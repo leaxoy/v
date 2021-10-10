@@ -1,32 +1,28 @@
 local function setup()
     -- tree sitter
     require('nvim-treesitter.configs').setup {
+        ensure_installed = {"bash", "c", "go", "rust", "python", "tsx"},
         highlight = {
             enable = true,
             -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
             -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
             -- Using this option may slow down your editor, and you may see some duplicate highlights.
             -- Instead of true it can also be a list of languages
-            additional_vim_regex_highlighting = false,
+            additional_vim_regex_highlighting = false
         },
-        indent = {
-            enable = true
-        }
+        indent = {enable = true}
     }
 
-    require('vcs').setup {}
+    require('vcs').setup()
 
     -- indent
     require("indent_blankline").setup {
         char = "|",
         buftype_exclude = {"terminal"}
     }
-    
+
     require('nvim-autopairs').setup {}
-    require('github-theme').setup {
-        theme_style = 'dark',
-        transparent = true,
-    }
+    require('github-theme').setup {theme_style = 'dark', transparent = true}
 
     require('nvim-tree').setup {
         view = {
@@ -47,32 +43,63 @@ local function setup()
         }
     }
 
-    require('bufferline').setup{
+    require('bufferline').setup {
         options = {
-            numbers = 'ordinal',
-            indicator_icon = '▎',
+            numbers = function(opts)
+                return string.format('[%s]', opts.ordinal)
+            end,
             close_command = 'bdelete %d',
-            offsets = {{
-                filetype = "NvimTree",
-                text = "File Explorer",
-                highlight = "Directory",
-                text_align = "left"
-            }},
-            show_close_icons = true,
+            offsets = {
+                {
+                    filetype = "NvimTree",
+                    text = "文件管理器",
+                    highlight = "Directory",
+                    text_align = "center"
+                }, {
+                    filetype = "Outline",
+                    text = "大纲",
+                    highlight = "Directory",
+                    text_align = "center"
+                }
+            },
+            diagnostics = "nvim_lsp",
+            diagnostics_indicator = function(count, level, diagnostics, ctx)
+                local icon = level:match("error") and "E" or "W"
+                return icon .. "." .. count
+            end,
+            show_close_icon = false,
+            show_buffer_close_icons = true,
             show_buffer_icons = true,
-            show_tab_indicators = true,
+            show_tab_indicators = false,
+            modified_icon = '●',
+            always_show_bufferline = true,
             separator_style = 'slant',
+            tab_size = 16,
+            left_trunc_marker = '',
+            right_trunc_marker = ''
         }
     }
 
-    require('lualine').setup{ 
-        options = { theme = 'horizon' },
+    require('lualine').setup {
+        options = {theme = 'horizon'},
         sections = {
-            lualine_x = {},
-        },
+            lualine_a = {'mode'},
+            lualine_b = {'branch'},
+            lualine_c = {'filename'},
+            lualine_x = {
+                {
+                    'diagnostics',
+                    sources = {'nvim_lsp'},
+                    sections = {'error', 'warn', 'info', 'hint'},
+                    symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+                }, 'diff', 'filetype'
+            },
+            lualine_y = {'progress'},
+            lualine_z = {'location'}
+        }
     }
 
-    require("symbols-outline").setup{
+    require("symbols-outline").setup {
         highlight_hovered_item = true,
         show_guides = true,
         show_symbol_details = true,
@@ -83,8 +110,8 @@ local function setup()
             hover_symbol = "<C-space>",
             toggle_preview = "P",
             rename_symbol = "r",
-            code_actions = "a",
-        },
+            code_actions = "a"
+        }
     }
 end
 
