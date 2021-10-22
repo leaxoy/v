@@ -1,24 +1,42 @@
 local function setup()
-    vim.o.number = true
-    vim.o.relativenumber = true
-    vim.o.tabstop = 4
-    vim.o.shiftwidth = 4
-    vim.o.expandtab = true
-    vim.o.termguicolors = true
-    vim.o.cursorline = true
-    vim.o.completeopt = "menuone,noselect"
-    vim.o.autoindent = true
-    vim.o.showmatch = true
+	vim.o.number = true
+	vim.o.relativenumber = true
+	vim.o.tabstop = 4
+	vim.o.shiftwidth = 4
+	vim.o.expandtab = true
+	vim.o.termguicolors = true
+	vim.o.cursorline = true
+	vim.o.completeopt = "menuone,noselect"
+	vim.o.autoindent = true
+	vim.o.showmatch = true
+	vim.o.ruler = true
 
-    -- nvim tree config
-    vim.g.nvim_tree_ignore = {
-        ".DS_Store", ".git", ".idea", "output", "__pycache__", "*.pyc",
-        ".vscode"
-    }
-    vim.g.nvim_tree_indent_markers = 1
-    vim.g.nvim_tree_highlight_opened_files = 1
-    vim.g.nvim_tree_add_trailing = 1
-    vim.g.nvim_tree_group_empty = 1
+	-- You will likely want to reduce updatetime which affects CursorHold
+	-- note: this setting is global and should be set only once
+	vim.o.updatetime = 250
+	vim.bo.fileformat = "mac"
+
+	-- nvim tree config
+	vim.g.nvim_tree_ignore = {
+		".DS_Store",
+		".git",
+		".idea",
+		"output",
+		"__pycache__",
+		"*.pyc",
+		".vscode",
+	}
+	vim.g.nvim_tree_indent_markers = 1
+	vim.g.nvim_tree_highlight_opened_files = 1
+	vim.g.nvim_tree_add_trailing = 1
+	vim.g.nvim_tree_group_empty = 1
+	vim.g.nvim_tree_git_hl = 1
+
+	-- neo format config
+	vim.g.neoformat_basic_format_align = 1
+	vim.g.neoformat_enabled_python = { "black" }
+	vim.g.neoformat_enabled_go = { "gofumpt" }
+	vim.g.neoformat_enabled_lua = { "stylua" }
 end
 
-return {setup = setup}
+return { setup = setup }
