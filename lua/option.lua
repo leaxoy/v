@@ -6,7 +6,7 @@ local function setup()
 	vim.o.expandtab = true
 	vim.o.termguicolors = true
 	vim.o.cursorline = true
-	vim.o.completeopt = "menuone,noselect"
+	vim.o.completeopt = "menu,menuone,noselect"
 	vim.o.autoindent = true
 	vim.o.showmatch = true
 	vim.o.ruler = true

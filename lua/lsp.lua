@@ -1,34 +1,48 @@
 local function bind_key(bufnr)
-	local function o(...)
-		vim.api.nvim_buf_set_option(bufnr, ...)
-	end
 	-- Enable completion triggered by <c-x><c-o>
-	o("omnifunc", "v:lua.vim.lsp.omnifunc")
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-	local m = require("utils/bind").bnm(bufnr)
-	-- Mappings.
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	m("<space>gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
-	m("<space>gt", "<cmd>lua vim.lsp.buf.type_definition()<cr>")
-	m("<space>gD", "<cmd>lua vim.lsp.buf.declaration()<cr>")
-	m("<space>gi", "<cmd>lua vim.lsp.buf.implementation()<cr>") -- use telescope `fi`
-	m("<space>gr", "<cmd>lua vim.lsp.buf.references()<cr>") -- use telescope `fr`
-	m("<space>gk", "<cmd>lua vim.lsp.buf.hover()<cr>")
-	m("<space>gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
-	m("<space>gf", "<cmd>lua vim.lsp.buf.formatting()<cr>")
-	m("<space>ci", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>")
-	m("<space>co", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>")
-	m("<space>cl", "<cmd>lua vim.lsp.codelens.display()<cr>")
-	-- m('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>')
-	-- m('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>')
-	-- m('<space>ww',
-	--   '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>')
-	m("<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>")
-	m("<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>") -- use telescope `fa`
-	m("<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>")
-	m("<space>dd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>") -- auto show
-	m("<space>d[", "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>")
-	m("<space>d]", "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>")
+	-- Bind buffer keymap
+	local wk = require("which-key")
+	wk.register({
+		g = {
+			name = "+LSP",
+			d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "LSP Definition" },
+			D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "LSP Declaration" },
+			t = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "LSP Type Definition" },
+			i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "LSP Implementation" },
+			r = { "<cmd>lua vim.lsp.buf.references()<cr>", "LSP Reference" },
+			h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "LSP Hover" },
+			s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "LSP SignatureHelp" },
+			f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "LSP Formatting" },
+			w = {
+				name = "+Workspace",
+				a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add Workspace" },
+				r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove Workspace" },
+				l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List Workspaces" },
+			},
+			c = {
+				n = { "<cmd>lua vim.lsp.buf.rename()<cr>", "LSP Rename" },
+				i = { "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", "LSP Incoming Calls" },
+				o = { "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", "LSP Outgoing Calls" },
+				a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "LSP Code Action" },
+			},
+			l = {
+				name = "+CodeLens",
+				d = { "<cmd>lua vim.lsp.codelens.display()" },
+			},
+			x = {
+				name = "+Diagnostics",
+				q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Set Diagnostic" },
+				d = { "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", "Line Diagnostics" },
+				["["] = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
+				["]"] = { "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+			},
+		},
+	}, {
+		buffer = bufnr,
+		prefix = "<space>",
+	})
 end
 
 local function register_lsp_handlers()
@@ -37,32 +51,26 @@ local function register_lsp_handlers()
 		vim.lsp.handlers.signature_help,
 		{ border = "double" }
 	)
-	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-		vim.lsp.diagnostic.on_publish_diagnostics,
-		{ update_in_insert = true }
-	)
+	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+		update_in_insert = true,
+		virtual_text = {
+			prefix = "x", -- Could be '●', '▎', 'x', "■"
+		},
+	})
 
-	local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+	local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
 
 	for type, icon in pairs(signs) do
-		vim.fn.sign_define("DiagnosticSign" .. type, {
-			text = icon,
-			texthl = "DiagnosticSign" .. type,
-			numhl = "",
-		})
-		vim.fn.sign_define("DiagnosticVirtualText" .. type, {
-			text = icon,
-			texthl = "DiagnosticVirtualText" .. type,
-			numhl = "",
-		})
-		vim.fn.sign_define("DiagnosticFloating" .. type, {
-			text = icon,
-			texthl = "DiagnosticFloating" .. type,
-			numhl = "",
-		})
+		local hl = "LspDiagnosticsSign" .. type
+		local vt = "LspDiagnosticsVirtualText" .. type
+		local ft = "LspDiagnosticsFloating" .. type
+		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+		vim.fn.sign_define(vt, { text = icon, texthl = vt, numhl = vt })
+		vim.fn.sign_define(ft, { text = icon, texthl = ft, numhl = ft })
 	end
 
 	vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]])
+	vim.cmd([[autocmd CursorHold,CursorHoldI,InsertLeave * lua vim.lsp.codelens.refresh()]])
 end
 
 local function document_format(client)
@@ -70,6 +78,11 @@ local function document_format(client)
 		vim.api.nvim_command([[augroup Format]])
 		vim.api.nvim_command([[autocmd! * <buffer>]])
 		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]])
+		vim.api.nvim_command([[augroup END]])
+	else
+		vim.api.nvim_command([[augroup NeoFormat]])
+		vim.api.nvim_command([[autocmd! * <buffer>]])
+		vim.api.nvim_command([[autocmd BufWritePre <buffer> undojoin | Neoformat]])
 		vim.api.nvim_command([[augroup END]])
 	end
 end
@@ -121,6 +134,7 @@ end
 local function on_attach(client, bufnr)
 	require("virtualtypes").on_attach()
 	require("lsp_signature").on_attach()
+	require("illuminate").on_attach(client)
 
 	bind_key(bufnr)
 	register_lsp_handlers()
@@ -129,6 +143,9 @@ local function on_attach(client, bufnr)
 end
 
 local function setup()
+	local lsp = require("lspconfig")
+	lsp["sumneko_lua"].setup(require("lua-dev").setup())
+
 	local installer = require("nvim-lsp-installer")
 	installer.on_server_ready(function(server)
 		local opts = {
@@ -138,8 +155,6 @@ local function setup()
 		server:setup(opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)
-	local lsp = require("lspconfig")
-	lsp["sumneko_lua"].setup(require("lua-dev").setup())
 end
 
 return { setup = setup }

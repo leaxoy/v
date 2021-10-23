@@ -1,7 +1,7 @@
 local function setup()
 	-- tree sitter
 	require("nvim-treesitter.configs").setup({
-		ensure_installed = { "bash", "c", "go", "rust", "python", "tsx" },
+		ensure_installed = { "bash", "c", "go", "lua", "rust", "python", "tsx" },
 		highlight = {
 			enable = true,
 			-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -12,6 +12,26 @@ local function setup()
 		},
 		indent = { enable = true },
 		textobjects = {},
+		rainbow = {
+			enable = true,
+			extended_mode = true,
+		},
+	})
+	require("treesitter-context").setup({
+		default = {
+			"class",
+			"function",
+			"method",
+			"for", -- These won't appear in the context
+			"while",
+			"if",
+			"switch",
+			"case",
+		},
+		-- If a pattern is missing, *open a PR* so everyone can benefit.
+		rust = {
+			"impl_item",
+		},
 	})
 
 	require("vcs").setup()
@@ -25,6 +45,10 @@ local function setup()
 	require("nvim-autopairs").setup({})
 
 	require("nvim-tree").setup({
+		diagnostics = {
+			enable = true,
+		},
+		hijack_cursor = true,
 		view = {
 			-- width of the window, can be either a number (columns) or a string in `%`
 			width = 30,

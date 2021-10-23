@@ -36,21 +36,36 @@ return require("packer").startup(function()
 	})
 	use("ray-x/lsp_signature.nvim")
 	use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu" })
-
+	use({
+		"folke/lsp-colors.nvim",
+		config = function()
+			require("lsp-colors").setup()
+		end,
+	})
 	use("folke/lua-dev.nvim")
 
 	-- Snippet config
-	use("hrsh7th/vim-vsnip")
-	use("golang/vscode-go")
+	use({
+		"hrsh7th/vim-vsnip",
+		requires = {
+			"golang/vscode-go",
+			"cstrap/python-snippets",
+		},
+	})
+
+	-- Debug
+	use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
 
 	-- UI Component
 	use("projekt0n/github-nvim-theme")
-	use("morhetz/gruvbox")
+	use({ "ellisonleao/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("nvim-treesitter/nvim-treesitter-textobjects")
+	use("p00f/nvim-ts-rainbow")
+	use("romgrk/nvim-treesitter-context")
 	use("lukas-reineke/indent-blankline.nvim")
 	use({
-		"hoob3rt/lualine.nvim",
+		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 	use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
@@ -61,7 +76,13 @@ return require("packer").startup(function()
 		"ray-x/navigator.lua",
 		requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" },
 	})
-
+	use({
+		"rcarriga/nvim-notify",
+		requires = { "nvim-telescope/telescope.nvim" },
+		config = function()
+			require("telescope").load_extension("notify")
+		end,
+	})
 	use({ "skywind3000/asynctasks.vim", requires = { "skywind3000/asyncrun.vim" } })
 
 	-- Code edit
@@ -71,30 +92,31 @@ return require("packer").startup(function()
 	use("sbdchd/neoformat")
 	use({
 		"edolphin-ydf/goimpl.nvim",
-		requires = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-telescope/telescope.nvim" },
-			{ "nvim-treesitter/nvim-treesitter" },
-		},
+		requires = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("telescope").load_extension("goimpl")
 		end,
 	})
 	use("jubnzv/virtual-types.nvim")
+	use("RRethy/vim-illuminate")
+	use("rmagatti/auto-session")
+	use({
+		"rmagatti/session-lens",
+		requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
+		config = function()
+			require("telescope").load_extension("session-lens")
+			require("session-lens").setup({})
+		end,
+	})
 
 	-- File Explorer
 	use("kyazdani42/nvim-web-devicons") -- for file icons
 	use("kyazdani42/nvim-tree.lua")
 	use("akinsho/toggleterm.nvim")
-	use({ "nvim-telescope/telescope.nvim", requires = { "nvim-lua/plenary.nvim" } })
+	use({ "nvim-telescope/telescope.nvim", requires = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" } })
 	use({
 		"nvim-telescope/telescope-packer.nvim",
-		requires = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-telescope/telescope.nvim" },
-		},
+		requires = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("telescope").load_extension("packer")
 		end,
@@ -122,7 +144,12 @@ return require("packer").startup(function()
 		end,
 		run = "make",
 	})
-
+	use({
+		"folke/trouble.nvim",
+		config = function()
+			require("trouble").setup()
+		end,
+	})
 	use({
 		"sudormrfbin/cheatsheet.nvim",
 		requires = {

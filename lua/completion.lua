@@ -41,7 +41,9 @@ local function setup()
 			ghost_text = true,
 			native_menu = true,
 		},
-		documentation = {},
+		documentation = {
+			winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+		},
 	})
 end
 

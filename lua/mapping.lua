@@ -31,6 +31,15 @@ local function setup()
 				v = { "<cmd>vsplit<cr>", "Split Vertically" },
 				s = { "<cmd>split<cr>", "Split Horizonally" },
 			},
+			x = {
+				name = "+Trouble Manage",
+				x = { "<cmd>TroubleToggle<cr>", "Troubles" },
+				w = { "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", "Workspace Troubles" },
+				d = { "<cmd>TroubleToggle lsp_document_diagnostics<cr>", "Document Troubles" },
+				r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
+				q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix Troubles" },
+				l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
+			},
 		},
 		f = {
 			name = "Magic Finder",
