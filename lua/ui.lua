@@ -129,11 +129,6 @@ local function setup()
 			lualine_y = { "progress" },
 		},
 	})
-	require("github-theme").setup({
-		theme_style = "dark_default",
-		dark_float = true,
-	})
-
 	require("symbols-outline").setup({
 		highlight_hovered_item = true,
 		show_guides = true,

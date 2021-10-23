@@ -13,8 +13,10 @@ local function setup()
 
 	-- You will likely want to reduce updatetime which affects CursorHold
 	-- note: this setting is global and should be set only once
-	vim.o.updatetime = 250
+	vim.o.updatetime = 200
 	vim.bo.fileformat = "mac"
+
+	vim.cmd([[colorscheme github_dark_default]])
 
 	-- nvim tree config
 	vim.g.nvim_tree_ignore = {

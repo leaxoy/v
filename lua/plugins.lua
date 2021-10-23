@@ -58,7 +58,6 @@ return require("packer").startup(function()
 
 	-- UI Component
 	use("projekt0n/github-nvim-theme")
-	use({ "ellisonleao/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("nvim-treesitter/nvim-treesitter-textobjects")
 	use("p00f/nvim-ts-rainbow")
@@ -97,7 +96,6 @@ return require("packer").startup(function()
 			require("telescope").load_extension("goimpl")
 		end,
 	})
-	use("jubnzv/virtual-types.nvim")
 	use("RRethy/vim-illuminate")
 	use("rmagatti/auto-session")
 	use({

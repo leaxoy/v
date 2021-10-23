@@ -3,6 +3,7 @@ local function bind_key(bufnr)
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
 	-- Bind buffer keymap
+	-- See `:help vim.lsp.*` for documentation on any of the below functions
 	local wk = require("which-key")
 	wk.register({
 		g = {
@@ -22,6 +23,7 @@ local function bind_key(bufnr)
 				l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List Workspaces" },
 			},
 			c = {
+				name = "+Call Hierarchy",
 				n = { "<cmd>lua vim.lsp.buf.rename()<cr>", "LSP Rename" },
 				i = { "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", "LSP Incoming Calls" },
 				o = { "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", "LSP Outgoing Calls" },
@@ -29,7 +31,8 @@ local function bind_key(bufnr)
 			},
 			l = {
 				name = "+CodeLens",
-				d = { "<cmd>lua vim.lsp.codelens.display()" },
+				d = { "<cmd>lua vim.lsp.codelens.display()", "LSP Display CodeLens" },
+				r = { "<cmd>lua vim.lsp.codelens.run()", "LSP Run CodeLens" },
 			},
 			x = {
 				name = "+Diagnostics",
@@ -70,7 +73,6 @@ local function register_lsp_handlers()
 	end
 
 	vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]])
-	vim.cmd([[autocmd CursorHold,CursorHoldI,InsertLeave * lua vim.lsp.codelens.refresh()]])
 end
 
 local function document_format(client)
@@ -132,7 +134,6 @@ local function update_lsp_capabilities(override)
 end
 
 local function on_attach(client, bufnr)
-	require("virtualtypes").on_attach()
 	require("lsp_signature").on_attach()
 	require("illuminate").on_attach(client)
 
@@ -146,13 +147,14 @@ local function setup()
 	local lsp = require("lspconfig")
 	lsp["sumneko_lua"].setup(require("lua-dev").setup())
 
+	local lsp_opts = {
+		on_attach = on_attach,
+		capabilities = update_lsp_capabilities(),
+		flags = { debounce_text_changes = 150 },
+	}
 	local installer = require("nvim-lsp-installer")
 	installer.on_server_ready(function(server)
-		local opts = {
-			on_attach = on_attach,
-			capabilities = update_lsp_capabilities(),
-		}
-		server:setup(opts)
+		server:setup(lsp_opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)
 end
