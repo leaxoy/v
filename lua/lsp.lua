@@ -1,3 +1,15 @@
+local function preview_location_callback(_, result)
+	if result == nil or vim.tbl_isempty(result) then
+		return nil
+	end
+	vim.lsp.util.preview_location(result[1])
+end
+
+function PeekDefinition()
+	local params = vim.lsp.util.make_position_params()
+	return vim.lsp.buf_request(0, "textDocument/definition", params, preview_location_callback)
+end
+
 local function bind_key(bufnr)
 	-- Enable completion triggered by <c-x><c-o>
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -9,6 +21,7 @@ local function bind_key(bufnr)
 		g = {
 			name = "+LSP",
 			d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "LSP Definition" },
+			p = { "<cmd>lua PeekDefinition()<cr>", "LSP Peek Definition" },
 			D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "LSP Declaration" },
 			t = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "LSP Type Definition" },
 			i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "LSP Implementation" },
@@ -108,16 +121,18 @@ local function document_highlight(client)
 	end
 end
 
-local function codelens()
-	vim.cmd([[highlight! link LspCodeLens WarningMsg]])
-	vim.cmd([[highlight! link LspCodeLensText WarningMsg]])
-	vim.cmd([[highlight! link LspCodeLensTextSign LspCodeLensText]])
-	vim.cmd([[highlight! link LspCodeLensTextSeparator Boolean]])
+local function codelens(client)
+	if client.resolved_capabilities.code_lens then
+		vim.cmd([[highlight! link LspCodeLens WarningMsg]])
+		vim.cmd([[highlight! link LspCodeLensText WarningMsg]])
+		vim.cmd([[highlight! link LspCodeLensTextSign LspCodeLensText]])
+		vim.cmd([[highlight! link LspCodeLensTextSeparator Boolean]])
 
-	vim.cmd([[augroup CodeLenses]])
-	vim.cmd([[autocmd!]])
-	vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
-	vim.cmd([[augroup END]])
+		vim.api.nvim_command([[augroup CodeLenses]])
+		vim.api.nvim_command([[autocmd! * <buffer>]])
+		vim.api.nvim_command([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
+		vim.api.nvim_command([[augroup END]])
+	end
 end
 
 local function update_lsp_capabilities(override)
@@ -159,7 +174,7 @@ local function on_attach(client, bufnr)
 	register_lsp_handlers()
 	document_format(client)
 	document_highlight(client)
-	codelens()
+	codelens(client)
 end
 
 local function setup()
