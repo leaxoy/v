@@ -57,11 +57,13 @@ return require("packer").startup(function()
 	use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
 
 	-- UI Component
+	use("olimorris/onedarkpro.nvim")
 	use("projekt0n/github-nvim-theme")
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("nvim-treesitter/nvim-treesitter-textobjects")
-	use("p00f/nvim-ts-rainbow")
+	use("nvim-treesitter/nvim-treesitter-refactor")
 	use("romgrk/nvim-treesitter-context")
+	use("p00f/nvim-ts-rainbow")
 	use("lukas-reineke/indent-blankline.nvim")
 	use({
 		"nvim-lualine/lualine.nvim",
@@ -84,11 +86,22 @@ return require("packer").startup(function()
 	})
 	use({ "skywind3000/asynctasks.vim", requires = { "skywind3000/asyncrun.vim" } })
 
-	-- Code edit
-	use("terrortylor/nvim-comment")
-	use("windwp/nvim-autopairs")
+	-- VCS
 	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
+	use({ "TimUntersberger/neogit", requires = { "nvim-lua/plenary.nvim" } })
+
+	-- Code edit
+	use("numToStr/Comment.nvim")
+	use("windwp/nvim-autopairs")
+	use({
+		"jghauser/mkdir.nvim",
+		config = function()
+			require("mkdir")
+		end,
+	})
+	use("Pocco81/AutoSave.nvim")
 	use("sbdchd/neoformat")
+	use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })
 	use({
 		"edolphin-ydf/goimpl.nvim",
 		requires = { "nvim-telescope/telescope.nvim" },
@@ -121,22 +134,14 @@ return require("packer").startup(function()
 	})
 	use({
 		"nvim-telescope/telescope-project.nvim",
-		requires = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-telescope/telescope.nvim" },
-		},
+		requires = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("telescope").load_extension("project")
 		end,
 	})
 	use({
 		"nvim-telescope/telescope-fzf-native.nvim",
-		requires = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-telescope/telescope.nvim" },
-		},
+		requires = { "nvim-telescope/telescope.nvim" },
 		config = function()
 			require("telescope").load_extension("fzf")
 		end,
@@ -150,11 +155,7 @@ return require("packer").startup(function()
 	})
 	use({
 		"sudormrfbin/cheatsheet.nvim",
-		requires = {
-			{ "nvim-telescope/telescope.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-lua/plenary.nvim" },
-		},
+		requires = { "nvim-telescope/telescope.nvim" },
 	})
 	use({
 		"folke/which-key.nvim",

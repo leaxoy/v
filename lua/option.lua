@@ -10,13 +10,13 @@ local function setup()
 	vim.o.autoindent = true
 	vim.o.showmatch = true
 	vim.o.ruler = true
+	vim.o.foldmethod = "expr"
+	vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
 	-- You will likely want to reduce updatetime which affects CursorHold
 	-- note: this setting is global and should be set only once
 	vim.o.updatetime = 200
-	vim.bo.fileformat = "mac"
-
-	vim.cmd([[colorscheme github_dark_default]])
+	vim.o.background = "dark"
 
 	-- nvim tree config
 	vim.g.nvim_tree_ignore = {

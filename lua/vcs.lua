@@ -34,6 +34,11 @@ local function setup()
 		},
 		current_line_blame = true,
 	})
+	require("neogit").setup({
+		integrations = {
+			diffview = true,
+		},
+	})
 end
 
 return { setup = setup }

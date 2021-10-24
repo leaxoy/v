@@ -10,7 +10,6 @@ local function setup()
 			},
 		},
 	})
-	require("nvim_comment").setup({ line_mapping = "<space>cc" })
 	require("toggleterm").setup({
 		open_mapping = [[<C-t>]],
 		size = function(term)

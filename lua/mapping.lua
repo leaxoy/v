@@ -22,6 +22,14 @@ local function setup()
 				["8"] = { "<cmd>BufferLineGoToBuffer 8<cr>", "Goto Buffer 8" },
 				["9"] = { "<cmd>BufferLineGoToBuffer 9<cr>", "Goto Buffer 9" },
 			},
+			t = {
+				name = "+Debug & Test",
+				b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+				c = { "<cmd>lua require'dap'.continue()<cr>", "Debug Continue" },
+				i = { "<cmd>lua require'dap'.step_into()<cr>", "Debut Step Into" },
+				o = { "<cmd>lua require'dap'.step_over()<cr>", "Debut Step Over" },
+				r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Open Debug Repl" },
+			},
 			w = {
 				name = "+Window Manage",
 				h = { "<cmd>wincmd h<cr>", "Goto Left Window" },
@@ -39,6 +47,10 @@ local function setup()
 				r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
 				q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix Troubles" },
 				l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
+			},
+			c = {
+				name = "+Change & Comment",
+				g = { "<cmd>lua require'neogen'.generate()<cr>", "Gen Doc" },
 			},
 		},
 		f = {

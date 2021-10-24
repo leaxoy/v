@@ -10,11 +10,32 @@ local function setup()
 			-- Instead of true it can also be a list of languages
 			additional_vim_regex_highlighting = false,
 		},
+		incremental_selection = { enable = true },
 		indent = { enable = true },
 		textobjects = {},
 		rainbow = {
 			enable = true,
 			extended_mode = true,
+		},
+		refactor = {
+			highlight_definitions = { enable = true },
+			highlight_current_scope = { enable = true },
+			smart_rename = {
+				enable = true,
+				keymaps = {
+					smart_rename = "grr",
+				},
+			},
+			navigation = {
+				enable = true,
+				keymaps = {
+					goto_definition = "gnd",
+					list_definitions = "gnD",
+					list_definitions_toc = "gO",
+					goto_next_usage = "<a-*>",
+					goto_previous_usage = "<a-#>",
+				},
+			},
 		},
 	})
 	require("treesitter-context").setup({
@@ -145,6 +166,8 @@ local function setup()
 	})
 
 	gps.setup({})
+
+	require("onedarkpro").load()
 
 	-- require('navigator').setup()
 end

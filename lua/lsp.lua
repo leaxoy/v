@@ -31,8 +31,9 @@ local function bind_key(bufnr)
 			},
 			l = {
 				name = "+CodeLens",
-				d = { "<cmd>lua vim.lsp.codelens.display()", "LSP Display CodeLens" },
-				r = { "<cmd>lua vim.lsp.codelens.run()", "LSP Run CodeLens" },
+				d = { "<cmd>lua vim.lsp.codelens.display()<cr>", "LSP Display CodeLens" },
+				r = { "<cmd>lua vim.lsp.codelens.run()<cr>", "LSP Run CodeLens" },
+				f = { "<cmd>lua vim.lsp.codelens.refresh()<cr>", "LSP Refresh CodeLens" },
 			},
 			x = {
 				name = "+Diagnostics",
@@ -57,7 +58,7 @@ local function register_lsp_handlers()
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 		update_in_insert = true,
 		virtual_text = {
-			prefix = "x", -- Could be '●', '▎', 'x', "■"
+			prefix = "● ", -- Could be '●', '▎', 'x', "■"
 		},
 	})
 
@@ -67,15 +68,20 @@ local function register_lsp_handlers()
 		local hl = "LspDiagnosticsSign" .. type
 		local vt = "LspDiagnosticsVirtualText" .. type
 		local ft = "LspDiagnosticsFloating" .. type
+		local ut = "LspDiagnosticsUnderline" .. type
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 		vim.fn.sign_define(vt, { text = icon, texthl = vt, numhl = vt })
 		vim.fn.sign_define(ft, { text = icon, texthl = ft, numhl = ft })
+		vim.fn.sign_define(ut, { text = icon, texthl = ut, numhl = ut })
 	end
 
-	vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]])
+	vim.cmd(
+		[[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false, border="rounded"})]]
+	)
 end
 
 local function document_format(client)
+	-- try format with lsp, otherwise use Neoformat
 	if client.resolved_capabilities.document_formatting then
 		vim.api.nvim_command([[augroup Format]])
 		vim.api.nvim_command([[autocmd! * <buffer>]])
@@ -100,6 +106,18 @@ local function document_highlight(client)
 		vim.api.nvim_command([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
 		vim.api.nvim_command([[augroup END]])
 	end
+end
+
+local function codelens()
+	vim.cmd([[highlight! link LspCodeLens WarningMsg]])
+	vim.cmd([[highlight! link LspCodeLensText WarningMsg]])
+	vim.cmd([[highlight! link LspCodeLensTextSign LspCodeLensText]])
+	vim.cmd([[highlight! link LspCodeLensTextSeparator Boolean]])
+
+	vim.cmd([[augroup CodeLenses]])
+	vim.cmd([[autocmd!]])
+	vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
+	vim.cmd([[augroup END]])
 end
 
 local function update_lsp_capabilities(override)
@@ -141,6 +159,7 @@ local function on_attach(client, bufnr)
 	register_lsp_handlers()
 	document_format(client)
 	document_highlight(client)
+	codelens()
 end
 
 local function setup()
@@ -154,6 +173,35 @@ local function setup()
 	}
 	local installer = require("nvim-lsp-installer")
 	installer.on_server_ready(function(server)
+		if server.name == "gopls" then
+			lsp_opts.settings = {
+				gopls = {
+					-- more settings: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+					-- flags = {allow_incremental_sync = true, debounce_text_changes = 500},
+					-- not supported
+					analyses = { unusedparams = true, unreachable = false },
+					codelenses = {
+						generate = true, -- show the `go generate` lens.
+						gc_details = true, --  // Show a code lens toggling the display of gc's choices.
+						test = true,
+						tidy = true,
+						upgrade_dependency = true,
+					},
+					usePlaceholders = true,
+					completeUnimported = true,
+					staticcheck = true,
+					matcher = "Fuzzy",
+					-- experimentalDiagnosticsDelay = "500ms",
+					diagnosticsDelay = "500ms",
+					experimentalWatchedFileDelay = "100ms",
+					symbolMatcher = "fuzzy",
+					["local"] = "",
+					gofumpt = true, -- true, -- turn on for new repos, gofmpt is good but also create code turmoils
+					buildFlags = { "-tags", "integration" },
+					-- buildFlags = {"-tags", "functional"}
+				},
+			}
+		end
 		server:setup(lsp_opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)
