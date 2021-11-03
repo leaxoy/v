@@ -10,8 +10,8 @@ local function setup()
 	vim.o.autoindent = true
 	vim.o.showmatch = true
 	vim.o.ruler = true
-	vim.o.foldmethod = "expr"
-	vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+	-- vim.o.foldmethod = "expr"
+	-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
 	-- You will likely want to reduce updatetime which affects CursorHold
 	-- note: this setting is global and should be set only once
@@ -19,15 +19,6 @@ local function setup()
 	vim.o.background = "dark"
 
 	-- nvim tree config
-	vim.g.nvim_tree_ignore = {
-		".DS_Store",
-		".git",
-		".idea",
-		"output",
-		"__pycache__",
-		"*.pyc",
-		".vscode",
-	}
 	vim.g.nvim_tree_indent_markers = 1
 	vim.g.nvim_tree_highlight_opened_files = 1
 	vim.g.nvim_tree_add_trailing = 1
@@ -39,6 +30,7 @@ local function setup()
 	vim.g.neoformat_enabled_python = { "black" }
 	vim.g.neoformat_enabled_go = { "gofumpt" }
 	vim.g.neoformat_enabled_lua = { "stylua" }
+	vim.g.neoformat_enabled_kotlin = { "ktlint" }
 end
 
 return { setup = setup }

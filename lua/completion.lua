@@ -44,6 +44,28 @@ local function setup()
 		documentation = {
 			winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
 		},
+		sorting = {
+			comparators = {
+				cmp.config.compare.offset,
+				cmp.config.compare.exact,
+				cmp.config.compare.score,
+				cmp.config.compare.recently_used,
+				cmp.config.compare.kind,
+				cmp.config.compare.sort_text,
+				cmp.config.compare.length,
+				cmp.config.compare.order,
+			},
+		},
+	})
+
+	-- Use buffer source for `/`.
+	cmp.setup.cmdline("/", {
+		sources = { { name = "buffer" } },
+	})
+
+	-- Use cmdline & path source for ':'.
+	cmp.setup.cmdline(":", {
+		sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
 	})
 end
 

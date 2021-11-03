@@ -1,55 +1,49 @@
 local function setup()
-	local dap = require("dap")
-	dap.configurations.c = {
-		{
-			name = "Launch",
-			type = "lldb",
-			request = "launch",
-			program = function()
-				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-			end,
-			cwd = "${workspaceFolder}",
-			stopOnEntry = false,
-			args = {},
+	local dap_installer = require("dap-install")
+	dap_installer.setup({})
+	local debuggers = require("dap-install.api.debuggers").get_installed_debuggers()
+	for _, debugger in ipairs(debuggers) do
+		dap_installer.config(debugger)
+	end
 
-			-- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
-			--
-			--    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-			--
-			-- Otherwise you might get the following error:
-			--
-			--    Error on launch: Failed to attach to the target process
-			--
-			-- But you should be aware of the implications:
-			-- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
-			runInTerminal = false,
+	require("dapui").setup({
+		icons = { expanded = "▾", collapsed = "▸" },
+		mappings = {
+			-- Use a table to apply multiple mappings
+			expand = { "<CR>", "<2-LeftMouse>" },
+			open = "o",
+			remove = "d",
+			edit = "e",
+			repl = "r",
 		},
-	}
-	dap.configurations.cpp = dap.configurations.c
-	dap.configurations.rust = dap.configurations.c
-	dap.configurations.go = {
-		{
-			type = "go",
-			name = "Debug",
-			request = "launch",
-			program = "${file}",
+		sidebar = {
+			-- You can change the order of elements in the sidebar
+			elements = {
+				-- Provide as ID strings or tables with "id" and "size" keys
+				{
+					id = "scopes",
+					size = 0.25, -- Can be float or integer > 1
+				},
+				{ id = "breakpoints", size = 0.25 },
+				{ id = "stacks", size = 0.25 },
+				{ id = "watches", size = 00.25 },
+			},
+			size = 40,
+			position = "left", -- Can be "left", "right", "top", "bottom"
 		},
-		{
-			type = "go",
-			name = "Debug test", -- configuration for debugging test files
-			request = "launch",
-			mode = "test",
-			program = "${file}",
+		tray = {
+			elements = { "repl" },
+			size = 10,
+			position = "bottom", -- Can be "left", "right", "top", "bottom"
 		},
-		-- works with go.mod packages and sub packages
-		{
-			type = "go",
-			name = "Debug test (go.mod)",
-			request = "launch",
-			mode = "test",
-			program = "./${relativeFileDirname}",
+		floating = {
+			max_height = nil, -- These can be integers or a float between 0 and 1.
+			max_width = nil, -- Floats will be treated as percentage of your screen.
+			mappings = { close = { "q", "<Esc>" } },
 		},
-	}
+		windows = { indent = 1 },
+	})
+	require("nvim-dap-virtual-text").setup({})
 end
 
 return { setup = setup }

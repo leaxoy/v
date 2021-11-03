@@ -2,16 +2,26 @@ local function setup()
 	local wk = require("which-key")
 	wk.register({
 		["<space>"] = {
+			l = {
+				r = { "<cmd>LspRestart<cr>", "Restart Lsp Server" },
+			},
+			p = {
+				name = "+Preview",
+				m = { "<cmd>Glow<cr>", "Markdown" },
+			},
 			u = {
 				name = "+UI Manage",
 				f = { "<cmd>NvimTreeToggle<cr>", "Open File Explorer" },
 				s = { "<cmd>SymbolsOutline<cr>", "Open Symbol Outline" },
+				d = { "<cmd>lua require'dapui'.toggle()<cr>", "Open Debug & Test" },
 			},
 			b = {
 				name = "+Buffer Manage",
 				["]"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
 				["["] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
 				b = { "<cmd>buffers<cr>", "List All Buffer" },
+				e = { "<cmd>BufferLineSortByExtension<cr>", "Sort By Extensions" },
+				d = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directories" },
 				["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Goto Buffer 1" },
 				["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "Goto Buffer 2" },
 				["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "Goto Buffer 3" },
@@ -47,12 +57,17 @@ local function setup()
 				r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
 				q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix Troubles" },
 				l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
+				t = { "<cmd>TodoQuickFix<cr>", "List Todos" },
 			},
 			c = {
 				name = "+Change & Comment",
 				g = { "<cmd>lua require'neogen'.generate()<cr>", "Gen Doc" },
 			},
 		},
+		["<c-h>"] = { "<cmd>10h<cr>", "Jump" },
+		["<c-j>"] = { "<cmd>10j<cr>", "Jump" },
+		["<c-k>"] = { "<cmd>10k<cr>", "Jump" },
+		["<c-l>"] = { "<cmd>10l<cr>", "Jump" },
 		f = {
 			name = "Magic Finder",
 			ca = { "<cmd>CodeActionMenu<cr>", "Code Action Menu" },
@@ -60,6 +75,7 @@ local function setup()
 			f = { "<cmd>Telescope find_files<cr>", "Open File Finder" },
 			l = { "<cmd>Telescope file_browser<cr>", "Open File Browser" },
 			b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
+			t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },
 			a = { "<cmd>Telescope lsp_code_actions<cr>", "[LSP] Code Actions" },
 			d = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "[LSP] Diagnostics" },
 			r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },

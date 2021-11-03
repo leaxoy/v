@@ -77,15 +77,15 @@ local function register_lsp_handlers()
 
 	local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
 
-	for type, icon in pairs(signs) do
-		local hl = "LspDiagnosticsSign" .. type
-		local vt = "LspDiagnosticsVirtualText" .. type
-		local ft = "LspDiagnosticsFloating" .. type
-		local ut = "LspDiagnosticsUnderline" .. type
+	local sign = function(hl, icon)
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-		vim.fn.sign_define(vt, { text = icon, texthl = vt, numhl = vt })
-		vim.fn.sign_define(ft, { text = icon, texthl = ft, numhl = ft })
-		vim.fn.sign_define(ut, { text = icon, texthl = ut, numhl = ut })
+	end
+
+	for type, icon in pairs(signs) do
+		sign("LspDiagnosticsSign" .. type, icon)
+		sign("LspDiagnosticsVirtualText" .. type, icon)
+		sign("LspDiagnosticsFloating" .. type, icon)
+		sign("LspDiagnosticsUnderline" .. type, icon)
 	end
 
 	vim.cmd(
@@ -188,8 +188,8 @@ local function setup()
 	}
 	local installer = require("nvim-lsp-installer")
 	installer.on_server_ready(function(server)
-		if server.name == "gopls" then
-			lsp_opts.settings = {
+		local lsp_settings = {
+			["gopls"] = {
 				gopls = {
 					-- more settings: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 					-- flags = {allow_incremental_sync = true, debounce_text_changes = 500},
@@ -215,8 +215,16 @@ local function setup()
 					buildFlags = { "-tags", "integration" },
 					-- buildFlags = {"-tags", "functional"}
 				},
-			}
-		end
+			},
+
+			["rust_analyzer"] = {
+				rust_analyzer = {
+					cargo = { allFeatures = true },
+					checkOnSave = { command = "clippy" },
+				},
+			},
+		}
+		lsp_opts.settings = lsp_settings[server.name] or {}
 		server:setup(lsp_opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)

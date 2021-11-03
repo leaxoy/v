@@ -66,10 +66,19 @@ local function setup()
 	require("nvim-autopairs").setup({})
 
 	require("nvim-tree").setup({
-		diagnostics = {
-			enable = true,
-		},
+		diagnostics = { enable = true },
 		hijack_cursor = true,
+		filters = {
+			custom = {
+				".DS_Store",
+				".git",
+				".idea",
+				"output",
+				"__pycache__",
+				"*.pyc",
+				".vscode",
+			},
+		},
 		view = {
 			-- width of the window, can be either a number (columns) or a string in `%`
 			width = 30,
@@ -167,9 +176,9 @@ local function setup()
 
 	gps.setup({})
 
-	require("onedarkpro").load()
-
-	-- require('navigator').setup()
+	require("github-theme").setup({
+		theme_style = "dark_default",
+	})
 end
 
 return { setup = setup }
