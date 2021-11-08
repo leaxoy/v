@@ -1,5 +1,6 @@
 -- Store startup time in seconds
 vim.g.start_time = vim.fn.reltime()
+
 require("plugins")
 require("option").setup()
 require("completion").setup()

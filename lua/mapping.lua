@@ -1,9 +1,21 @@
+function ToggleLazygit()
+	local lazygit = require("toggleterm.terminal").Terminal:new({
+		cmd = "lazygit",
+		hidden = true,
+		direction = "float",
+		float_opts = { border = "double" },
+	})
+	lazygit:toggle()
+end
+
 local function setup()
 	local wk = require("which-key")
 	wk.register({
 		["<space>"] = {
 			l = {
-				r = { "<cmd>LspRestart<cr>", "Restart Lsp Server" },
+				r = { "<cmd>LspRestart<cr>", "Restart LSP Server" },
+				i = { "<cmd>LspInfo<cr>", "Show LSP Info" },
+				s = { "<cmd>LspInstallInfo<cr>", "Manage LSP Servers" },
 			},
 			p = {
 				name = "+Preview",
@@ -11,10 +23,12 @@ local function setup()
 			},
 			u = {
 				name = "+UI Manage",
-				f = { "<cmd>NvimTreeToggle<cr>", "Open File Explorer" },
-				s = { "<cmd>SymbolsOutline<cr>", "Open Symbol Outline" },
-				d = { "<cmd>lua require'dapui'.toggle()<cr>", "Open Debug & Test" },
+				f = { "<cmd>NvimTreeToggle<cr>", "Toggle File Explorer" },
+				g = { "<cmd>lua ToggleLazygit()<cr>", "Toggle LazyGit" },
+				s = { "<cmd>SymbolsOutline<cr>", "Toggle Symbol Outline" },
+				d = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle Debug & Test" },
 			},
+			e = { name = "+Editor", w = { "<cmd>w<cr>", "Write" } },
 			b = {
 				name = "+Buffer Manage",
 				["]"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
@@ -64,10 +78,11 @@ local function setup()
 				g = { "<cmd>lua require'neogen'.generate()<cr>", "Gen Doc" },
 			},
 		},
-		["<c-h>"] = { "<cmd>10h<cr>", "Jump" },
-		["<c-j>"] = { "<cmd>10j<cr>", "Jump" },
-		["<c-k>"] = { "<cmd>10k<cr>", "Jump" },
-		["<c-l>"] = { "<cmd>10l<cr>", "Jump" },
+		H = { "^", "Jump Line Begin" },
+		L = { "$", "Jump Line End" },
+		J = { "10j", "Jump 10 Line Down" },
+		K = { "10k", "Jump 10 Line Up" },
+		[";"] = { ":", "Command Mode" },
 		f = {
 			name = "Magic Finder",
 			ca = { "<cmd>CodeActionMenu<cr>", "Code Action Menu" },
@@ -81,13 +96,17 @@ local function setup()
 			r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
 			i = { "<cmd>Telescope lsp_implementations<cr>", "[LSP] Implementations" },
 			s = { "<cmd>Telescope lsp_document_symbols<cr>", "[LSP] Document Symbols" },
-			mt = { "<cmd>Neoformat<cr>", "Format Current Buffer" },
-			p = { "<cmd>lua require'telescope'.extensions.project.project{}<cr>", "List Projects" },
+			p = { "<cmd>Telescope project display_type=full<cr>", "List Projects" },
 		},
-		gim = {
-			"<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<cr>",
-			"Go Impl Interface",
-		},
+		gim = { "<cmd>Telescope goimpl<cr>", "Go Impl Interface" },
+	})
+	wk.register({
+		["<c-h>"] = { "<c-o>^", "Jump To Line Begining" },
+		["<c-l>"] = { "<c-o>$", "Jump To Line Ending" },
+		["<c-j>"] = { "<c-o>10j", "Jump 10 Line Down" },
+		["<c-k>"] = { "<c-o>10k", "Jump 10 Line Up" },
+	}, {
+		mode = "i",
 	})
 end
 

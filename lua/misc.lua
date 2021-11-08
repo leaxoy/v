@@ -1,5 +1,9 @@
 local function setup()
 	require("telescope").setup({
+		defaults = {
+			-- initial_mode = "normal",
+			prompt_prefix = "🔍 ",
+		},
 		extensions = {
 			fzf = {
 				fuzzy = true, -- false will only do exact matching
@@ -11,7 +15,7 @@ local function setup()
 		},
 	})
 	require("toggleterm").setup({
-		open_mapping = [[<C-t>]],
+		open_mapping = [[<c-t>]],
 		size = function(term)
 			if term.direction == "horizontal" then
 				return 30
@@ -19,8 +23,10 @@ local function setup()
 				return vim.o.columns * 0.4
 			end
 		end,
+		hidden = true,
 		hide_numbers = true,
-		direction = "tab",
+		-- direction = "tab",
+		direction = "float",
 		shade_terminals = true,
 		float_opts = { border = "double" },
 	})
@@ -32,6 +38,13 @@ local function setup()
 		auto_save_enabled = nil,
 		auto_restore_enabled = nil,
 		auto_session_suppress_dirs = nil,
+	})
+	require("nvim-startup").setup({
+		startup_file = "/tmp/nvim-startuptime", -- sets startup log path (string)
+		message = "Whoa! those {} are pretty fast", -- sets a custom message (string | function)
+		-- message = function(time) -- function-based custom message
+		-- time < 100 and 'Just {}? really good!' or 'Those {} can get faster'
+		-- end
 	})
 end
 

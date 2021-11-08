@@ -1,7 +1,7 @@
 local function setup()
 	-- tree sitter
 	require("nvim-treesitter.configs").setup({
-		ensure_installed = { "bash", "c", "go", "lua", "rust", "python", "tsx" },
+		ensure_installed = { "bash", "c", "cpp", "go", "kotlin", "lua", "rust", "python", "tsx" },
 		highlight = {
 			enable = true,
 			-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -55,6 +55,7 @@ local function setup()
 		},
 	})
 
+	require("bqf").setup({})
 	require("vcs").setup()
 
 	-- indent
@@ -176,9 +177,7 @@ local function setup()
 
 	gps.setup({})
 
-	require("github-theme").setup({
-		theme_style = "dark_default",
-	})
+	require("github-theme").setup({ theme_style = "dark_default" })
 end
 
 return { setup = setup }

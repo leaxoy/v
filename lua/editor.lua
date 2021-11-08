@@ -5,7 +5,7 @@ local function setup()
 			.. vim.fn.strftime("%H:%M:%S")
 			.. ", [file]: "
 			.. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()),
-		events = { "InsertLeave" },
+		events = { "InsertLeave", "TextChanged" },
 		conditions = {
 			exists = true,
 			filename_is_not = {},
@@ -39,6 +39,11 @@ local function setup()
 		},
 	})
 	require("neogen").setup({ enabled = true })
+	require("hlslens").setup({
+		calm_down = true,
+		nearest_only = true,
+		nearest_float_when = "always",
+	})
 end
 
 return { setup = setup }

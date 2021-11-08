@@ -69,7 +69,7 @@ return require("packer").startup({
 				require("telescope").load_extension("dap")
 			end,
 		})
-		use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
+		-- use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
 
 		-- UI Component
 		use("olimorris/onedarkpro.nvim")
@@ -86,12 +86,12 @@ return require("packer").startup({
 		})
 		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 		use("simrat39/symbols-outline.nvim")
-		use("liuchengxu/vista.vim")
 		use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
 		use({
 			"ray-x/navigator.lua",
 			requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" },
 		})
+		use({ "kevinhwang91/nvim-bqf", })
 		use({
 			"rcarriga/nvim-notify",
 			requires = { "nvim-telescope/telescope.nvim" },
@@ -108,7 +108,8 @@ return require("packer").startup({
 		-- Code edit
 		use("numToStr/Comment.nvim")
 		use("windwp/nvim-autopairs")
-		use({ "ellisonleao/glow.nvim" })
+		use({ "ellisonleao/glow.nvim" }) -- markdown render
+		use({ "kevinhwang91/nvim-hlslens" }) -- searching
 		use({
 			"jghauser/mkdir.nvim",
 			config = function()
@@ -197,6 +198,8 @@ return require("packer").startup({
 				})
 			end,
 		})
+		use("henriquehbr/nvim-startup.lua")
+		use({ "michaelb/sniprun", run = "bash ./install.sh" })
 
 		if packer_bootstrap then
 			require("packer").sync()

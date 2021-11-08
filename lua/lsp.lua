@@ -166,14 +166,18 @@ local function update_lsp_capabilities(override)
 	return capabilities
 end
 
+local function autocmd(client)
+	document_format(client)
+	document_highlight(client)
+end
+
 local function on_attach(client, bufnr)
 	require("lsp_signature").on_attach()
 	require("illuminate").on_attach(client)
 
 	bind_key(bufnr)
 	register_lsp_handlers()
-	document_format(client)
-	document_highlight(client)
+	autocmd(client)
 	codelens(client)
 end
 
@@ -194,7 +198,14 @@ local function setup()
 					-- more settings: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 					-- flags = {allow_incremental_sync = true, debounce_text_changes = 500},
 					-- not supported
-					analyses = { unusedparams = true, unreachable = false },
+					analyses = {
+						unusedparams = true,
+						unreachable = true,
+						unusedwrite = true,
+						fieldalignment = true,
+						nilness = true,
+						shadow = true,
+					},
 					codelenses = {
 						generate = true, -- show the `go generate` lens.
 						gc_details = true, --  // Show a code lens toggling the display of gc's choices.
@@ -202,6 +213,7 @@ local function setup()
 						tidy = true,
 						upgrade_dependency = true,
 					},
+					experimentalWorkspaceModule = true,
 					usePlaceholders = true,
 					completeUnimported = true,
 					staticcheck = true,
