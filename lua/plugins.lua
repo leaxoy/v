@@ -91,7 +91,7 @@ return require("packer").startup({
 			"ray-x/navigator.lua",
 			requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" },
 		})
-		use({ "kevinhwang91/nvim-bqf", })
+		use({ "kevinhwang91/nvim-bqf" })
 		use({
 			"rcarriga/nvim-notify",
 			requires = { "nvim-telescope/telescope.nvim" },
@@ -103,7 +103,7 @@ return require("packer").startup({
 
 		-- VCS
 		use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
-		use({ "TimUntersberger/neogit", requires = { "nvim-lua/plenary.nvim" } })
+		use({ "TimUntersberger/neogit", requires = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } })
 
 		-- Code edit
 		use("numToStr/Comment.nvim")

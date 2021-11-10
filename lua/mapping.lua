@@ -27,6 +27,7 @@ local function setup()
 				g = { "<cmd>lua ToggleLazygit()<cr>", "Toggle LazyGit" },
 				s = { "<cmd>SymbolsOutline<cr>", "Toggle Symbol Outline" },
 				d = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle Debug & Test" },
+				v = { "<cmd>lua require'neogit'.open()<cr>", "Toggle VCS View" },
 			},
 			e = { name = "+Editor", w = { "<cmd>w<cr>", "Write" } },
 			b = {
@@ -55,7 +56,7 @@ local function setup()
 				r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Open Debug Repl" },
 			},
 			w = {
-				name = "+Window Manage",
+				name = "+Wjjindow Manage",
 				h = { "<cmd>wincmd h<cr>", "Goto Left Window" },
 				j = { "<cmd>wincmd j<cr>", "Goto Bottom Window" },
 				k = { "<cmd>wincmd k<cr>", "Goto Top Window" },
@@ -78,11 +79,20 @@ local function setup()
 				g = { "<cmd>lua require'neogen'.generate()<cr>", "Gen Doc" },
 			},
 		},
-		H = { "^", "Jump Line Begin" },
-		L = { "$", "Jump Line End" },
+		H = { "^", "Start of line" },
+		L = { "$", "End of line" },
 		J = { "10j", "Jump 10 Line Down" },
 		K = { "10k", "Jump 10 Line Up" },
 		[";"] = { ":", "Command Mode" },
+		d = {
+			name = "+Delete",
+			H = { "d^", "Start of line" },
+			L = { "d$", "End of line" },
+			['"'] = { 'di"', "double quoted string" },
+			["'"] = { "di'", "single quoted string" },
+			["[["] = { "di[", "content between matched []" },
+			["]]"] = { "di]", "content between matched []" },
+		},
 		f = {
 			name = "Magic Finder",
 			ca = { "<cmd>CodeActionMenu<cr>", "Code Action Menu" },
@@ -101,10 +111,11 @@ local function setup()
 		gim = { "<cmd>Telescope goimpl<cr>", "Go Impl Interface" },
 	})
 	wk.register({
-		["<c-h>"] = { "<c-o>^", "Jump To Line Begining" },
-		["<c-l>"] = { "<c-o>$", "Jump To Line Ending" },
+		["<c-h>"] = { "<c-o>^", "Start of line" },
+		["<c-l>"] = { "<c-o>$", "End of line" },
 		["<c-j>"] = { "<c-o>10j", "Jump 10 Line Down" },
 		["<c-k>"] = { "<c-o>10k", "Jump 10 Line Up" },
+		["<c-t>"] = { "<c-o><cmd>ToggleTerm<cr>", "Toggle Terminal" },
 	}, {
 		mode = "i",
 	})

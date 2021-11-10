@@ -75,7 +75,7 @@ local function register_lsp_handlers()
 		},
 	})
 
-	local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
+	local signs = { Error = "", Warning = "", Hint = "", Information = "" }
 
 	local sign = function(hl, icon)
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -95,17 +95,14 @@ end
 
 local function document_format(client)
 	-- try format with lsp, otherwise use Neoformat
+	vim.api.nvim_command([[augroup Format]])
+	vim.api.nvim_command([[autocmd! * <buffer>]])
 	if client.resolved_capabilities.document_formatting then
-		vim.api.nvim_command([[augroup Format]])
-		vim.api.nvim_command([[autocmd! * <buffer>]])
 		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]])
-		vim.api.nvim_command([[augroup END]])
 	else
-		vim.api.nvim_command([[augroup NeoFormat]])
-		vim.api.nvim_command([[autocmd! * <buffer>]])
 		vim.api.nvim_command([[autocmd BufWritePre <buffer> undojoin | Neoformat]])
-		vim.api.nvim_command([[augroup END]])
 	end
+	vim.api.nvim_command([[augroup END]])
 end
 
 local function document_highlight(client)

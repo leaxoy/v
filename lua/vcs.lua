@@ -35,6 +35,7 @@ local function setup()
 		current_line_blame = true,
 	})
 	require("neogit").setup({
+		kind = "floating",
 		integrations = {
 			diffview = true,
 		},
