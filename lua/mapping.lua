@@ -56,7 +56,7 @@ local function setup()
 				r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Open Debug Repl" },
 			},
 			w = {
-				name = "+Wjjindow Manage",
+				name = "+Window Manage",
 				h = { "<cmd>wincmd h<cr>", "Goto Left Window" },
 				j = { "<cmd>wincmd j<cr>", "Goto Bottom Window" },
 				k = { "<cmd>wincmd k<cr>", "Goto Top Window" },
