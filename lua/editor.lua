@@ -19,8 +19,8 @@ local function setup()
 	})
 	require("Comment").setup({
 		toggler = {
-			line = "<space>cc",
-			block = "<space>cv",
+			line = "<leader>cc",
+			block = "<leader>cv",
 		},
 	})
 	require("todo-comments").setup({
@@ -43,7 +43,9 @@ local function setup()
 		calm_down = true,
 		nearest_only = true,
 		nearest_float_when = "always",
+		virt_priority = 1,
 	})
+	require("marks").setup({})
 end
 
 return { setup = setup }

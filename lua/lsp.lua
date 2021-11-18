@@ -58,7 +58,7 @@ local function bind_key(bufnr)
 		},
 	}, {
 		buffer = bufnr,
-		prefix = "<space>",
+		prefix = "<leader>",
 	})
 end
 

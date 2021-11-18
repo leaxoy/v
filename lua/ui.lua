@@ -1,7 +1,20 @@
 local function setup()
 	-- tree sitter
 	require("nvim-treesitter.configs").setup({
-		ensure_installed = { "bash", "c", "cpp", "c_sharp", "go", "kotlin", "lua", "rust", "python", "tsx" },
+		ensure_installed = {
+			"bash",
+			"c",
+			"cpp",
+			"c_sharp",
+			"go",
+			"java",
+			"kotlin",
+			"lua",
+			"rust",
+			"python",
+			"toml",
+			"tsx",
+		},
 		highlight = {
 			enable = true,
 			-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -103,7 +116,51 @@ local function setup()
 			numbers = function(opts)
 				return string.format("[%s]", opts.ordinal)
 			end,
-			close_command = "bdelete %d",
+			highlights = {
+				fill = {
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "StatusLineNC" },
+				},
+				background = {
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "StatusLine" },
+				},
+				buffer_visible = {
+					gui = "",
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "Normal" },
+				},
+				buffer_selected = {
+					gui = "",
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "Normal" },
+				},
+				separator = {
+					guifg = { attribute = "bg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "StatusLine" },
+				},
+				separator_selected = {
+					guifg = { attribute = "fg", highlight = "Special" },
+					guibg = { attribute = "bg", highlight = "Normal" },
+				},
+				separator_visible = {
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "StatusLineNC" },
+				},
+				close_button = {
+					guifg = { attribute = "fg", highlight = "Normal" },
+					guibg = { attribute = "bg", highlight = "StatusLine" },
+				},
+				close_button_selected = {
+					guifg = { attribute = "fg", highlight = "normal" },
+					guibg = { attribute = "bg", highlight = "normal" },
+				},
+				close_button_visible = {
+					guifg = { attribute = "fg", highlight = "normal" },
+					guibg = { attribute = "bg", highlight = "normal" },
+				},
+			},
+			close_command = "Bdelete! %d",
 			offsets = {
 				{
 					filetype = "NvimTree",
@@ -113,16 +170,16 @@ local function setup()
 				},
 				{
 					filetype = "Outline",
-					text = "Outline",
+					text = "Symbol Outline",
 					highlight = "Directory",
 					text_align = "center",
 				},
 			},
 			diagnostics = "nvim_lsp",
-			diagnostics_indicator = function(count, level, diagnostics, ctx)
-				local icon = level:match("error") and "E" or "W"
-				return icon .. "." .. count
-			end,
+			-- diagnostics_indicator = function(count, level, diagnostics, ctx)
+			-- 	local signs = { error = "", warning = "", hint = "", information = "" }
+			-- 	return signs[level] .. "." .. count
+			-- end,
 			show_close_icon = false,
 			show_buffer_close_icons = true,
 			show_buffer_icons = true,
@@ -139,7 +196,16 @@ local function setup()
 	local gps = require("nvim-gps")
 
 	require("lualine").setup({
-		options = { theme = "github" },
+		-- options = { theme = "gruvbox-material" },
+		options = {
+			-- theme = "vscode",
+			-- disabled_filetypes = { "NvimTree", "Outline" },
+			theme = "auto",
+			component_separators = { left = ">", right = "<" },
+			section_separators = { left = "", right = "" },
+			always_divide_middle = true,
+		},
+		extensions = { "nvim-tree", "toggleterm" },
 		sections = {
 			lualine_a = { "mode" },
 			lualine_b = { "branch" },
@@ -165,11 +231,11 @@ local function setup()
 		show_guides = true,
 		show_symbol_details = true,
 		keymaps = { -- These keymaps can be a string or a table for multiple keys
-			close = {},
-			goto_location = "<Cr>",
+			close = nil,
+			goto_location = "<cr>",
 			focus_location = "o",
-			hover_symbol = "<C-space>",
-			toggle_preview = "P",
+			hover_symbol = "<c-space>",
+			toggle_preview = "K",
 			rename_symbol = "r",
 			code_actions = "a",
 		},
@@ -177,7 +243,12 @@ local function setup()
 
 	gps.setup({})
 
-	require("github-theme").setup({ theme_style = "dark_default" })
+	-- require("github-theme").setup({
+	-- 	theme_style = "dark_default",
+	-- 	keyword_style = "italic",
+	-- 	function_style = "italic",
+	-- 	transparent = true,
+	-- })
 end
 
 return { setup = setup }

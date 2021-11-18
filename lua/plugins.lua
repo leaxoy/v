@@ -22,8 +22,38 @@ return require("packer").startup({
 		-- Packer can manage itself
 		use("wbthomason/packer.nvim")
 
+		-- startup
+		use("henriquehbr/nvim-startup.lua")
+		use({
+			"rmagatti/auto-session",
+			config = function()
+				require("auto-session").setup({
+					log_level = "info",
+				})
+			end,
+		})
+		use({
+			"rmagatti/session-lens",
+			requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
+			config = function()
+				require("session-lens").setup({--[[your custom config--]]
+					theme_conf = { border = true },
+					previewer = true,
+				})
+				require("telescope").load_extension("session-lens")
+			end,
+		})
+
 		-- Lang specifies
 		use("solarnz/thrift.vim")
+		use({
+			"Saecki/crates.nvim",
+			event = { "BufRead Cargo.toml" },
+			requires = { { "nvim-lua/plenary.nvim" } },
+			config = function()
+				require("crates").setup()
+			end,
+		})
 
 		-- Lsp config
 		use("neovim/nvim-lspconfig")
@@ -36,6 +66,7 @@ return require("packer").startup({
 				"hrsh7th/cmp-buffer", -- cmp from buffer
 				"hrsh7th/cmp-vsnip", -- cmp from snippet
 				"onsails/lspkind-nvim",
+				"hrsh7th/cmp-cmdline",
 			},
 		})
 		use("ray-x/lsp_signature.nvim")
@@ -69,16 +100,23 @@ return require("packer").startup({
 				require("telescope").load_extension("dap")
 			end,
 		})
-		-- use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
+		use({
+			"rcarriga/vim-ultest",
+			requires = { "vim-test/vim-test", "roxma/nvim-yarp", "roxma/vim-hug-neovim-rpc" },
+			config = function() end,
+			run = ":UpdateRemotePlugins",
+		})
 
 		-- UI Component
-		use("olimorris/onedarkpro.nvim")
 		use("projekt0n/github-nvim-theme")
+		use("sainnhe/gruvbox-material")
+		use("Mofiqul/vscode.nvim")
 		use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 		use("nvim-treesitter/nvim-treesitter-textobjects")
 		use("nvim-treesitter/nvim-treesitter-refactor")
 		use("romgrk/nvim-treesitter-context")
 		use("p00f/nvim-ts-rainbow")
+		use("chentau/marks.nvim")
 		use("lukas-reineke/indent-blankline.nvim")
 		use({
 			"nvim-lualine/lualine.nvim",
@@ -87,10 +125,6 @@ return require("packer").startup({
 		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 		use("simrat39/symbols-outline.nvim")
 		use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
-		use({
-			"ray-x/navigator.lua",
-			requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" },
-		})
 		use({ "kevinhwang91/nvim-bqf" })
 		use({
 			"rcarriga/nvim-notify",
@@ -108,6 +142,14 @@ return require("packer").startup({
 		-- Code edit
 		use("numToStr/Comment.nvim")
 		use("windwp/nvim-autopairs")
+		use("famiu/bufdelete.nvim")
+		use({
+			"phaazon/hop.nvim",
+			config = function()
+				-- you can configure Hop the way you like here; see :h hop-config
+				require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
+			end,
+		})
 		use({ "ellisonleao/glow.nvim" }) -- markdown render
 		use({ "kevinhwang91/nvim-hlslens" }) -- searching
 		use({
@@ -134,15 +176,6 @@ return require("packer").startup({
 			end,
 		})
 		use("RRethy/vim-illuminate")
-		use("rmagatti/auto-session")
-		use({
-			"rmagatti/session-lens",
-			requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
-			config = function()
-				require("telescope").load_extension("session-lens")
-				require("session-lens").setup({})
-			end,
-		})
 
 		-- File Explorer
 		use("kyazdani42/nvim-web-devicons") -- for file icons
@@ -154,6 +187,13 @@ return require("packer").startup({
 			requires = { "nvim-telescope/telescope.nvim" },
 			config = function()
 				require("telescope").load_extension("packer")
+			end,
+		})
+		use({
+			"nvim-telescope/telescope-hop.nvim",
+			requires = { "nvim-telescope/telescope.nvim" },
+			config = function()
+				require("telescope").load_extension("hop")
 			end,
 		})
 		use({
@@ -182,6 +222,7 @@ return require("packer").startup({
 					},
 					key_labels = {
 						["<space>"] = "SPC",
+						["<leader>"] = "SPC",
 						["<tab>"] = "TAB",
 					},
 					layout = {
@@ -190,12 +231,11 @@ return require("packer").startup({
 				})
 			end,
 		})
-		use("henriquehbr/nvim-startup.lua")
 		use({ "michaelb/sniprun", run = "bash ./install.sh" })
 
 		if packer_bootstrap then
 			require("packer").sync()
 		end
 	end,
-	config = { git = { clone_timeout = 300 } },
+	config = { git = { clone_timeout = 300 }, max_jobs = 25 },
 })
