@@ -1,4 +1,6 @@
-local function setup()
+local M = {}
+
+M.setup = function()
 	require("autosave").setup({
 		enabled = true,
 		execution_message = "AutoSave: [time]: "
@@ -39,13 +41,6 @@ local function setup()
 		},
 	})
 	require("neogen").setup({ enabled = true })
-	require("hlslens").setup({
-		calm_down = true,
-		nearest_only = true,
-		nearest_float_when = "always",
-		virt_priority = 1,
-	})
-	require("marks").setup({})
 end
 
-return { setup = setup }
+return M

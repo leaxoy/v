@@ -4,10 +4,9 @@ vim.g.mapleader = " "
 
 require("plugins")
 require("option").setup()
+require("ui").setup()
 require("mapping").setup()
-require("completion").setup()
 require("lsp").setup()
 require("editor").setup()
--- require("dap").setup()
-require("ui").setup()
-require("misc").setup()
+require("dbg").setup()
+require("vcs").setup()

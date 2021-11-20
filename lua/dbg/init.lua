@@ -1,11 +1,6 @@
-local function setup()
-	local dap_installer = require("dap-install")
-	dap_installer.setup({})
-	local debuggers = require("dap-install.api.debuggers").get_installed_debuggers()
-	for _, debugger in ipairs(debuggers) do
-		dap_installer.config(debugger)
-	end
+local M = {}
 
+M.setup = function()
 	require("dapui").setup({
 		icons = { expanded = "▾", collapsed = "▸" },
 		mappings = {
@@ -44,6 +39,28 @@ local function setup()
 		windows = { indent = 1 },
 	})
 	require("nvim-dap-virtual-text").setup({})
+
+	local installer = require("dap-install")
+	installer.setup({})
+	local debuggers = require("dap-install.api.debuggers").get_installed_debuggers()
+	for _, debugger in ipairs(debuggers) do
+		installer.config(debugger)
+	end
+
+	-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "", linehl = "", numhl = "" })
+
+	local dap, dapui = require("dap"), require("dapui")
+	dap.listeners.after.event_initialized["dapui_config"] = function()
+		dapui.open()
+	end
+	dap.listeners.before.event_terminated["dapui_config"] = function()
+		dapui.close()
+	end
+	dap.listeners.before.event_exited["dapui_config"] = function()
+		dapui.close()
+	end
+	-- require("dbg/go").setup()
+	-- require("dbg/python").setup()
 end
 
-return { setup = setup }
+return M

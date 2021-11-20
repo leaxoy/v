@@ -65,8 +65,10 @@ return require("packer").startup({
 				"hrsh7th/cmp-nvim-lua", -- cmp from lua
 				"hrsh7th/cmp-buffer", -- cmp from buffer
 				"hrsh7th/cmp-vsnip", -- cmp from snippet
-				"onsails/lspkind-nvim",
+				"onsails/lspkind-nvim", -- cmp menu text
 				"hrsh7th/cmp-cmdline",
+				"hrsh7th/cmp-nvim-lsp-document-symbol",
+				"lukas-reineke/cmp-under-comparator",
 			},
 		})
 		use("ray-x/lsp_signature.nvim")
@@ -231,7 +233,6 @@ return require("packer").startup({
 				})
 			end,
 		})
-		use({ "michaelb/sniprun", run = "bash ./install.sh" })
 
 		if packer_bootstrap then
 			require("packer").sync()
