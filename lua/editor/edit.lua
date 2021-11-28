@@ -3,10 +3,10 @@ local M = {}
 M.setup = function()
 	require("autosave").setup({
 		enabled = true,
-		execution_message = "AutoSave: [time]: "
+		execution_message = "自动保存: [时间]: "
 			.. vim.fn.strftime("%H:%M:%S")
-			.. ", [file]: "
-			.. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()),
+			.. ", [文件]: "
+			.. vim.fn.expand("%:p"),
 		events = { "InsertLeave", "TextChanged" },
 		conditions = {
 			exists = true,
@@ -17,7 +17,7 @@ M.setup = function()
 		write_all_buffers = false,
 		on_off_commands = true,
 		clean_command_line_interval = 0,
-		debounce_delay = 1000,
+		debounce_delay = 3000,
 	})
 	require("Comment").setup({
 		toggler = {

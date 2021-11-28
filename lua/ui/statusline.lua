@@ -29,6 +29,14 @@ M.setup = function()
 					sources = { "nvim_lsp" },
 					sections = { "error", "warn", "info", "hint" },
 					symbols = { error = "E", warn = "W", info = "I", hint = "H" },
+					-- diagnostics_color = {
+					-- 	-- Same values like general color option can be used here.
+					-- 	error = "DiagnosticError", -- changes diagnostic's error color
+					-- 	warn = "DiagnosticWarn", -- changes diagnostic's warn color
+					-- 	info = "DiagnosticInfo", -- Changes diagnostic's info color
+					-- 	hint = "DiagnosticHint", -- Changes diagnostic's hint color
+					-- },
+					colored = true,
 				},
 				"diff",
 				"filetype",

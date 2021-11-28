@@ -24,10 +24,12 @@ local function key_binding(bufnr)
 			},
 			c = {
 				name = "+Call Hierarchy",
-				n = { "<cmd>lua vim.lsp.buf.rename()<cr>", "LSP Rename" },
+				-- n = { "<cmd>lua vim.lsp.buf.rename()<cr>", "LSP Rename" },
+				n = { "<cmd>lua require'lspactions'.rename()<cr>", "LSP Rename" },
 				i = { "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", "LSP Incoming Calls" },
 				o = { "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", "LSP Outgoing Calls" },
-				a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "LSP Code Action" },
+				-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "LSP Code Action" },
+				a = { "<cmd>lua require'lspactions'.code_action()<cr>", "LSP Code Action" },
 			},
 			l = {
 				name = "+CodeLens",
@@ -38,7 +40,10 @@ local function key_binding(bufnr)
 			x = {
 				name = "+Diagnostics",
 				q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Set Diagnostic" },
-				d = { "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", "Line Diagnostics" },
+				d = {
+					"<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({ border = 'double' })<cr>",
+					"Line Diagnostics",
+				},
 				["["] = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
 				["]"] = { "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", "Next Diagnostic" },
 			},

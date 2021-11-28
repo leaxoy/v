@@ -7,6 +7,7 @@ M.setup = function()
 	require("ui/tabline").setup()
 	require("ui/terminal").setup()
 	require("ui/statusline").setup()
+	require("ui/theme").setup()
 end
 
 return M

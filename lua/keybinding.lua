@@ -50,6 +50,7 @@ local function setup()
 			s = { "<cmd>Telescope session-lens search_session<cr>", "Search" },
 			a = { "<cmd>SaveSession<cr>", "Save" },
 			d = { "<cmd>DeleteSession<cr>", "Delete" },
+			r = { "<cmd>RestoreSession<cr>", "Restore" },
 		},
 		t = {
 			name = "+Debug & Test",
@@ -73,12 +74,22 @@ local function setup()
 		},
 		w = {
 			name = "+Window",
+			c = { "<cmd>wincmd c<cr>", "Close Current Window" },
+			o = { "<cmd>wincmd o<cr>", "Close Other Window" },
 			h = { "<cmd>wincmd h<cr>", "Goto Left Window" },
 			j = { "<cmd>wincmd j<cr>", "Goto Bottom Window" },
 			k = { "<cmd>wincmd k<cr>", "Goto Top Window" },
 			l = { "<cmd>wincmd l<cr>", "Goto Right Window" },
 			v = { "<cmd>vsplit<cr>", "Split Vertically" },
 			s = { "<cmd>split<cr>", "Split Horizonally" },
+			r = {
+				name = "+Resize",
+				h = { "<c-w>10<", "Decrease width" },
+				j = { "<c-w>10+", "Increase height" },
+				k = { "<c-w>10-", "Decrease height" },
+				l = { "<c-w>10>", "Increase width" },
+			},
+			["="] = { "<c-w>=", "Equally high and wide" },
 		},
 		x = {
 			name = "+Trouble",
@@ -114,6 +125,7 @@ local function setup()
 			w = { "<cmd>Telescope<cr>", "Open Telescope Window" },
 			f = { "<cmd>Telescope find_files<cr>", "Open File Finder" },
 			l = { "<cmd>Telescope file_browser<cr>", "Open File Browser" },
+			g = { "<cmd>Telescope live_grep<cr>", "Open Live Grep" },
 			b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
 			t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },
 			a = { "<cmd>Telescope lsp_code_actions<cr>", "[LSP] Code Actions" },
@@ -145,6 +157,8 @@ local function setup()
 		["<c-k>"] = { "<c-o>10k", "Jump 10 Line Up" },
 		["<c-t>"] = { "<c-o><cmd>ToggleTerm<cr>", "Toggle Terminal" },
 		["<c-u>"] = { "<c-o>u", "Undo" },
+		["<c-y>"] = { "<c-o>yy", "Copy Line" },
+		["<c-p>"] = { "<c-o>p", "Paste" },
 	}, {
 		mode = "i",
 	})

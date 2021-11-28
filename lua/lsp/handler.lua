@@ -10,6 +10,47 @@ local function register_lsp_handlers()
 			prefix = "● ", -- Could be '●', '▎', 'x', "■"
 		},
 	})
+	vim.lsp.handlers["textDocument/codeAction"] = require("lspactions").codeaction
+	vim.lsp.handlers["textDocument/references"] = vim.lsp.with(require("lspactions").references, {
+		open_list = true,
+		jump_to_result = true,
+		jump_to_list = false,
+		loclist = false,
+		always_qf = false,
+		transform = function(result)
+			return result
+		end,
+	})
+	vim.lsp.handlers["textDocument/definition"] = vim.lsp.with(require("lspactions").definition, {
+		open_list = true,
+		jump_to_result = true,
+		jump_to_list = false,
+		loclist = false,
+		always_qf = false,
+		transform = function(result)
+			return result
+		end,
+	})
+	vim.lsp.handlers["textDocument/declaration"] = vim.lsp.with(require("lspactions").declaration, {
+		open_list = true,
+		jump_to_result = true,
+		jump_to_list = false,
+		loclist = false,
+		always_qf = false,
+		transform = function(result)
+			return result
+		end,
+	})
+	vim.lsp.handlers["textDocument/implementation"] = vim.lsp.with(require("lspactions").implementation, {
+		open_list = true,
+		jump_to_result = true,
+		jump_to_list = false,
+		loclist = false,
+		always_qf = false,
+		transform = function(result)
+			return result
+		end,
+	})
 
 	local signs = { Error = "", Warning = "", Hint = "", Information = "" }
 

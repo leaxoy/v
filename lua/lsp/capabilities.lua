@@ -47,8 +47,8 @@ end
 
 M.highlight = function(client)
 	if client.resolved_capabilities.document_highlight then
-		vim.api.nvim_command([[hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow]])
-		vim.api.nvim_command([[hi LspReferenceText cterm=bold ctermbg=red guibg=DarkGreen]])
+		vim.api.nvim_command([[hi LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
+		vim.api.nvim_command([[hi LspReferenceText cterm=bold ctermbg=red guibg=Green]])
 		vim.api.nvim_command([[hi LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
 		vim.api.nvim_command([[augroup Highlight]])
 		vim.api.nvim_command([[autocmd! * <buffer>]])

@@ -36,7 +36,7 @@ return require("packer").startup({
 			"rmagatti/session-lens",
 			requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
 			config = function()
-				require("session-lens").setup({--[[your custom config--]]
+				require("session-lens").setup({
 					theme_conf = { border = true },
 					previewer = true,
 				})
@@ -72,6 +72,10 @@ return require("packer").startup({
 			},
 		})
 		use("ray-x/lsp_signature.nvim")
+		use({
+			"RishabhRD/lspactions",
+			requires = { "tjdevries/astronauta.nvim", "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
+		})
 		use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu" })
 		use({
 			"folke/lsp-colors.nvim",
@@ -117,6 +121,15 @@ return require("packer").startup({
 		use("nvim-treesitter/nvim-treesitter-textobjects")
 		use("nvim-treesitter/nvim-treesitter-refactor")
 		use("romgrk/nvim-treesitter-context")
+		use({
+			"folke/zen-mode.nvim",
+			config = function()
+				require("zen-mode").setup({
+					window = { width = 0.8 },
+					plugins = { options = { enabled = true, ruler = false } },
+				})
+			end,
+		})
 		use("p00f/nvim-ts-rainbow")
 		use("chentau/marks.nvim")
 		use("lukas-reineke/indent-blankline.nvim")

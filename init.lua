@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 require("plugins")
 require("option").setup()
 require("ui").setup()
-require("mapping").setup()
+require("keybinding").setup()
 require("lsp").setup()
 require("editor").setup()
 require("dbg").setup()
