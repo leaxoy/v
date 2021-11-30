@@ -20,6 +20,7 @@ local function setup()
 	vim.o.smartcase = true
 
 	vim.o.termguicolors = true
+	vim.o.guifont = "FiraCode Nerd Font Mono:h18"
 	vim.o.cursorline = true
 	vim.o.completeopt = "menu,menuone,noselect"
 	vim.o.showmatch = true

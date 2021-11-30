@@ -4,11 +4,13 @@ M.on_attach = function(client, bufnr)
 	require("lsp_signature").on_attach()
 	require("illuminate").on_attach(client)
 
-	require("lsp/keybinding").key_binding(bufnr)
-	require("lsp/handler").lsp_handler()
+	require("lsp/keybinding").setup(bufnr)
+	require("lsp/handler").setup()
 	require("lsp/capabilities").codelens(client)
-	require("lsp/capabilities").highlight(client)
+	-- require("lsp/capabilities").highlight(client)
 	require("lsp/capabilities").format(client)
+
+	require("lsp/hierarchy").setup()
 end
 
 M.setup = function()

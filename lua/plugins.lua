@@ -84,6 +84,7 @@ return require("packer").startup({
 			end,
 		})
 		use("folke/lua-dev.nvim")
+		use("ldelossa/calltree.nvim")
 
 		-- Snippet config
 		use({
@@ -191,6 +192,12 @@ return require("packer").startup({
 			end,
 		})
 		use("RRethy/vim-illuminate")
+		use({
+			"AckslD/nvim-neoclip.lua",
+			config = function()
+				require("neoclip").setup()
+			end,
+		})
 
 		-- File Explorer
 		use("kyazdani42/nvim-web-devicons") -- for file icons

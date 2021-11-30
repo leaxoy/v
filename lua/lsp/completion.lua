@@ -36,6 +36,8 @@ local function setup()
 			{ name = "vsnip" }, -- For vsnip user.
 			{ name = "buffer" },
 			{ name = "cmdline" },
+			{ name = "nvim_lua" },
+			{ name = "crates" },
 		},
 		experimental = {
 			ghost_text = true,
@@ -68,9 +70,6 @@ local function setup()
 	cmp.setup.cmdline(":", {
 		sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
 	})
-
-	vim.cmd([[autocmd FileType toml lua require('cmp').setup.buffer { sources = { { name = 'crates' } } }]])
-	vim.cmd([[autocmd FileType lua lua require('cmp').setup.buffer { sources = { { name = 'nvim_lua' } } }]])
 end
 
 return { setup = setup }

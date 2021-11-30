@@ -2,7 +2,7 @@ local M = {}
 
 M.setup = function()
 	require("autosave").setup({
-		enabled = true,
+		enabled = false,
 		execution_message = "自动保存: [时间]: "
 			.. vim.fn.strftime("%H:%M:%S")
 			.. ", [文件]: "
