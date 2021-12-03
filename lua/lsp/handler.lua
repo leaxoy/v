@@ -17,7 +17,8 @@ local function setup()
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 		update_in_insert = true,
 		virtual_text = {
-			prefix = "● ", -- Could be '●', '▎', 'x', "■"
+			prefix = "■ ", -- Could be '●', '▎', 'x', "■"
+			source = "if_many",
 		},
 	})
 	vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(require("lspactions").codeaction, {})
@@ -29,26 +30,16 @@ local function setup()
 		location_config
 	)
 
-	local signs = { Error = "", Warning = "", Hint = "", Information = "" }
-
 	local sign = function(hl, icon)
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 	end
-
-	if vim.fn.has("nvim-0.5.1") then
-		for type, icon in pairs(signs) do
-			sign("LspDiagnosticsSign" .. type, icon)
-			sign("LspDiagnosticsVirtualText" .. type, icon)
-			sign("LspDiagnosticsFloating" .. type, icon)
-			sign("LspDiagnosticsUnderline" .. type, icon)
-		end
-	else
-		for type, icon in pairs(signs) do
-			sign("DiagnosticSign" .. type, icon)
-			sign("DiagnosticVirtualText" .. type, icon)
-			sign("DiagnosticFloating" .. type, icon)
-			sign("DiagnosticUnderline" .. type, icon)
-		end
+	local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+	for type, icon in pairs(signs) do
+		sign("Diagnostic" .. type, icon)
+		sign("DiagnosticSign" .. type, icon)
+		sign("DiagnosticVirtualText" .. type, icon)
+		sign("DiagnosticFloating" .. type, icon)
+		sign("DiagnosticUnderline" .. type, icon)
 	end
 
 	vim.cmd(

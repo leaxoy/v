@@ -8,6 +8,7 @@ local function setup()
 				with_text = true,
 				maxwidth = 50,
 				menu = {
+					copilot = "[AI]",
 					buffer = "[BUF]",
 					nvim_lsp = "[LSP]",
 					vsnip = "[SNI]",
@@ -33,11 +34,14 @@ local function setup()
 		},
 		sources = {
 			{ name = "nvim_lsp" },
+			{ name = "copilot" },
 			{ name = "vsnip" }, -- For vsnip user.
 			{ name = "buffer" },
 			{ name = "cmdline" },
 			{ name = "nvim_lua" },
 			{ name = "crates" },
+			{ name = "orgmode" },
+			{ name = "nvim_lsp_document_symbol" },
 		},
 		experimental = {
 			ghost_text = true,

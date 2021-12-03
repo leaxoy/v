@@ -11,8 +11,11 @@ end
 M.setup = function()
 	require("symbols-outline").setup({
 		highlight_hovered_item = true,
+		auto_preview = true,
 		show_guides = true,
 		show_symbol_details = true,
+		relative_width = true,
+		width = 25,
 		keymaps = { -- These keymaps can be a string or a table for multiple keys
 			close = nil,
 			goto_location = "<cr>",

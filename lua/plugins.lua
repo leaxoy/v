@@ -54,6 +54,22 @@ return require("packer").startup({
 				require("crates").setup()
 			end,
 		})
+		use({
+			"nvim-orgmode/orgmode",
+			config = function()
+				require("orgmode").setup({
+					org_agenda_files = { "~/Dropbox/org/*", "~/my-orgs/**/*" },
+					org_default_notes_file = "~/Dropbox/org/refile.org",
+					mappings = { global = {} },
+				})
+			end,
+		})
+		use({
+			"lukas-reineke/headlines.nvim",
+			config = function()
+				require("headlines").setup()
+			end,
+		})
 
 		-- Lsp config
 		use("neovim/nvim-lspconfig")
@@ -62,6 +78,7 @@ return require("packer").startup({
 			"hrsh7th/nvim-cmp",
 			requires = {
 				"hrsh7th/cmp-nvim-lsp", -- cmp from lsp
+				{ "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
 				"hrsh7th/cmp-nvim-lua", -- cmp from lua
 				"hrsh7th/cmp-buffer", -- cmp from buffer
 				"hrsh7th/cmp-vsnip", -- cmp from snippet

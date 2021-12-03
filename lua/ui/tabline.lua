@@ -66,10 +66,10 @@ M.setup = function()
 				},
 			},
 			diagnostics = "nvim_lsp",
-			-- diagnostics_indicator = function(count, level, diagnostics, ctx)
-			-- 	local signs = { error = "", warning = "", hint = "", information = "" }
-			-- 	return signs[level] .. "." .. count
-			-- end,
+			diagnostics_indicator = function(count, level, diagnostics, ctx)
+				local signs = { error = "", warning = "", hint = "", information = "" }
+				return signs[level] .. "." .. count
+			end,
 			show_close_icon = false,
 			show_buffer_close_icons = true,
 			show_buffer_icons = true,
