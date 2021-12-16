@@ -1,6 +1,7 @@
 local M = {}
 
 M.setup = function()
+	require("nvim-web-devicons").setup({ default = true })
 	require("ui/file_explorer").setup()
 	require("ui/finder").setup()
 	require("ui/outline").setup()

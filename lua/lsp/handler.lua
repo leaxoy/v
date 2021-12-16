@@ -43,7 +43,7 @@ local function setup()
 	end
 
 	vim.cmd(
-		[[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({show_header=false, focusable=false, border="rounded"})]]
+		[[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {scope='cursor', show_header=false, focus=false, border='rounded'})]]
 	)
 end
 

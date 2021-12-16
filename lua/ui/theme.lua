@@ -12,6 +12,9 @@ M.setup = function()
 
 	vim.g.vscode_style = "dark"
 
+	vim.g.github_sidebars = { "qf", "vista_kind", "terminal", "packer" }
+	vim.g.github_comment_style = "italic"
+
 	M.set_theme()
 end
 

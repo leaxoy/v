@@ -16,7 +16,7 @@ local function setup()
 			["]"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
 			["["] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
 			b = { "<cmd>buffers<cr>", "List All Buffer" },
-			d = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
+			x = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
 			["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Goto Buffer 1" },
 			["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "Goto Buffer 2" },
 			["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "Goto Buffer 3" },

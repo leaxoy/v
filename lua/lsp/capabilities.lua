@@ -96,7 +96,7 @@ M.format = function(client)
 	-- try format with lsp, otherwise use Neoformat
 	vim.api.nvim_command([[augroup Format]])
 	vim.api.nvim_command([[autocmd! * <buffer>]])
-	vim.cmd([[autocmd BufWritePre *.py PyrightOrganizeImports]])
+	-- vim.cmd([[autocmd BufWritePre *.py PyrightOrganizeImports]])
 	vim.cmd([[autocmd BufWritePre *.go lua OrganizeImports(500)]])
 	if client.resolved_capabilities.document_formatting then
 		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]])

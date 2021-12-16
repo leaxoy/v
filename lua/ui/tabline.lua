@@ -6,50 +6,6 @@ M.setup = function()
 			numbers = function(opts)
 				return string.format("[%s]", opts.ordinal)
 			end,
-			highlights = {
-				fill = {
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "StatusLineNC" },
-				},
-				background = {
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "StatusLine" },
-				},
-				buffer_visible = {
-					gui = "",
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "Normal" },
-				},
-				buffer_selected = {
-					gui = "",
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "Normal" },
-				},
-				separator = {
-					guifg = { attribute = "bg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "StatusLine" },
-				},
-				separator_selected = {
-					guifg = { attribute = "fg", highlight = "Special" },
-					guibg = { attribute = "bg", highlight = "Normal" },
-				},
-				separator_visible = {
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "StatusLineNC" },
-				},
-				close_button = {
-					guifg = { attribute = "fg", highlight = "Normal" },
-					guibg = { attribute = "bg", highlight = "StatusLine" },
-				},
-				close_button_selected = {
-					guifg = { attribute = "fg", highlight = "normal" },
-					guibg = { attribute = "bg", highlight = "normal" },
-				},
-				close_button_visible = {
-					guifg = { attribute = "fg", highlight = "normal" },
-					guibg = { attribute = "bg", highlight = "normal" },
-				},
-			},
 			close_command = "Bdelete! %d",
 			offsets = {
 				{
@@ -64,6 +20,12 @@ M.setup = function()
 					highlight = "Directory",
 					text_align = "center",
 				},
+				{
+					filetype = "Calltree",
+					text = "Call Hierarchy",
+					highlight = "Directory",
+					text_align = "center",
+				},
 			},
 			diagnostics = "nvim_lsp",
 			diagnostics_indicator = function(count, level, diagnostics, ctx)
@@ -71,7 +33,7 @@ M.setup = function()
 				return signs[level] .. "." .. count
 			end,
 			show_close_icon = false,
-			show_buffer_close_icons = true,
+			show_buffer_close_icons = false,
 			show_buffer_icons = true,
 			show_tab_indicators = false,
 			modified_icon = "●",
@@ -80,6 +42,50 @@ M.setup = function()
 			tab_size = 16,
 			left_trunc_marker = "",
 			right_trunc_marker = "",
+		},
+		highlights = {
+			fill = {
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "StatusLineNC" },
+			},
+			background = {
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "StatusLine" },
+			},
+			buffer_visible = {
+				gui = "",
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "Normal" },
+			},
+			buffer_selected = {
+				gui = "",
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "Normal" },
+			},
+			separator = {
+				guifg = { attribute = "bg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "StatusLine" },
+			},
+			separator_selected = {
+				guifg = { attribute = "fg", highlight = "Special" },
+				guibg = { attribute = "bg", highlight = "Normal" },
+			},
+			separator_visible = {
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "StatusLineNC" },
+			},
+			close_button = {
+				guifg = { attribute = "fg", highlight = "Normal" },
+				guibg = { attribute = "bg", highlight = "StatusLine" },
+			},
+			close_button_selected = {
+				guifg = { attribute = "fg", highlight = "normal" },
+				guibg = { attribute = "bg", highlight = "normal" },
+			},
+			close_button_visible = {
+				guifg = { attribute = "fg", highlight = "normal" },
+				guibg = { attribute = "bg", highlight = "normal" },
+			},
 		},
 	})
 end

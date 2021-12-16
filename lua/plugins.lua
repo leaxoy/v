@@ -109,6 +109,7 @@ return require("packer").startup({
 			requires = {
 				{ "golang/vscode-go", opt = true, ft = "go" },
 				{ "cstrap/python-snippets", opt = true, ft = "python" },
+				{ "rafamadriz/friendly-snippets" },
 			},
 		})
 
@@ -124,12 +125,7 @@ return require("packer").startup({
 				require("telescope").load_extension("dap")
 			end,
 		})
-		use({
-			"rcarriga/vim-ultest",
-			requires = { "vim-test/vim-test", "roxma/nvim-yarp", "roxma/vim-hug-neovim-rpc" },
-			config = function() end,
-			run = ":UpdateRemotePlugins",
-		})
+		use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
 
 		-- UI Component
 		use("projekt0n/github-nvim-theme")
@@ -222,13 +218,6 @@ return require("packer").startup({
 		use("akinsho/toggleterm.nvim")
 		use({ "nvim-telescope/telescope.nvim", requires = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" } })
 		use({
-			"nvim-telescope/telescope-packer.nvim",
-			requires = { "nvim-telescope/telescope.nvim" },
-			config = function()
-				require("telescope").load_extension("packer")
-			end,
-		})
-		use({
 			"nvim-telescope/telescope-hop.nvim",
 			requires = { "nvim-telescope/telescope.nvim" },
 			config = function()
@@ -245,7 +234,7 @@ return require("packer").startup({
 		use({
 			"folke/trouble.nvim",
 			config = function()
-				require("trouble").setup()
+				require("trouble").setup({ mode = "document_diagnostics", use_diagnostic_signs = true })
 			end,
 		})
 		use({

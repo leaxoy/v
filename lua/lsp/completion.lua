@@ -1,11 +1,27 @@
+local has_words_before = function()
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
 local function setup()
 	local cmp = require("cmp")
 
 	cmp.setup({
+		completion = {
+			completeopt = "menu,menuone,noselect",
+		},
+		documentation = {
+			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+		},
+		experimental = { ghost_text = true, native_menu = false },
 		formatting = {
-			fields = { "abbr", "kind", "menu" },
+			fields = { "kind", "abbr", "menu" },
 			format = require("lspkind").cmp_format({
-				with_text = true,
+				with_text = false,
 				maxwidth = 50,
 				menu = {
 					copilot = "[AI]",
@@ -16,39 +32,38 @@ local function setup()
 				},
 			}),
 		},
-		snippet = {
-			expand = function(args)
-				vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
-			end,
-		},
 		mapping = {
 			["<C-d>"] = cmp.mapping.scroll_docs(-5),
 			["<C-f>"] = cmp.mapping.scroll_docs(5),
 			["<C-Space>"] = cmp.mapping.complete(),
 			["<C-e>"] = cmp.mapping.close(),
-			["<cr>"] = cmp.mapping.confirm({
+			["<CR>"] = cmp.mapping.confirm({
 				select = true,
 				behavior = cmp.ConfirmBehavior.Replace,
 			}),
-			["<TAB>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "s" }),
+			["<Tab>"] = cmp.mapping(function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif vim.fn["vsnip#available"](1) == 1 then
+					feedkey("<Plug>(vsnip-expand-or-jump)", "")
+				elseif has_words_before() then
+					cmp.complete()
+				else
+					fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+				end
+			end, { "i", "s" }),
+			["<S-Tab>"] = cmp.mapping(function()
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+					feedkey("<Plug>(vsnip-jump-prev)", "")
+				end
+			end, { "i", "s" }),
 		},
-		sources = {
-			{ name = "nvim_lsp" },
-			{ name = "copilot" },
-			{ name = "vsnip" }, -- For vsnip user.
-			{ name = "buffer" },
-			{ name = "cmdline" },
-			{ name = "nvim_lua" },
-			{ name = "crates" },
-			{ name = "orgmode" },
-			{ name = "nvim_lsp_document_symbol" },
-		},
-		experimental = {
-			ghost_text = true,
-			native_menu = false,
-		},
-		documentation = {
-			winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+		snippet = {
+			expand = function(args)
+				vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
+			end,
 		},
 		sorting = {
 			comparators = {
@@ -62,6 +77,17 @@ local function setup()
 				cmp.config.compare.length,
 				cmp.config.compare.order,
 			},
+		},
+		sources = {
+			{ name = "nvim_lsp" },
+			{ name = "copilot" },
+			{ name = "vsnip" }, -- For vsnip user.
+			{ name = "buffer" },
+			{ name = "cmdline" },
+			{ name = "nvim_lua" },
+			{ name = "crates" },
+			{ name = "orgmode" },
+			{ name = "nvim_lsp_document_symbol" },
 		},
 	})
 

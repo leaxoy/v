@@ -72,6 +72,8 @@ M.setup = function()
 		vim.cmd([[ do User LspAttachBuffers ]])
 		require("lsp/hierarchy").setup()
 	end)
+
+	require("lspconfig").sourcekit.setup(lsp_opts)
 end
 
 return M

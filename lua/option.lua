@@ -20,9 +20,7 @@ local function setup()
 	vim.o.smartcase = true
 
 	vim.o.termguicolors = true
-	vim.o.guifont = "FiraCode Nerd Font Mono:h18"
 	vim.o.cursorline = true
-	vim.o.completeopt = "menu,menuone,noselect"
 	vim.o.showmatch = true
 	vim.o.ruler = true
 	vim.o.background = "dark"
@@ -30,8 +28,8 @@ local function setup()
 	vim.o.showmode = false
 	vim.o.autoread = true
 	-- 不可见字符的显示，这里只把空格显示为一个点
-	vim.o.list = true
-	vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·"
+	vim.o.list = false
+	vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·,eol:↴,space:⋅"
 	-- 补全增强
 	vim.o.wildmenu = true
 	-- vim.o.foldmethod = "expr"
@@ -53,6 +51,10 @@ local function setup()
 	vim.g.neoformat_enabled_go = { "gofumpt" }
 	vim.g.neoformat_enabled_lua = { "stylua" }
 	vim.g.neoformat_enabled_kotlin = { "ktlint" }
+
+	-- copilot config
+	vim.g.copilot_no_tab_map = true
+	vim.g.copilot_assume_mapped = true
 end
 
 return { setup = setup }
