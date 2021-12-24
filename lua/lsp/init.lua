@@ -49,7 +49,6 @@ M.setup = function()
 					completeUnimported = true,
 					staticcheck = true,
 					matcher = "Fuzzy",
-					-- experimentalDiagnosticsDelay = "500ms",
 					diagnosticsDelay = "500ms",
 					experimentalWatchedFileDelay = "100ms",
 					symbolMatcher = "fuzzy",
@@ -72,8 +71,6 @@ M.setup = function()
 		vim.cmd([[ do User LspAttachBuffers ]])
 		require("lsp/hierarchy").setup()
 	end)
-
-	require("lspconfig").sourcekit.setup(lsp_opts)
 end
 
 return M

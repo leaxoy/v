@@ -8,8 +8,8 @@ local function setup()
 	vim.o.relativenumber = true
 
 	-- Indent Config
-	vim.o.tabstop = 4
-	vim.o.shiftwidth = 4
+	vim.o.tabstop = 2
+	vim.o.shiftwidth = 2
 	vim.o.expandtab = true
 	vim.o.autoindent = true
 
@@ -30,6 +30,7 @@ local function setup()
 	-- 不可见字符的显示，这里只把空格显示为一个点
 	vim.o.list = false
 	vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·,eol:↴,space:⋅"
+	vim.o.showcmd = false
 	-- 补全增强
 	vim.o.wildmenu = true
 	-- vim.o.foldmethod = "expr"

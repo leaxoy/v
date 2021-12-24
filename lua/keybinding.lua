@@ -94,8 +94,8 @@ local function setup()
 		x = {
 			name = "+Trouble",
 			x = { "<cmd>TroubleToggle<cr>", "Troubles" },
-			w = { "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", "Workspace Troubles" },
-			d = { "<cmd>TroubleToggle lsp_document_diagnostics<cr>", "Document Troubles" },
+			w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Troubles" },
+			d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Troubles" },
 			r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
 			q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix" },
 			l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
@@ -119,6 +119,7 @@ local function setup()
 			["{"] = { "diB", "content between matched {}" },
 			["}"] = { "diB", "content between matched {}" },
 		},
+		D = { "dd", "Current Line" },
 		f = {
 			name = "Magic Finder",
 			ca = { "<cmd>CodeActionMenu<cr>", "Code Action Menu" },
@@ -129,7 +130,7 @@ local function setup()
 			b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
 			t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },
 			a = { "<cmd>Telescope lsp_code_actions<cr>", "[LSP] Code Actions" },
-			d = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "[LSP] Diagnostics" },
+			d = { "<cmd>Telescope diagnostics<cr>", "[LSP] Diagnostics" },
 			r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
 			i = { "<cmd>Telescope lsp_implementations<cr>", "[LSP] Implementations" },
 			s = { "<cmd>Telescope lsp_document_symbols<cr>", "[LSP] Document Symbols" },
@@ -159,6 +160,7 @@ local function setup()
 		["<c-u>"] = { "<c-o>u", "Undo" },
 		["<c-y>"] = { "<c-o>yy", "Copy Line" },
 		["<c-p>"] = { "<c-o>p", "Paste" },
+		["jk"] = { "<Esc>", "Escape Insert Mode" },
 	}, {
 		mode = "i",
 	})

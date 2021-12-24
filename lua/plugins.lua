@@ -70,6 +70,7 @@ return require("packer").startup({
 				require("headlines").setup()
 			end,
 		})
+		use({ "skanehira/preview-uml.vim", requires = { "aklt/plantuml-syntax" } })
 
 		-- Lsp config
 		use("neovim/nvim-lspconfig")
@@ -101,7 +102,7 @@ return require("packer").startup({
 			end,
 		})
 		use("folke/lua-dev.nvim")
-		use("ldelossa/calltree.nvim")
+		use("ldelossa/litee.nvim")
 
 		-- Snippet config
 		use({
@@ -131,6 +132,7 @@ return require("packer").startup({
 		use("projekt0n/github-nvim-theme")
 		use("sainnhe/gruvbox-material")
 		use("Mofiqul/vscode.nvim")
+		use("bluz71/vim-moonfly-colors")
 		use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 		use("nvim-treesitter/nvim-treesitter-textobjects")
 		use("nvim-treesitter/nvim-treesitter-refactor")
@@ -253,9 +255,8 @@ return require("packer").startup({
 						["<leader>"] = "SPC",
 						["<tab>"] = "TAB",
 					},
-					layout = {
-						height = { min = 6, max = 25 },
-					},
+					layout = { height = { min = 3, max = 5 } },
+					plugins = { spelling = { enabled = true } },
 				})
 			end,
 		})

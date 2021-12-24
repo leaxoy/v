@@ -1,5 +1,5 @@
 local function setup()
-	local location_config = {
+	local loc_conf = {
 		open_list = true,
 		jump_to_result = true,
 		jump_to_list = false,
@@ -14,26 +14,28 @@ local function setup()
 		vim.lsp.handlers.signature_help,
 		{ border = "double" }
 	)
-	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-		update_in_insert = true,
+	vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(require("lspactions").codeaction, {})
+	vim.lsp.handlers["textDocument/references"] = vim.lsp.with(require("lspactions").references, loc_conf)
+	vim.lsp.handlers["textDocument/definition"] = vim.lsp.with(require("lspactions").definition, loc_conf)
+	vim.lsp.handlers["textDocument/declaration"] = vim.lsp.with(require("lspactions").declaration, loc_conf)
+	vim.lsp.handlers["textDocument/implementation"] = vim.lsp.with(require("lspactions").implementation, loc_conf)
+
+	vim.diagnostic.config({
 		virtual_text = {
 			prefix = "■ ", -- Could be '●', '▎', 'x', "■"
 			source = "if_many",
 		},
+		signs = true,
+		float = { show_header = false, focus = false, border = "rounded" },
+		underline = true,
+		update_in_insert = true,
+		severity_sort = false,
 	})
-	vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(require("lspactions").codeaction, {})
-	vim.lsp.handlers["textDocument/references"] = vim.lsp.with(require("lspactions").references, location_config)
-	vim.lsp.handlers["textDocument/definition"] = vim.lsp.with(require("lspactions").definition, location_config)
-	vim.lsp.handlers["textDocument/declaration"] = vim.lsp.with(require("lspactions").declaration, location_config)
-	vim.lsp.handlers["textDocument/implementation"] = vim.lsp.with(
-		require("lspactions").implementation,
-		location_config
-	)
 
 	local sign = function(hl, icon)
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 	end
-	local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+	local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 	for type, icon in pairs(signs) do
 		sign("Diagnostic" .. type, icon)
 		sign("DiagnosticSign" .. type, icon)
@@ -42,9 +44,7 @@ local function setup()
 		sign("DiagnosticUnderline" .. type, icon)
 	end
 
-	vim.cmd(
-		[[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {scope='cursor', show_header=false, focus=false, border='rounded'})]]
-	)
+	vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {scope='cursor'})]])
 end
 
 return { setup = setup }
