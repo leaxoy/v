@@ -8,6 +8,7 @@ M.setup = function()
 	require("lualine").setup({
 		options = {
 			theme = "auto",
+			icon_enabled = true,
 			component_separators = { left = ">", right = "<" },
 			section_separators = { left = "", right = "" },
 			always_divide_middle = true,

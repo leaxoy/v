@@ -10,16 +10,6 @@ M.setup = function()
 		filetype = "org",
 	}
 
-	-- require("nvim-treesitter.configs").setup({
-	-- 	-- If TS highlights are not enabled at all, or disabled via `disable` prop, highlighting will fallback to default Vim syntax highlighting
-	-- 	highlight = {
-	-- 		enable = true,
-	-- 		disable = { "org" }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
-	-- 		additional_vim_regex_highlighting = { "org" }, -- Required since TS highlighter doesn't support all syntax features (conceal)
-	-- 	},
-	-- 	ensure_installed = { "org" }, -- Or run :TSUpdate org
-	-- })
-
 	require("nvim-treesitter.configs").setup({
 		ensure_installed = {
 			"bash",
@@ -50,31 +40,10 @@ M.setup = function()
 		},
 		incremental_selection = { enable = true },
 		indent = { enable = true },
-		textobjects = {},
 		rainbow = {
 			enable = true,
 			extended_mode = true,
 		},
-		-- refactor = {
-		-- 	highlight_definitions = { enable = true },
-		-- 	highlight_current_scope = { enable = true },
-		-- 	smart_rename = {
-		-- 		enable = true,
-		-- 		keymaps = {
-		-- 			smart_rename = "grr",
-		-- 		},
-		-- 	},
-		-- 	navigation = {
-		-- 		enable = true,
-		-- 		keymaps = {
-		-- 			goto_definition = "gnd",
-		-- 			list_definitions = "gnD",
-		-- 			list_definitions_toc = "gO",
-		-- 			goto_next_usage = "<a-*>",
-		-- 			goto_previous_usage = "<a-#>",
-		-- 		},
-		-- 	},
-		-- },
 	})
 	require("treesitter-context").setup({
 		default = {

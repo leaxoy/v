@@ -21,8 +21,14 @@ M.setup = function()
 					text_align = "center",
 				},
 				{
-					filetype = "Calltree",
+					filetype = "calltree",
 					text = "Call Hierarchy",
+					highlight = "Directory",
+					text_align = "center",
+				},
+				{
+					filetype = "symboltree",
+					text = "Symbol Outline",
 					highlight = "Directory",
 					text_align = "center",
 				},

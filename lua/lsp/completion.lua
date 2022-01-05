@@ -16,6 +16,7 @@ local function setup()
 		},
 		documentation = {
 			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+			winhighlight = "NormalFloat:NormalFloat,FloatBorder:VertSplit",
 		},
 		experimental = { ghost_text = true, native_menu = false },
 		formatting = {
@@ -24,7 +25,7 @@ local function setup()
 				with_text = false,
 				maxwidth = 50,
 				menu = {
-					copilot = "[AI]",
+					-- copilot = "[AI]",
 					buffer = "[BUF]",
 					nvim_lsp = "[LSP]",
 					vsnip = "[SNI]",
@@ -80,7 +81,7 @@ local function setup()
 		},
 		sources = {
 			{ name = "nvim_lsp" },
-			{ name = "copilot" },
+			-- { name = "copilot" },
 			{ name = "vsnip" }, -- For vsnip user.
 			{ name = "buffer" },
 			{ name = "cmdline" },

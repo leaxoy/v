@@ -28,13 +28,6 @@ M.setup = function()
 		float_opts = { border = "double" },
 	})
 	vim.cmd("autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()")
-	require("nvim-startup").setup({
-		startup_file = "/tmp/nvim-startuptime", -- sets startup log path (string)
-		message = "Whoa! those {} are pretty fast", -- sets a custom message (string | function)
-		-- message = function(time) -- function-based custom message
-		-- time < 100 and 'Just {}? really good!' or 'Those {} can get faster'
-		-- end
-	})
 end
 
 return M

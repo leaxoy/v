@@ -1,24 +1,6 @@
 local M = {}
 
 M.setup = function()
-	require("autosave").setup({
-		enabled = false,
-		execution_message = "自动保存: [时间]: "
-			.. vim.fn.strftime("%H:%M:%S")
-			.. ", [文件]: "
-			.. vim.fn.expand("%:p"),
-		events = { "InsertLeave", "TextChanged" },
-		conditions = {
-			exists = true,
-			filename_is_not = {},
-			filetype_is_not = {},
-			modifiable = true,
-		},
-		write_all_buffers = false,
-		on_off_commands = true,
-		clean_command_line_interval = 0,
-		debounce_delay = 3000,
-	})
 	require("Comment").setup({
 		toggler = {
 			line = "<leader>cc",
