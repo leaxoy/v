@@ -2,6 +2,8 @@
 vim.g.start_time = vim.fn.reltime()
 vim.g.mapleader = " "
 
+require("impatient").enable_profile()
+
 require("plugins")
 require("option").setup()
 require("ui").setup()

@@ -57,12 +57,12 @@ local function setup(bufnr)
 		O = { "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>", "Workspace Symbol" },
 		h = {
 			name = "+Hierarchy",
+			-- Type Hierarchy
+			t = { "<cmd>lua vim.api.nvim_err_writeln('supertypes not supported')<cr>", "SuperTypes" },
+			T = { "<cmd>lua vim.api.nvim_err_writeln('subtypes not supported')<cr>", "SubTypes" },
 			-- Call Hierarchy
 			i = { "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", "Incoming Calls" },
 			o = { "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", "Outgoing Calls" },
-			-- Type Hierarchy
-			t = { "<cmd>lua vim.api.nvim_err_writeln('supertypes not supported')<cr>" },
-			T = { "<cmd>lua vim.api.nvim_err_writeln('subtypes not supported')<cr>" },
 		},
 		w = {
 			name = "+Workspace",

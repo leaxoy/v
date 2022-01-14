@@ -35,7 +35,7 @@ local function setup()
 			name = "Magic Finder",
 			w = { "<cmd>Telescope<cr>", "Open Telescope Window" },
 			f = { "<cmd>Telescope find_files<cr>", "Open File Finder" },
-			l = { "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<cr>", "Open File Browser" },
+			l = { "<cmd>Telescope file_browser<cr>", "Open File Browser" },
 			g = { "<cmd>Telescope live_grep<cr>", "Open Live Grep" },
 			b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
 			t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },

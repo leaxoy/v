@@ -84,11 +84,10 @@ M.setup = function()
 	local lsp_manager = require("nvim-lsp-installer")
 	lsp_manager.on_server_ready(function(server)
 		opts.settings = vim.tbl_deep_extend("keep", opts.settings or {}, M.lsp_settings[server.name] or {})
-		opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
+		-- opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
 		opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server.name] or {})
 		server:setup(opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
-		require("lsp/hierarchy").setup()
 	end)
 end
 

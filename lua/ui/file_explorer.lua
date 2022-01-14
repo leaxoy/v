@@ -1,3 +1,5 @@
+local tree_cb = require("nvim-tree.config").nvim_tree_callback
+
 local M = {}
 
 M.title = function()
@@ -36,7 +38,15 @@ M.setup = function()
 				-- if true, it will only use your list to set the mappings
 				custom_only = false,
 				-- list of mappings to set on the tree manually
-				list = {},
+				list = {
+					{ key = "<C-[>", cb = tree_cb("dir_up") },
+					{ key = "<C-]>", cb = tree_cb("cd") },
+					{ key = "<Tab>", cb = tree_cb("preview") },
+					{ key = "r", cb = tree_cb("rename") },
+					{ key = "d", cb = tree_cb("remove") },
+					{ key = "a", cb = tree_cb("create") },
+					{ key = "f", cb = tree_cb("refresh") },
+				},
 			},
 		},
 	})

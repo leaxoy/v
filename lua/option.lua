@@ -38,6 +38,8 @@ local function setup()
 
 	vim.o.confirm = true
 	vim.wo.colorcolumn = "100"
+	vim.o.spell = true
+	vim.opt.spelllang = { "en_us" }
 
 	-- nvim tree config
 	vim.g.nvim_tree_indent_markers = 1

@@ -15,12 +15,6 @@ M.setup = function()
 					text_align = "center",
 				},
 				{
-					filetype = require("ui/outline").filetype(),
-					text = require("ui/outline").title(),
-					highlight = "Directory",
-					text_align = "center",
-				},
-				{
 					filetype = "calltree",
 					text = "Call Hierarchy",
 					highlight = "Directory",

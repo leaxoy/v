@@ -23,6 +23,7 @@ return require("packer").startup({
 		use("wbthomason/packer.nvim")
 
 		-- startup
+		use({ "lewis6991/impatient.nvim" })
 		use({
 			"rmagatti/auto-session",
 			config = function()
@@ -74,7 +75,8 @@ return require("packer").startup({
 		use("neovim/nvim-lspconfig")
 		use("williamboman/nvim-lsp-installer")
 		use({
-			"hrsh7th/nvim-cmp",
+			"Iron-E/nvim-cmp",
+			branch = "feat/completion-menu-borders",
 			requires = {
 				"hrsh7th/cmp-nvim-lsp", -- cmp from lsp
 				-- { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
@@ -85,12 +87,13 @@ return require("packer").startup({
 				"hrsh7th/cmp-cmdline",
 				"hrsh7th/cmp-nvim-lsp-document-symbol",
 				"lukas-reineke/cmp-under-comparator",
+				"f3fora/cmp-spell",
 			},
 		})
 		use("ray-x/lsp_signature.nvim")
 		use({
 			"RishabhRD/lspactions",
-			requires = { "tjdevries/astronauta.nvim", "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
+			requires = { "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
 		})
 		use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu" })
 		use("folke/lua-dev.nvim")
@@ -100,6 +103,7 @@ return require("packer").startup({
 				"ldelossa/litee-calltree.nvim",
 				"ldelossa/litee-symboltree.nvim",
 				"ldelossa/litee-filetree.nvim",
+				"ldelossa/litee-bookmarks.nvim",
 			},
 			config = function()
 				require("litee.lib").setup({
@@ -109,6 +113,7 @@ return require("packer").startup({
 				require("litee.calltree").setup({ icon_set = "nerd" })
 				require("litee.symboltree").setup({ icon_set = "nerd" })
 				require("litee.filetree").setup({ icon_set = "nerd" })
+				require("litee.bookmarks").setup({ icon_set = "nerd" })
 			end,
 		})
 
@@ -141,7 +146,6 @@ return require("packer").startup({
 		use("lukas-reineke/indent-blankline.nvim")
 		use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })
 		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
-		use("simrat39/symbols-outline.nvim")
 		use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
 		use({ "kevinhwang91/nvim-bqf" })
 
@@ -153,6 +157,13 @@ return require("packer").startup({
 		use("numToStr/Comment.nvim")
 		use("windwp/nvim-autopairs")
 		use("famiu/bufdelete.nvim")
+		use({
+			"lewis6991/spellsitter.nvim",
+			config = function()
+				require("spellsitter").setup()
+			end,
+		})
+
 		use({ "ellisonleao/glow.nvim" }) -- markdown render
 		use({ "kevinhwang91/nvim-hlslens" }) -- searching
 		use({
@@ -217,5 +228,9 @@ return require("packer").startup({
 			require("packer").sync()
 		end
 	end,
-	config = { git = { clone_timeout = 300 }, max_jobs = 25 },
+	config = {
+		git = { clone_timeout = 300 },
+		max_jobs = 25,
+		compile_path = vim.fn.stdpath("config") .. "/plugin/packer_compiled.lua",
+	},
 })

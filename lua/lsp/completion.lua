@@ -11,13 +11,18 @@ local function setup()
 	local cmp = require("cmp")
 
 	cmp.setup({
-		completion = {
-			completeopt = "menu,menuone,noselect",
+		window = {
+			completion = {
+				border = "rounded",
+				scrollbar = "║",
+			},
+			documentation = {
+				border = "double",
+				scrollbar = "║",
+				winhighlight = "NormalFloat:NormalFloat,FloatBorder:VertSplit",
+			},
 		},
-		documentation = {
-			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-			winhighlight = "NormalFloat:NormalFloat,FloatBorder:VertSplit",
-		},
+		completion = { completeopt = "menu,menuone,noselect" },
 		experimental = { ghost_text = true, native_menu = false },
 		formatting = {
 			fields = { "kind", "abbr", "menu" },
@@ -26,10 +31,11 @@ local function setup()
 				maxwidth = 50,
 				menu = {
 					-- copilot = "[AI]",
-					buffer = "[BUF]",
+					buffer = "[BUFFER]",
 					nvim_lsp = "[LSP]",
-					vsnip = "[SNI]",
+					vsnip = "[SNIPPET]",
 					nvim_lua = "[LUA]",
+					spell = "[SPELL]",
 				},
 			}),
 		},
@@ -89,6 +95,7 @@ local function setup()
 			{ name = "crates" },
 			{ name = "orgmode" },
 			{ name = "nvim_lsp_document_symbol" },
+			{ name = "spell" },
 		},
 	})
 
