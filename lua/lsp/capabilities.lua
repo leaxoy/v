@@ -81,12 +81,12 @@ end
 
 M.highlight = function(client)
 	if client.resolved_capabilities.document_highlight then
-		vim.api.nvim_command([[hi LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
-		vim.api.nvim_command([[hi LspReferenceText cterm=bold ctermbg=red guibg=Green]])
-		vim.api.nvim_command([[hi LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
+		-- vim.api.nvim_command([[hi LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
+		-- vim.api.nvim_command([[hi LspReferenceText cterm=bold ctermbg=red guibg=Green]])
+		-- vim.api.nvim_command([[hi LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
 		vim.api.nvim_command([[augroup Highlight]])
 		vim.api.nvim_command([[autocmd! * <buffer>]])
-		vim.api.nvim_command([[autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()]])
+		vim.api.nvim_command([[autocmd CursorHold,CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]])
 		vim.api.nvim_command([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
 		vim.api.nvim_command([[augroup END]])
 	end
@@ -97,7 +97,7 @@ M.format = function(client)
 	vim.api.nvim_command([[augroup Format]])
 	vim.api.nvim_command([[autocmd! * <buffer>]])
 	-- vim.cmd([[autocmd BufWritePre *.py PyrightOrganizeImports]])
-	vim.cmd([[autocmd BufWritePre *.go lua OrganizeImports(500)]])
+	-- vim.cmd([[autocmd BufWritePre *.go lua OrganizeImports(500)]])
 	if client.resolved_capabilities.document_formatting then
 		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]])
 	else

@@ -13,7 +13,7 @@ end
 M.setup = function()
 	require("nvim-tree").setup({
 		diagnostics = { enable = true },
-		hijack_cursor = true,
+		-- hijack_cursor = true,
 		filters = {
 			custom = {
 				".DS_Store",

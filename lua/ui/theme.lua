@@ -20,11 +20,13 @@ end
 
 M.set_theme = function(opt)
 	opt = opt or {}
-	opt = vim.tbl_extend("keep", opt, { theme = "vscode" })
+	opt = vim.tbl_extend("keep", opt, { theme = vim.g.theme or "vscode" })
 	if opt.theme == "gruvbox" then
 		vim.cmd([[colorscheme gruvbox-material]])
 	elseif opt.theme == "vscode" then
 		vim.cmd([[colorscheme vscode]])
+	elseif opt.theme == "github_dark_default" then
+		vim.cmd([[colorscheme github_dark_default]])
 	end
 end
 

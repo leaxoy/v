@@ -55,16 +55,6 @@ return require("packer").startup({
 			end,
 		})
 		use({
-			"nvim-orgmode/orgmode",
-			config = function()
-				require("orgmode").setup({
-					org_agenda_files = { "~/Dropbox/org/*", "~/my-orgs/**/*" },
-					org_default_notes_file = "~/Dropbox/org/refile.org",
-					mappings = { global = {} },
-				})
-			end,
-		})
-		use({
 			"skanehira/preview-uml.vim",
 			requires = { { "aklt/plantuml-syntax", ft = "plantuml", opt = true } },
 			ft = "plantuml",
@@ -75,11 +65,11 @@ return require("packer").startup({
 		use("neovim/nvim-lspconfig")
 		use("williamboman/nvim-lsp-installer")
 		use({
-			"Iron-E/nvim-cmp",
-			branch = "feat/completion-menu-borders",
+			"hrsh7th/nvim-cmp",
+			branch = "dev",
 			requires = {
 				"hrsh7th/cmp-nvim-lsp", -- cmp from lsp
-				-- { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
+				{ "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
 				"hrsh7th/cmp-nvim-lua", -- cmp from lua
 				"hrsh7th/cmp-buffer", -- cmp from buffer
 				"hrsh7th/cmp-vsnip", -- cmp from snippet
@@ -151,9 +141,14 @@ return require("packer").startup({
 
 		-- VCS
 		use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
-		use({ "TimUntersberger/neogit", requires = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } })
 
 		-- Code edit
+		use({
+			"karb94/neoscroll.nvim",
+			config = function()
+				require("neoscroll").setup()
+			end,
+		})
 		use("numToStr/Comment.nvim")
 		use("windwp/nvim-autopairs")
 		use("famiu/bufdelete.nvim")
@@ -163,7 +158,19 @@ return require("packer").startup({
 				require("spellsitter").setup()
 			end,
 		})
-
+		use({
+			"ThePrimeagen/refactoring.nvim",
+			requires = {
+				{ "nvim-lua/plenary.nvim" },
+				{ "nvim-treesitter/nvim-treesitter" },
+			},
+		})
+		use({
+			"gbprod/substitute.nvim",
+			config = function()
+				require("substitute").setup()
+			end,
+		})
 		use({ "ellisonleao/glow.nvim" }) -- markdown render
 		use({ "kevinhwang91/nvim-hlslens" }) -- searching
 		use({
@@ -198,6 +205,7 @@ return require("packer").startup({
 				"nvim-telescope/telescope-dap.nvim",
 				"edolphin-ydf/goimpl.nvim",
 				"sudormrfbin/cheatsheet.nvim",
+				"LinArcX/telescope-command-palette.nvim",
 			},
 		})
 		use({

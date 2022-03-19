@@ -5,6 +5,7 @@ function PeekDefinition()
 		end
 		vim.lsp.util.preview_location(result[1], { border = "rounded" })
 	end
+
 	local params = vim.lsp.util.make_position_params()
 	return vim.lsp.buf_request(0, "textDocument/definition", params, preview_location_callback)
 end
@@ -16,6 +17,7 @@ function PeekImplementation()
 		end
 		vim.lsp.util.preview_location(result, { border = "rounded" })
 	end
+
 	local params = vim.lsp.util.make_position_params()
 	return vim.lsp.buf_request(0, "textDocument/implementation", params, preview_location_callback)
 end
@@ -39,7 +41,7 @@ local function setup(bufnr)
 			name = "+Code Action",
 			-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
 			a = { "<cmd>lua require'lspactions'.code_action()<cr>", "Code Action" },
-			-- n = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+			-- r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
 			r = { "<cmd>lua require'lspactions'.rename()<cr>", "Rename" },
 		},
 		A = { "<cmd>CodeActionMenu<cr>", "Code Action Menu" },

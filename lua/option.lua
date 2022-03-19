@@ -8,8 +8,8 @@ local function setup()
 	vim.o.relativenumber = true
 
 	-- Indent Config
-	vim.o.tabstop = 2
-	vim.o.shiftwidth = 2
+	vim.o.tabstop = 4
+	vim.o.shiftwidth = 4
 	vim.o.expandtab = true
 	vim.o.autoindent = true
 
@@ -38,8 +38,8 @@ local function setup()
 
 	vim.o.confirm = true
 	vim.wo.colorcolumn = "100"
-	vim.o.spell = true
-	vim.opt.spelllang = { "en_us" }
+	-- vim.o.spell = true
+	-- vim.opt.spelllang = { "en_us" }
 
 	-- nvim tree config
 	vim.g.nvim_tree_indent_markers = 1
@@ -56,8 +56,11 @@ local function setup()
 	vim.g.neoformat_enabled_kotlin = { "ktlint" }
 
 	-- copilot config
-	vim.g.copilot_no_tab_map = true
+	-- vim.g.copilot_no_tab_map = true
 	vim.g.copilot_assume_mapped = true
+
+	vim.api.nvim_command([[autocmd Filetype go setlocal tabstop=2 shiftwidth=2 expandtab]])
+	vim.api.nvim_command([[autocmd Filetype rs setlocal tabstop=2 shiftwidth=2 expandtab]])
 end
 
 return { setup = setup }

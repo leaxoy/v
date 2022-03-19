@@ -1,15 +1,6 @@
 local M = {}
 M.setup = function()
-	require("nvim-autopairs").setup({})
-	require("indent_blankline").setup({
-		char = "|",
-		buftype_exclude = { "terminal" },
-		show_end_of_line = true,
-		space_char_blankline = " ",
-		show_current_context = true,
-		-- show_current_context_start = true,
-	})
-
-	require("bqf").setup({})
+    require("nvim-autopairs").setup({})
+    require("bqf").setup({})
 end
 return M

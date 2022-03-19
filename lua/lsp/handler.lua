@@ -43,8 +43,6 @@ local function setup()
 		sign("DiagnosticFloating" .. type, icon)
 		sign("DiagnosticUnderline" .. type, icon)
 	end
-
-	vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {scope='cursor'})]])
 end
 
 return { setup = setup }

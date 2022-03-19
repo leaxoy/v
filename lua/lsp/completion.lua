@@ -30,7 +30,7 @@ local function setup()
 				with_text = false,
 				maxwidth = 50,
 				menu = {
-					-- copilot = "[AI]",
+					copilot = "[AI]",
 					buffer = "[BUFFER]",
 					nvim_lsp = "[LSP]",
 					vsnip = "[SNIPPET]",
@@ -48,6 +48,13 @@ local function setup()
 				select = true,
 				behavior = cmp.ConfirmBehavior.Replace,
 			}),
+			["<C-Tab>"] = cmp.mapping(function(fallback)
+				vim.api.nvim_feedkeys(
+					vim.fn["copilot#Accept"](vim.api.nvim_replace_termcodes("<Tab>", true, true, true)),
+					"n",
+					true
+				)
+			end),
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
@@ -87,13 +94,12 @@ local function setup()
 		},
 		sources = {
 			{ name = "nvim_lsp" },
-			-- { name = "copilot" },
+			{ name = "copilot" },
 			{ name = "vsnip" }, -- For vsnip user.
 			{ name = "buffer" },
 			{ name = "cmdline" },
 			{ name = "nvim_lua" },
 			{ name = "crates" },
-			{ name = "orgmode" },
 			{ name = "nvim_lsp_document_symbol" },
 			{ name = "spell" },
 		},

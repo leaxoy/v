@@ -77,11 +77,10 @@ local function setup()
 		},
 		u = {
 			name = "+User Interface",
+			d = { "<cmd>lua require'dapui'.toggle()<cr>", "Debug & Test" },
 			f = { "<cmd>NvimTreeToggle<cr>", "File Explorer" },
 			g = { "<cmd>lua ToggleLazygit()<cr>", "LazyGit" },
 			s = { "<cmd>SymbolsOutline<cr>", "Symbol Outline" },
-			d = { "<cmd>lua require'dapui'.toggle()<cr>", "Debug & Test" },
-			v = { "<cmd>lua require'neogit'.open()<cr>", "VCS" },
 		},
 		w = {
 			name = "+Window",
@@ -163,6 +162,13 @@ local function setup()
 	wk.register({
 		["<tab>"] = { ">", "Indent right" },
 		["<s-tab>"] = { "<", "Indent left" },
+		r = {
+			name = "+Refactor",
+			f = { "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", "Extract Function" },
+			i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>", "Inline Variable" },
+			r = { "<cmd>Telescope refactoring refactors<cr>", "Refactor Window" },
+			v = { "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>", "Extract Variable" },
+		},
 	}, { mode = "v" })
 end
 
