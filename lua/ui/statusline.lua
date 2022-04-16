@@ -12,6 +12,7 @@ M.setup = function()
 			component_separators = { left = ">", right = "<" },
 			section_separators = { left = "", right = "" },
 			always_divide_middle = true,
+			globalstatus = true,
 		},
 		extensions = { "nvim-tree", "toggleterm", "symbols-outline", "quickfix" },
 		sections = {
