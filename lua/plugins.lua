@@ -125,10 +125,8 @@ return require("packer").startup({
         use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
 
         -- UI Component
-        use("projekt0n/github-nvim-theme")
         use("sainnhe/gruvbox-material")
         use("Mofiqul/vscode.nvim")
-        use("bluz71/vim-moonfly-colors")
         use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
         use("romgrk/nvim-treesitter-context")
         use("p00f/nvim-ts-rainbow")
@@ -205,7 +203,6 @@ return require("packer").startup({
                 "nvim-telescope/telescope-dap.nvim",
                 "edolphin-ydf/goimpl.nvim",
                 "sudormrfbin/cheatsheet.nvim",
-                "LinArcX/telescope-command-palette.nvim",
             },
         })
         use({
