@@ -119,7 +119,6 @@ return require("packer").startup({
 
         -- Debug
         use("mfussenegger/nvim-dap")
-        use("Pocco81/DAPInstall.nvim")
         use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
         use({ "theHamsta/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } })
         use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
@@ -127,6 +126,7 @@ return require("packer").startup({
         -- UI Component
         use("sainnhe/gruvbox-material")
         use("Mofiqul/vscode.nvim")
+        use("navarasu/onedark.nvim")
         use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
         use("romgrk/nvim-treesitter-context")
         use("p00f/nvim-ts-rainbow")

@@ -1,12 +1,7 @@
 local M = {}
 
 M.setup = function()
-	require("Comment").setup({
-		toggler = {
-			line = "<leader>cc",
-			block = "<leader>cv",
-		},
-	})
+	require("Comment").setup({})
 	require("todo-comments").setup({
 		keywords = {
 			FIX = {

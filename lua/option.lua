@@ -62,6 +62,10 @@ local function setup()
 
     vim.api.nvim_command([[autocmd Filetype go setlocal tabstop=2 shiftwidth=2 expandtab]])
     vim.api.nvim_command([[autocmd Filetype rs setlocal tabstop=2 shiftwidth=2 expandtab]])
+    vim.api.nvim_command([[autocmd Filetype tsx setlocal tabstop=2 shiftwidth=2 expandtab]])
+    vim.api.nvim_command([[autocmd Filetype jsx setlocal tabstop=2 shiftwidth=2 expandtab]])
+    vim.api.nvim_command([[autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab]])
+    vim.api.nvim_command([[autocmd Filetype vue setlocal tabstop=2 shiftwidth=2 expandtab]])
 end
 
 return { setup = setup }
