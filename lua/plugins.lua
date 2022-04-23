@@ -43,6 +43,8 @@ return require("packer").startup({
                 require("telescope").load_extension("session-lens")
             end,
         })
+        -- UI
+        use("stevearc/dressing.nvim")
 
         -- Lang specifies
         use("solarnz/thrift.vim")
@@ -69,23 +71,17 @@ return require("packer").startup({
             requires = {
                 "hrsh7th/cmp-nvim-lsp", -- cmp from lsp
                 { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
-                "hrsh7th/cmp-nvim-lua", -- cmp from lua
                 "hrsh7th/cmp-buffer", -- cmp from buffer
                 "hrsh7th/cmp-vsnip", -- cmp from snippet
-                "onsails/lspkind-nvim", -- cmp menu text
                 "hrsh7th/cmp-cmdline",
                 "hrsh7th/cmp-nvim-lsp-document-symbol",
                 "hrsh7th/cmp-nvim-lsp-signature-help",
+                "onsails/lspkind-nvim", -- cmp menu text
                 "lukas-reineke/cmp-under-comparator",
                 "f3fora/cmp-spell",
             },
         })
         use("ray-x/lsp_signature.nvim")
-        use({
-            "RishabhRD/lspactions",
-            requires = { "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
-        })
-        use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu" })
         use("folke/lua-dev.nvim")
         use({
             "ldelossa/litee.nvim",
@@ -199,6 +195,7 @@ return require("packer").startup({
                 "nvim-lua/popup.nvim",
                 -- Telescope Plugins
                 "nvim-telescope/telescope-file-browser.nvim",
+                "nvim-telescope/telescope-ui-select.nvim",
                 "nvim-telescope/telescope-project.nvim",
                 "nvim-telescope/telescope-dap.nvim",
                 "edolphin-ydf/goimpl.nvim",

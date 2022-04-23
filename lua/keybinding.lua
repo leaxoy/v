@@ -107,18 +107,23 @@ local function setup()
             ["="] = { "<c-w>=", "Equally high and wide" },
         },
         x = {
-            name = "+Trouble",
-            x = { "<cmd>TroubleToggle<cr>", "Troubles" },
+            name = "+Diagnostic",
             w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Troubles" },
             d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Troubles" },
             r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
             q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix" },
             l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
             t = { "<cmd>TodoQuickFix<cr>", "List Todos" },
+            c = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='cursor', show_header=false, focus=false, border='rounded'})<cr>", "Show Line Diagnostic" },
+            x = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='line', show_header=false, focus=false, border='rounded'})<cr>", "Show Line Diagnostic" },
+            j = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
+            k = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
         },
     }, {
         mode = "n",
         prefix = "<leader>",
+    })
+    wk.register({
         d = {
             name = "+Delete",
             H = { "d^", "Start of line" },
@@ -142,7 +147,7 @@ local function setup()
         ["<tab>"] = { ">>", "Indent right" },
         ["<s-tab>"] = { "<<", "Indent left" },
         ["<c-s>"] = { "<cmd>w<cr>", "Save buffer" },
-    })
+    }, { mode = "n" })
     wk.register({
         ["<c-h>"] = { "<c-o>^", "Start of line" },
         ["<c-l>"] = { "<c-o>$", "End of line" },

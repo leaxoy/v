@@ -74,8 +74,6 @@ M.lsp_init_options = {
 
 M.setup = function()
     require("lsp/completion").setup()
-    -- local lsp = require("lspconfig")
-    -- lsp["sumneko_lua"].setup(require("lua-dev").setup())
 
     local opts = {
         on_attach = M.on_attach,
@@ -88,7 +86,7 @@ M.setup = function()
         -- opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
         opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server.name] or {})
         if server.name == "sumneko_lua" then
-            local luadev = require('lua-dev').setup()
+            local luadev = require("lua-dev").setup({ lspconfig = opts })
             server:setup(luadev)
         else
             server:setup(opts)

@@ -30,11 +30,10 @@ local function setup()
                 with_text = false,
                 maxwidth = 50,
                 menu = {
-                    copilot = "[AI]",
-                    buffer = "[BUFFER]",
+                    copilot = "[PILOT]",
+                    buffer = "[BUF]",
                     nvim_lsp = "[LSP]",
-                    vsnip = "[SNIPPET]",
-                    nvim_lua = "[LUA]",
+                    vsnip = "[SNI]",
                     spell = "[SPELL]",
                 },
             }),
@@ -54,7 +53,7 @@ local function setup()
                     "n",
                     true
                 )
-            end),
+            end, { "i" }),
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
@@ -98,7 +97,6 @@ local function setup()
             { name = "vsnip" }, -- For vsnip user.
             { name = "buffer" },
             { name = "cmdline" },
-            { name = "nvim_lua" },
             { name = "crates" },
             { name = "nvim_lsp_document_symbol" },
             { name = "nvim_lsp_signature_help" },
