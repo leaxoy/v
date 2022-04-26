@@ -89,7 +89,7 @@ local function parse_lines(t)
     return ret
 end
 
-function RustExpandMacro(direction)
+local function rust_expand_macro(direction)
     vim.lsp.buf_request(0, "rust-analyzer/expandMacro", vim.lsp.util.make_position_params(), function(_, result)
         local latest_buf_id = nil
         -- echo a message when result is nil (meaning no macro under cursor) and
@@ -126,7 +126,7 @@ return {
     ["rust_analyzer"] = {
         RustExpandMacro = {
             function()
-                RustExpandMacro("vsplit")
+                rust_expand_macro("vsplit")
             end,
             description = "Expand Rust Macro",
         },

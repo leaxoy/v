@@ -1,8 +1,8 @@
 local M = {}
 
 M.setup = function()
-    require('dressing').setup({
-        input = { entabled = true },
+    require("dressing").setup({
+        input = { entabled = true, prompt_align = "center" },
         select = { enabled = true },
     })
 

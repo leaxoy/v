@@ -83,6 +83,7 @@ return require("packer").startup({
         })
         use("ray-x/lsp_signature.nvim")
         use("folke/lua-dev.nvim")
+        use("simrat39/symbols-outline.nvim")
         use({
             "ldelossa/litee.nvim",
             requires = {
@@ -167,12 +168,7 @@ return require("packer").startup({
         })
         use({ "ellisonleao/glow.nvim" }) -- markdown render
         use({ "kevinhwang91/nvim-hlslens" }) -- searching
-        use({
-            "jghauser/mkdir.nvim",
-            config = function()
-                require("mkdir")
-            end,
-        })
+        use({ "jghauser/mkdir.nvim", config = function() require("mkdir") end })
         use("sbdchd/neoformat")
         use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })
         use({

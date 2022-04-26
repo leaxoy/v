@@ -53,6 +53,20 @@ M.lsp_settings = {
             checkOnSave = { command = "clippy" },
         },
     },
+    ["sumneko_lua"] = {
+        Lua = {
+            format = {
+                enable = true,
+                -- Put format options here
+                -- NOTE: the value should be STRING!!
+                defaultConfig = {
+                    indent_style = "space",
+                    -- indent_size = "2",
+                    quote_style = "double",
+                }
+            },
+        },
+    }
 }
 
 M.lsp_init_options = {
@@ -75,13 +89,13 @@ M.lsp_init_options = {
 M.setup = function()
     require("lsp/completion").setup()
 
-    local opts = {
-        on_attach = M.on_attach,
-        capabilities = require("lsp/capabilities").update_capabilities(),
-        flags = { debounce_text_changes = 150 },
-    }
     local lsp_manager = require("nvim-lsp-installer")
     lsp_manager.on_server_ready(function(server)
+        local opts = {
+            on_attach = M.on_attach,
+            capabilities = require("lsp/capabilities").update_capabilities(),
+            flags = { debounce_text_changes = 150 },
+        }
         opts.settings = vim.tbl_deep_extend("keep", opts.settings or {}, M.lsp_settings[server.name] or {})
         -- opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
         opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server.name] or {})

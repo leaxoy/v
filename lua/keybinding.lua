@@ -13,8 +13,8 @@ local function setup()
     wk.register({
         b = {
             name = "+Buffer",
-            ["]"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
-            ["["] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
+            ["h"] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
+            ["l"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
             b = { "<cmd>buffers<cr>", "List All Buffer" },
             x = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
             ["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Goto Buffer 1" },
@@ -39,7 +39,6 @@ local function setup()
             g = { "<cmd>Telescope live_grep<cr>", "Open Live Grep" },
             b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
             t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },
-            a = { "<cmd>Telescope lsp_code_actions<cr>", "[LSP] Code Actions" },
             d = { "<cmd>Telescope diagnostics<cr>", "[LSP] Diagnostics" },
             r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
             i = { "<cmd>Telescope lsp_implementations<cr>", "[LSP] Implementations" },
@@ -65,8 +64,9 @@ local function setup()
         },
         v = {
             name = "+VCS",
-            p = { "<cmd>Gitsigns preview_hunk<cr>", "Preview diff" },
             d = { "<cmd>Gitsigns diffthis<cr>", "Diff this file" },
+            p = { "<cmd>Gitsigns preview_hunk<cr>", "Preview diff" },
+            v = { "<cmd>lua ToggleLazygit()<cr>", "LazyGit" },
         },
         t = {
             name = "+Debug & Test",
@@ -84,7 +84,6 @@ local function setup()
             name = "+User Interface",
             d = { "<cmd>lua require'dapui'.toggle()<cr>", "Debug & Test" },
             f = { "<cmd>NvimTreeToggle<cr>", "File Explorer" },
-            g = { "<cmd>lua ToggleLazygit()<cr>", "LazyGit" },
             s = { "<cmd>SymbolsOutline<cr>", "Symbol Outline" },
         },
         w = {
@@ -108,16 +107,15 @@ local function setup()
         },
         x = {
             name = "+Diagnostic",
-            w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Troubles" },
-            d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Troubles" },
-            r = { "<cmd>TroubleToggle lsp_references<cr>", "LSP Reference Troubles" },
-            q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix" },
-            l = { "<cmd>TroubleToggle loclist<cr>", "LocList Troubles" },
+            w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Diagnostics" },
+            d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Diagnostics" },
+            q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix List" },
+            l = { "<cmd>TroubleToggle loclist<cr>", "Location List" },
             t = { "<cmd>TodoQuickFix<cr>", "List Todos" },
-            c = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='cursor', show_header=false, focus=false, border='rounded'})<cr>", "Show Line Diagnostic" },
+            c = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='cursor', show_header=false, focus=false, border='rounded'})<cr>", "Show Cursor Diagnostic" },
             x = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='line', show_header=false, focus=false, border='rounded'})<cr>", "Show Line Diagnostic" },
-            j = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
-            k = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+            j = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+            k = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
         },
     }, {
         mode = "n",
