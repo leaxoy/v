@@ -81,6 +81,7 @@ return require("packer").startup({
         "f3fora/cmp-spell",
       },
     })
+    use("b0o/SchemaStore.nvim")
     use("ray-x/lsp_signature.nvim")
     use("folke/lua-dev.nvim")
     use("simrat39/symbols-outline.nvim")
@@ -215,6 +216,10 @@ return require("packer").startup({
             ["<space>"] = "SPC",
             ["<leader>"] = "SPC",
             ["<tab>"] = "TAB",
+          },
+          popup_mappings = {
+            ["scroll_up"] = "<c-k>",
+            ["scroll_down"] = "<c-j>",
           },
           layout = { height = { min = 3, max = 5 } },
           plugins = { spelling = { enabled = true } },

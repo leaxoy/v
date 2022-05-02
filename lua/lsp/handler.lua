@@ -11,7 +11,7 @@ local function setup()
       source = "if_many",
     },
     signs = true,
-    float = { show_header = false, focus = false, border = "rounded" },
+    float = { show_header = true, focus = false, border = "double" },
     underline = true,
     update_in_insert = true,
     severity_sort = false,

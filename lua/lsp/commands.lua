@@ -145,7 +145,4 @@ return {
       description = "Source Organize Imports",
     },
   },
-  ["auto_command"] = function()
-    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
-  end,
 }

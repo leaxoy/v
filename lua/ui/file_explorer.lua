@@ -2,13 +2,9 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 local M = {}
 
-M.title = function()
-  return "File Explorer"
-end
+M.title = function() return "File Explorer" end
 
-M.filetype = function()
-  return "NvimTree"
-end
+M.filetype = function() return "NvimTree" end
 
 M.setup = function()
   require("nvim-tree").setup({
@@ -26,13 +22,14 @@ M.setup = function()
       },
     },
     view = {
+      hide_root_folder = true,
       -- width of the window, can be either a number (columns) or a string in `%`
       width = 30,
       -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
       side = "left",
       -- if true the tree will resize itself after opening a file
-      auto_resize = true,
-      lsp_diagnostics = true,
+      -- auto_resize = true,
+      -- lsp_diagnostics = true,
       mappings = {
         -- custom only false will merge the list with the default mappings
         -- if true, it will only use your list to set the mappings
@@ -54,7 +51,10 @@ M.setup = function()
         enable = true,
       },
     },
-    actions = { open_file = { resize_window = true } }
+    actions = {
+      change_dir = { enable = false },
+      open_file = { resize_window = true },
+    }
   })
 end
 
