@@ -104,34 +104,34 @@ M.setup = function()
   require("lsp/completion").setup()
 
   local lsp_manager = require("nvim-lsp-installer")
-  -- lsp_manager.setup({
-  --   ensure_installed = vim.g.lsp_servers,
-  --   ui = {
-  --     icons = {
-  --       server_installed = "✓",
-  --       server_pending = "➜",
-  --       server_uninstalled = "✗"
-  --     }
-  --   }
-  -- })
+  lsp_manager.setup({
+    ensure_installed = vim.g.lsp_servers,
+    ui = {
+      icons = {
+        server_installed = "✓",
+        server_pending = "➜",
+        server_uninstalled = "✗"
+      }
+    }
+  })
 
-  lsp_manager.on_server_ready(function(server)
+  local lspconfig = require("lspconfig");
+  for _, server_name in pairs(vim.g.lsp_servers) do
     local opts = {
       on_attach = M.on_attach,
       capabilities = require("lsp/capabilities").update_capabilities(),
       flags = { debounce_text_changes = 150 },
     }
-    opts.settings = vim.tbl_deep_extend("keep", opts.settings or {}, M.lsp_settings[server.name] or {})
+    opts.settings = vim.tbl_deep_extend("keep", opts.settings or {}, M.lsp_settings[server_name] or {})
+    opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server_name] or {})
     -- opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
-    opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server.name] or {})
-    if server.name == "sumneko_lua" then
+    if server_name == "sumneko_lua" then
       local luadev = require("lua-dev").setup({ lspconfig = opts })
-      server:setup(luadev)
+      lspconfig[server_name].setup(luadev)
     else
-      server:setup(opts)
+      lspconfig[server_name].setup(opts)
     end
-    -- vim.cmd([[ do User LspAttachBuffers ]])
-  end)
+  end
 end
 
 return M
