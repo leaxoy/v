@@ -28,7 +28,7 @@ M.setup = function()
         header = "",
         close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
         border = "rounded",
-        source = "always",
+        source = "if_many",
         prefix = " ",
         scope = "cursor",
       }
