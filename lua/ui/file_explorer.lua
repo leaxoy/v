@@ -2,11 +2,7 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 local M = {}
 
-M.title = function() return "File Explorer" end
-
-M.filetype = function() return "NvimTree" end
-
-M.setup = function()
+M.setup_nvim_tree = function()
   require("nvim-tree").setup({
     diagnostics = { enable = true },
     -- hijack_cursor = true,
@@ -51,11 +47,16 @@ M.setup = function()
         enable = true,
       },
     },
+    git = { enable = true, timeout = 100 },
     actions = {
       change_dir = { enable = false },
       open_file = { resize_window = true },
     }
   })
+end
+
+M.setup = function()
+  M.setup_nvim_tree()
 end
 
 return M

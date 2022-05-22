@@ -6,6 +6,8 @@ require("impatient").enable_profile()
 
 require("plugins")
 require("option").setup()
+require("commands").autocmds()
+require("diagnostic").setup()
 require("ui").setup()
 require("keybinding").setup()
 require("lsp").setup()

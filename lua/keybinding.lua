@@ -15,8 +15,6 @@ local function setup()
       name = "+Buffer",
       ["h"] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
       ["l"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
-      b = { "<cmd>buffers<cr>", "List All Buffer" },
-      x = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
       ["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Goto Buffer 1" },
       ["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "Goto Buffer 2" },
       ["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "Goto Buffer 3" },
@@ -34,19 +32,21 @@ local function setup()
     f = {
       name = "Magic Finder",
       w = { "<cmd>Telescope<cr>", "Open Telescope Window" },
-      f = { "<cmd>Telescope find_files<cr>", "Open File Finder" },
-      l = { "<cmd>Telescope file_browser<cr>", "Open File Browser" },
-      g = { "<cmd>Telescope live_grep<cr>", "Open Live Grep" },
-      b = { "<cmd>Telescope buffers<cr>", "Open All Buffers" },
-      t = { "<cmd>TodoTelescope<cr>", "Open Todo List" },
-      d = { "<cmd>Telescope diagnostics<cr>", "[LSP] Diagnostics" },
+      f = { "<cmd>Telescope find_files<cr>", "File Finder" },
+      l = { "<cmd>Telescope file_browser<cr>", "File Browser" },
+      g = { "<cmd>Telescope live_grep_raw<cr>", "Live Grep" },
+      c = { "<cmd>Telescope grep_string<cr>", "Grep String" },
+      b = { "<cmd>Telescope buffers<cr>", "All Buffers" },
+      t = { "<cmd>TodoTelescope<cr>", "Todo List" },
+      d = { "<cmd>Telescope diagnostics<cr>", "Diagnostics" },
       r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
       i = { "<cmd>Telescope lsp_implementations<cr>", "[LSP] Implementations" },
       s = { "<cmd>Telescope lsp_document_symbols<cr>", "[LSP] Document Symbols" },
       p = { "<cmd>Telescope project display_type=full<cr>", "List Projects" },
+      e = { "<cmd>Telescope packer<cr>", "List Packer Plugins" },
     },
     l = {
-      name = "+LSP",
+      name = "+LSP Manage",
       r = { "<cmd>LspRestart<cr>", "Restart Server" },
       i = { "<cmd>LspInfo<cr>", "Show Info" },
       s = { "<cmd>LspInstallInfo<cr>", "Manage Servers" },
@@ -54,13 +54,6 @@ local function setup()
     p = {
       name = "+Preview",
       m = { "<cmd>Glow<cr>", "Markdown" },
-    },
-    s = {
-      name = "+Session",
-      s = { "<cmd>Telescope session-lens search_session<cr>", "Search" },
-      a = { "<cmd>SaveSession<cr>", "Save" },
-      d = { "<cmd>DeleteSession<cr>", "Delete" },
-      r = { "<cmd>RestoreSession<cr>", "Restore" },
     },
     v = {
       name = "+VCS",
@@ -88,7 +81,7 @@ local function setup()
     },
     w = {
       name = "+Window",
-      c = { "<cmd>wincmd c<cr>", "Close Current Window" },
+      c = { "<cmd>wincmd x<cr>", "Close Current Window" },
       o = { "<cmd>wincmd o<cr>", "Close Other Window" },
       v = { "<cmd>vsplit<cr>", "Split Vertically" },
       s = { "<cmd>split<cr>", "Split Horizonally" },
@@ -100,15 +93,12 @@ local function setup()
     },
     x = {
       name = "+Diagnostic",
-      w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Diagnostics" },
-      d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Diagnostics" },
-      q = { "<cmd>TroubleToggle quickfix<cr>", "QuickFix List" },
-      l = { "<cmd>TroubleToggle loclist<cr>", "Location List" },
-      t = { "<cmd>TodoQuickFix<cr>", "List Todos" },
-      c = { "<cmd>lua vim.diagnostic.open_float(nil, {scope='cursor'})<cr>", "Show Cursor Diagnostic" },
-      x = { "<cmd>lua vim.diagnostic.open_float(nil, nil)<cr>", "Show Line Diagnostic" },
-      j = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
-      k = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
+      t = { "<cmd>TodoQuickFix<cr>", "Workspace Todos" },
+      b = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Buffer Diagnostic" },
+      w = { "<cmd>lua vim.diagnostic.setqflist()<cr>", "Workspace Diagnostic" },
+      x = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Show Line Diagnostic" },
+      l = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+      h = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
     },
   }, {
     mode = "n",
@@ -135,10 +125,8 @@ local function setup()
     K = { "10k", "Jump 10 Line Up" },
     [";"] = { ":", "Command Mode" },
     ["#"] = { "#<cmd>lua require('hlslens').start()<cr>", "Search" },
-    ["<tab>"] = { ">>", "Indent right" },
-    ["<s-tab>"] = { "<<", "Indent left" },
     ["<c-s>"] = { "<cmd>w<cr>", "Save buffer" },
-    ["<c-q>"] = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
+    ["<c-x>"] = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
     ["<c-h>"] = { "<cmd>wincmd h<cr>", "Goto Left Window" },
     ["<c-j>"] = { "<cmd>wincmd j<cr>", "Goto Bottom Window" },
     ["<c-k>"] = { "<cmd>wincmd k<cr>", "Goto Top Window" },
@@ -155,21 +143,10 @@ local function setup()
     ["<c-y>"] = { "<c-o>yy", "Copy Line" },
     ["<c-p>"] = { "<c-o>p", "Paste" },
     ["<c-s>"] = { "<c-o><cmd>w<cr>", "Save buffer" },
-    ["<c-q>"] = { "<c-o><cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
+    ["<c-x>"] = { "<c-o><cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
   }, {
     mode = "i",
   })
-  wk.register({
-    ["<tab>"] = { ">", "Indent right" },
-    ["<s-tab>"] = { "<", "Indent left" },
-    r = {
-      name = "+Refactor",
-      f = { "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", "Extract Function" },
-      i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>", "Inline Variable" },
-      r = { "<cmd>Telescope refactoring refactors<cr>", "Refactor Window" },
-      v = { "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>", "Extract Variable" },
-    },
-  }, { mode = "v" })
 end
 
 return { setup = setup }

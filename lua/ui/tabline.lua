@@ -4,20 +4,10 @@ M.setup = function()
   require("bufferline").setup({
     options = {
       numbers = function(opts) return string.format("[%s]", opts.ordinal) end,
-      close_command = "Bdelete! %d",
       offsets = {
-        {
-          filetype = require("ui/file_explorer").filetype(),
-          text = require("ui/file_explorer").title(),
-          highlight = "Directory",
-          text_align = "center",
-        },
-        {
-          filetype = "calltree",
-          text = "Call Hierarchy",
-          highlight = "Directory",
-          text_align = "center",
-        },
+        { filetype = "NvimTree", text = "File Explorer", highlight = "Directory", text_align = "center" },
+        { filetype = "calltree", text = "Call Hierarchy", highlight = "Directory", text_align = "center" },
+        { filetype = "Outline", text = "Outline", highlight = "Directory", text_align = "center" },
       },
       show_close_icon = false,
       show_buffer_close_icons = false,

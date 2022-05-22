@@ -1,22 +1,31 @@
 local M = {}
 M.setup = function()
   require("telescope").setup({
-    defaults = { prompt_prefix = "🔍 " },
+    defaults = {
+      prompt_prefix = "🔍 ",
+      -- layout_strategy = "horizontal",
+      layout_strategy = "vertical",
+      layout_config = {
+        horizontal = { width = 0.7, height = 0.8, prompt_position = "bottom", preview_cutoff = 120 },
+        vertical = { width = 0.8, height = 0.9, prompt_position = "bottom", preview_cutoff = 40 },
+        center = { width = 0.7, height = 0.3, preview_cutoff = 10, prompt_position = "top" },
+        cursor = { width = 0.8, height = 0.9, preview_cutoff = 40, },
+        bottom_pane = { height = 25, prompt_position = "top", preview_cutoff = 120 },
+      }
+    },
+    pickers = {},
     extensions = {
       file_browser = {},
-      ["ui-select"] = {
-        require("telescope.themes").get_dropdown({
-          -- even more opts
-        }),
-      },
-    },
+    }
   })
   require("telescope").load_extension("file_browser")
+  require("telescope").load_extension("live_grep_raw")
+  require("telescope").load_extension("media_files")
   require("telescope").load_extension("project")
   require("telescope").load_extension("dap")
   require("telescope").load_extension("goimpl")
-  require("telescope").load_extension("refactoring")
-  require("telescope").load_extension("ui-select")
+  require("telescope").load_extension("packer")
+  require("telescope").load_extension("gradle")
 end
 
 return M

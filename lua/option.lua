@@ -1,4 +1,6 @@
-local function setup()
+local M = {}
+
+M.setup = function()
   -- You will likely want to reduce updatetime which affects CursorHold
   -- note: this setting is global and should be set only once
   vim.o.laststatus = 3
@@ -14,6 +16,8 @@ local function setup()
   vim.o.shiftwidth = 4
   vim.o.expandtab = true
   vim.o.autoindent = true
+  vim.o.smarttab = true
+  vim.o.smartindent = true
 
   -- Search Config
   vim.o.hlsearch = true
@@ -32,7 +36,7 @@ local function setup()
   -- 不可见字符的显示，这里只把空格显示为一个点
   vim.o.list = false
   vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·,eol:↴,space:⋅"
-  vim.o.showcmd = false
+  vim.o.showcmd = true
   -- 补全增强
   vim.o.wildmenu = true
   -- vim.o.foldmethod = "expr"
@@ -49,16 +53,10 @@ local function setup()
   vim.g.nvim_tree_group_empty = 1
   vim.g.nvim_tree_git_hl = 1
 
-  -- neo format config
-  vim.g.neoformat_basic_format_align = 1
-  vim.g.neoformat_enabled_python = { "black" }
-  vim.g.neoformat_enabled_go = { "gofumpt" }
-  vim.g.neoformat_enabled_lua = { "stylua" }
-  vim.g.neoformat_enabled_kotlin = { "ktlint" }
-
   vim.g.ts_syntaxes = {
     "bash",
     "c",
+    "cmake",
     "cpp",
     "c_sharp",
     "go",
@@ -74,41 +72,32 @@ local function setup()
     "toml",
     "tsx",
     "typescript",
+    "vue",
   }
   vim.g.lsp_servers = {
     "asm_lsp",
     "bashls",
     "clangd",
+    "cmake",
     "cssls",
-    "eslint",
     "gopls",
     "jdtls",
     "jsonls",
     "kotlin_language_server",
     "omnisharp",
     "pyright",
+    "rome",
     "rust_analyzer",
-    "sourcekit",
-    "spectral",
-    "sqls",
     "sumneko_lua",
     "taplo",
     "tsserver",
-    "vuels",
+    "volar",
     "yamlls",
   }
 
   -- copilot config
   -- vim.g.copilot_no_tab_map = true
   vim.g.copilot_assume_mapped = true
-
-  vim.api.nvim_command([[autocmd Filetype go setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype rs setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype tsx setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype jsx setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype vue setlocal tabstop=2 shiftwidth=2 expandtab]])
-  vim.api.nvim_command([[autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 expandtab]])
 end
 
-return { setup = setup }
+return M

@@ -12,7 +12,7 @@ M.setup = function()
   require("ui/tabline").setup()
   require("ui/terminal").setup()
   require("ui/statusline").setup()
-  require("ui/theme").setup({ theme = "one" })
+  require("ui/theme").setup({ theme = "vscode" })
 end
 
 return M

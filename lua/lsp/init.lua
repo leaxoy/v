@@ -1,15 +1,15 @@
 local M = {}
 
 M.on_attach = function(client, bufnr)
-  require("lsp_signature").on_attach()
-  require("illuminate").on_attach(client)
-
-  require("lsp/keybinding").setup(bufnr)
-  require("lsp/handler").setup()
-  require("lsp/capabilities").codelens(client)
-  require("lsp/capabilities").highlight(client)
-  require("lsp/capabilities").format(client)
-  require("lsp/capabilities").diagnostic(bufnr)
+  require("lsp_signature").on_attach({
+    bind = true,
+    handler_opts = { border = "rounded" }
+  }, bufnr)
+  local caps = require("lsp.capabilities")
+  require("lsp.keybinding").setup(bufnr)
+  caps.codelens(client)
+  caps.highlight(client, bufnr)
+  caps.format(client)
 end
 
 M.lsp_settings = {
@@ -22,15 +22,13 @@ M.lsp_settings = {
       deepCompletion = true,
       analyses = {
         unusedparams = true,
-        unreachable = true,
         unusedwrite = true,
         fieldalignment = true,
         nilness = true,
         shadow = true,
+        useany = true,
       },
-      annotations = {
-        ["nil"] = true, escape = true, inline = true, bounds = true,
-      },
+      annotations = { ["nil"] = true, escape = true, inline = true, bounds = true },
       codelenses = {
         enable = true,
         enableByDefault = true,
@@ -73,14 +71,15 @@ M.lsp_settings = {
         enable = true,
         -- Put format options here
         -- NOTE: the value should be STRING!!
+        -- see: https://github.com/CppCXY/EmmyLuaCodeStyle
         defaultConfig = {
           indent_style = "space",
           indent_size = "2",
           quote_style = "double",
-        }
+        },
       },
     },
-  }
+  },
 }
 
 M.lsp_init_options = {
@@ -110,21 +109,34 @@ M.setup = function()
       icons = {
         server_installed = "✓",
         server_pending = "➜",
-        server_uninstalled = "✗"
-      }
-    }
+        server_uninstalled = "✗",
+      },
+    },
   })
 
-  local lspconfig = require("lspconfig");
+  local lspconfig = require("lspconfig")
   for _, server_name in pairs(vim.g.lsp_servers) do
     local opts = {
       on_attach = M.on_attach,
-      capabilities = require("lsp/capabilities").update_capabilities(),
+      capabilities = require("lsp.capabilities").update_capabilities(),
       flags = { debounce_text_changes = 150 },
+      handlers = require("lsp.handler").handlers,
     }
-    opts.settings = vim.tbl_deep_extend("keep", opts.settings or {}, M.lsp_settings[server_name] or {})
-    opts.commands = vim.tbl_deep_extend("keep", opts.commands or {}, require("lsp/commands")[server_name] or {})
-    -- opts.init_options = vim.tbl_deep_extend("keep", opts.init_options or {}, M.lsp_init_options[server.name] or {})
+    opts.settings = vim.tbl_deep_extend(
+      "keep",
+      opts.settings or vim.empty_dict(),
+      M.lsp_settings[server_name] or vim.empty_dict()
+    )
+    opts.commands = vim.tbl_deep_extend(
+      "keep",
+      opts.commands or vim.empty_dict(),
+      require("lsp.commands")[server_name] or vim.empty_dict()
+    )
+    opts.init_options = vim.tbl_deep_extend(
+      "keep",
+      opts.init_options or vim.empty_dict(),
+      M.lsp_init_options[server_name] or vim.empty_dict()
+    )
     if server_name == "sumneko_lua" then
       local luadev = require("lua-dev").setup({ lspconfig = opts })
       lspconfig[server_name].setup(luadev)

@@ -35,12 +35,13 @@ local function setup()
           nvim_lsp = "[LSP]",
           vsnip = "[SNI]",
           spell = "[SPELL]",
+          crates = "[CRATE]",
         },
       }),
     },
     mapping = {
-      ["<C-d>"] = cmp.mapping.scroll_docs(-5),
-      ["<C-f>"] = cmp.mapping.scroll_docs(5),
+      ["<C-d>"] = cmp.mapping.scroll_docs(5),
+      ["<C-u>"] = cmp.mapping.scroll_docs(-5),
       ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-e>"] = cmp.mapping.close(),
       ["<CR>"] = cmp.mapping.confirm({

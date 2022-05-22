@@ -1,10 +1,6 @@
 local M = {}
 
 M.setup = function()
-  local gps = require("nvim-gps")
-
-  gps.setup({})
-
   require("lualine").setup({
     options = {
       theme = "auto",
@@ -19,8 +15,9 @@ M.setup = function()
       lualine_a = { "mode" },
       lualine_b = { "branch" },
       lualine_c = {
-        { "filename", path = 1 },
-        { gps.get_location, condition = gps.is_available },
+        "diff",
+        -- { "filename", path = 1 },
+        -- { gps.get_location, condition = gps.is_available },
       },
       lualine_x = {
         {
@@ -37,12 +34,30 @@ M.setup = function()
           },
           colored = true,
         },
-        "diff",
+        -- "diff",
       },
       lualine_y = { { "filetype" } },
       lualine_z = { "progress", "location" },
     },
   })
+
+  local gps = require("nvim-gps")
+
+  gps.setup({})
+
+  if vim.fn.has("nvim-0.8") then
+    _G.gps_location = function()
+      local f = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
+      return gps.is_available() and gps.get_location() ~= "" and f .. " # " .. gps.get_location() or f
+    end
+    vim.opt.winbar = "%{%v:lua.gps_location()%}"
+
+    vim.api.nvim_create_autocmd("CursorMoved,CursorMovedI", {
+      pattern = "*",
+      command = "redrawstatus"
+    })
+  end
+
 end
 
 return M

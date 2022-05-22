@@ -24,27 +24,21 @@ return require("packer").startup({
 
     -- startup
     use({ "lewis6991/impatient.nvim" })
-    use({
-      "rmagatti/auto-session",
-      config = function()
-        require("auto-session").setup({
-          log_level = "info",
-        })
-      end,
-    })
-    use({
-      "rmagatti/session-lens",
-      requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
-      config = function()
-        require("session-lens").setup({
-          theme_conf = { border = true },
-          previewer = true,
-        })
-        require("telescope").load_extension("session-lens")
-      end,
-    })
     -- UI
     use("stevearc/dressing.nvim")
+    use("sainnhe/gruvbox-material") -- theme
+    use("Mofiqul/vscode.nvim") -- theme
+    use("navarasu/onedark.nvim") -- theme
+    use("kyazdani42/nvim-web-devicons") -- for file icons
+    use("kyazdani42/nvim-tree.lua") -- file explorer
+    use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
+    use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })
+    use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
+    use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }) -- syntax highlighting
+    use("p00f/nvim-ts-rainbow") -- colored brackets
+    use("lukas-reineke/indent-blankline.nvim")
+    use({ "kevinhwang91/nvim-bqf" })
+    use({ "rcarriga/nvim-notify", config = function() require("notify").setup({}) end })
 
     -- Lang specifies
     use("solarnz/thrift.vim")
@@ -52,15 +46,7 @@ return require("packer").startup({
       "saecki/crates.nvim",
       event = { "BufRead Cargo.toml" },
       requires = { { "nvim-lua/plenary.nvim" } },
-      config = function()
-        require("crates").setup()
-      end,
-    })
-    use({
-      "skanehira/preview-uml.vim",
-      requires = { { "aklt/plantuml-syntax", ft = "plantuml", opt = true } },
-      ft = "plantuml",
-      opt = true,
+      config = function() require("crates").setup() end,
     })
 
     -- Lsp config
@@ -70,7 +56,11 @@ return require("packer").startup({
       "hrsh7th/nvim-cmp",
       requires = {
         "hrsh7th/cmp-nvim-lsp", -- cmp from lsp
-        { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
+        -- { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
+        { "zbirenbaum/copilot-cmp",
+          requires = { "zbirenbaum/copilot.lua", "github/copilot.vim" },
+          config = function() require("copilot").setup() end
+        },
         "hrsh7th/cmp-buffer", -- cmp from buffer
         "hrsh7th/cmp-vsnip", -- cmp from snippet
         "hrsh7th/cmp-cmdline",
@@ -78,7 +68,7 @@ return require("packer").startup({
         "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind-nvim", -- cmp menu text
         "lukas-reineke/cmp-under-comparator",
-        "f3fora/cmp-spell",
+        -- "f3fora/cmp-spell",
       },
     })
     use("b0o/SchemaStore.nvim")
@@ -90,8 +80,8 @@ return require("packer").startup({
       requires = {
         "ldelossa/litee-calltree.nvim",
         "ldelossa/litee-symboltree.nvim",
-        "ldelossa/litee-filetree.nvim",
-        "ldelossa/litee-bookmarks.nvim",
+        -- "ldelossa/litee-filetree.nvim",
+        -- "ldelossa/litee-bookmarks.nvim",
       },
       config = function()
         require("litee.lib").setup({
@@ -100,8 +90,8 @@ return require("packer").startup({
         })
         require("litee.calltree").setup({ icon_set = "nerd" })
         require("litee.symboltree").setup({ icon_set = "nerd" })
-        require("litee.filetree").setup({ icon_set = "nerd" })
-        require("litee.bookmarks").setup({ icon_set = "nerd" })
+        -- require("litee.filetree").setup({ icon_set = "nerd" })
+        -- require("litee.bookmarks").setup({ icon_set = "nerd" })
       end,
     })
 
@@ -121,69 +111,25 @@ return require("packer").startup({
     use({ "theHamsta/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } })
     use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
 
-    -- UI Component
-    use("sainnhe/gruvbox-material")
-    use("Mofiqul/vscode.nvim")
-    use("navarasu/onedark.nvim")
-    use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-    use("romgrk/nvim-treesitter-context")
-    use("p00f/nvim-ts-rainbow")
-    use("chentau/marks.nvim")
-    use("lukas-reineke/indent-blankline.nvim")
-    use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })
-    use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
-    use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
-    use({ "kevinhwang91/nvim-bqf" })
-
     -- VCS
     use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 
     -- Code edit
-    use({
-      "karb94/neoscroll.nvim",
-      config = function()
-        require("neoscroll").setup()
-      end,
-    })
+    use({ "karb94/neoscroll.nvim", config = function() require("neoscroll").setup() end })
     use("numToStr/Comment.nvim")
     use("windwp/nvim-autopairs")
     use("famiu/bufdelete.nvim")
-    use({
-      "lewis6991/spellsitter.nvim",
-      config = function()
-        require("spellsitter").setup()
-      end,
-    })
-    use({
-      "ThePrimeagen/refactoring.nvim",
-      requires = {
-        { "nvim-lua/plenary.nvim" },
-        { "nvim-treesitter/nvim-treesitter" },
-      },
-    })
-    use({
-      "gbprod/substitute.nvim",
-      config = function()
-        require("substitute").setup()
-      end,
-    })
+    use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use({ "ellisonleao/glow.nvim" }) -- markdown render
     use({ "kevinhwang91/nvim-hlslens" }) -- searching
-    use({ "jghauser/mkdir.nvim", config = function() require("mkdir") end })
-    use("sbdchd/neoformat")
     use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })
     use({
       "folke/todo-comments.nvim",
       requires = "nvim-lua/plenary.nvim",
-      config = function()
-        require("telescope").load_extension("todo-comments")
-      end,
+      config = function() require("telescope").load_extension("todo-comments") end,
     })
-    use("RRethy/vim-illuminate")
 
     -- File Explorer
-    use("kyazdani42/nvim-web-devicons") -- for file icons
-    use("kyazdani42/nvim-tree.lua")
     use("akinsho/toggleterm.nvim")
     use({
       "nvim-telescope/telescope.nvim",
@@ -192,36 +138,24 @@ return require("packer").startup({
         "nvim-lua/popup.nvim",
         -- Telescope Plugins
         "nvim-telescope/telescope-file-browser.nvim",
-        "nvim-telescope/telescope-ui-select.nvim",
+        "nvim-telescope/telescope-live-grep-raw.nvim",
         "nvim-telescope/telescope-project.nvim",
         "nvim-telescope/telescope-dap.nvim",
+        "nvim-telescope/telescope-packer.nvim",
+        "nvim-telescope/telescope-media-files.nvim",
+        "aloussase/telescope-gradle.nvim",
         "edolphin-ydf/goimpl.nvim",
         "sudormrfbin/cheatsheet.nvim",
       },
     })
     use({
-      "folke/trouble.nvim",
-      config = function()
-        require("trouble").setup({ mode = "document_diagnostics", use_diagnostic_signs = true })
-      end,
-    })
-    use({
       "folke/which-key.nvim",
       config = function()
         require("which-key").setup({
-          window = {
-            border = "double",
-          },
-          key_labels = {
-            ["<space>"] = "SPC",
-            ["<leader>"] = "SPC",
-            ["<tab>"] = "TAB",
-          },
-          popup_mappings = {
-            ["scroll_up"] = "<c-k>",
-            ["scroll_down"] = "<c-j>",
-          },
-          layout = { height = { min = 3, max = 5 } },
+          window = { border = "double" },
+          key_labels = { ["<space>"] = "SPC", ["<leader>"] = "SPC", ["<tab>"] = "TAB" },
+          popup_mappings = { scroll_up = "<c-k>", scroll_down = "<c-j>", },
+          layout = { height = { min = 3, max = 8 }, align = "center" },
           plugins = { spelling = { enabled = true } },
         })
       end,
