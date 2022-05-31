@@ -37,13 +37,19 @@ return {
     dap.configurations.go = {
       {
         type = "go",
-        name = "Debug",
+        name = "Debug File",
         request = "launch",
         program = "${file}",
       },
       {
         type = "go",
-        name = "Debug test", -- configuration for debugging test files
+        name = "Debug Package",
+        request = "launch",
+        program = "${fileDirname}",
+      },
+      {
+        type = "go",
+        name = "Debug test file", -- configuration for debugging test files
         request = "launch",
         mode = "test",
         program = "${file}",

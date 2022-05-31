@@ -10,6 +10,7 @@ M.setup = function()
   vim.o.number = true
   vim.o.relativenumber = true
   vim.o.splitright = true
+  vim.o.wrap = false
 
   -- Indent Config
   vim.o.tabstop = 4
@@ -39,6 +40,10 @@ M.setup = function()
   vim.o.showcmd = true
   -- 补全增强
   vim.o.wildmenu = true
+  vim.o.foldmethod = "indent"
+  vim.o.foldcolumn = "auto"
+  vim.o.foldenable = false
+  vim.o.foldlevelstart = 99
   -- vim.o.foldmethod = "expr"
   -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
@@ -46,12 +51,6 @@ M.setup = function()
   vim.wo.colorcolumn = "100"
   -- vim.o.spell = true
   -- vim.opt.spelllang = { "en_us" }
-
-  -- nvim tree config
-  vim.g.nvim_tree_highlight_opened_files = 1
-  vim.g.nvim_tree_add_trailing = 1
-  vim.g.nvim_tree_group_empty = 1
-  vim.g.nvim_tree_git_hl = 1
 
   vim.g.ts_syntaxes = {
     "bash",
@@ -86,7 +85,6 @@ M.setup = function()
     "kotlin_language_server",
     "omnisharp",
     "pyright",
-    "rome",
     "rust_analyzer",
     "sumneko_lua",
     "taplo",

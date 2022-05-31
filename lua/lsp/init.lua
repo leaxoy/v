@@ -1,6 +1,7 @@
 local M = {}
 
 M.on_attach = function(client, bufnr)
+  client.offset_encoding = "utf-16"
   require("lsp_signature").on_attach({
     bind = true,
     handler_opts = { border = "rounded" }
@@ -61,7 +62,7 @@ M.lsp_settings = {
   },
   ["rust_analyzer"] = {
     rust_analyzer = {
-      cargo = { allFeatures = true },
+      cargo = { allFeatures = true, features = { "all" }, },
       checkOnSave = { command = "clippy" },
     },
   },
@@ -99,12 +100,14 @@ M.lsp_init_options = {
   },
 }
 
-M.setup = function()
+M.setup = function(opt)
+  opt = vim.tbl_deep_extend("keep", opt or {}, {})
+
   require("lsp/completion").setup()
 
   local lsp_manager = require("nvim-lsp-installer")
   lsp_manager.setup({
-    ensure_installed = vim.g.lsp_servers,
+    ensure_installed = opt.lsp_servers,
     ui = {
       icons = {
         server_installed = "✓",
@@ -115,12 +118,12 @@ M.setup = function()
   })
 
   local lspconfig = require("lspconfig")
-  for _, server_name in pairs(vim.g.lsp_servers) do
+  for _, server_name in pairs(opt.lsp_servers) do
     local opts = {
       on_attach = M.on_attach,
       capabilities = require("lsp.capabilities").update_capabilities(),
       flags = { debounce_text_changes = 150 },
-      handlers = require("lsp.handler").handlers,
+      handlers = require("lsp.handler"),
     }
     opts.settings = vim.tbl_deep_extend(
       "keep",

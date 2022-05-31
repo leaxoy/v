@@ -6,6 +6,8 @@ M.setup_nvim_tree = function()
   require("nvim-tree").setup({
     diagnostics = { enable = true },
     -- hijack_cursor = true,
+    create_in_closed_folder = false,
+    respect_buf_cwd = false,
     filters = {
       custom = {
         ".DS_Store",
@@ -43,6 +45,11 @@ M.setup_nvim_tree = function()
       },
     },
     renderer = {
+      add_trailing = false,
+      group_empty = true,
+      highlight_git = true,
+      highlight_opened_files = "none",
+      root_folder_modifier = ":~",
       indent_markers = {
         enable = true,
       },

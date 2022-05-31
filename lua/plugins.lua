@@ -14,7 +14,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Only required if you have packer configured as `opt`
-vim.cmd([[packadd packer.nvim]])
+-- vim.cmd([[packadd packer.nvim]])
 
 local use = require("packer").use
 return require("packer").startup({
@@ -42,6 +42,7 @@ return require("packer").startup({
 
     -- Lang specifies
     use("solarnz/thrift.vim")
+    use({ "luzhlon/xmake.vim" })
     use({
       "saecki/crates.nvim",
       event = { "BufRead Cargo.toml" },
@@ -56,7 +57,6 @@ return require("packer").startup({
       "hrsh7th/nvim-cmp",
       requires = {
         "hrsh7th/cmp-nvim-lsp", -- cmp from lsp
-        -- { "hrsh7th/cmp-copilot", requires = { "github/copilot.vim" } },
         { "zbirenbaum/copilot-cmp",
           requires = { "zbirenbaum/copilot.lua", "github/copilot.vim" },
           config = function() require("copilot").setup() end
@@ -68,32 +68,12 @@ return require("packer").startup({
         "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind-nvim", -- cmp menu text
         "lukas-reineke/cmp-under-comparator",
-        -- "f3fora/cmp-spell",
       },
     })
     use("b0o/SchemaStore.nvim")
     use("ray-x/lsp_signature.nvim")
     use("folke/lua-dev.nvim")
     use("simrat39/symbols-outline.nvim")
-    use({
-      "ldelossa/litee.nvim",
-      requires = {
-        "ldelossa/litee-calltree.nvim",
-        "ldelossa/litee-symboltree.nvim",
-        -- "ldelossa/litee-filetree.nvim",
-        -- "ldelossa/litee-bookmarks.nvim",
-      },
-      config = function()
-        require("litee.lib").setup({
-          tree = { icon_set = "nerd", indent_guides = true },
-          panel = { orientation = "left", panel_size = 30 },
-        })
-        require("litee.calltree").setup({ icon_set = "nerd" })
-        require("litee.symboltree").setup({ icon_set = "nerd" })
-        -- require("litee.filetree").setup({ icon_set = "nerd" })
-        -- require("litee.bookmarks").setup({ icon_set = "nerd" })
-      end,
-    })
 
     -- Snippet config
     use({
@@ -115,10 +95,11 @@ return require("packer").startup({
     use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 
     -- Code edit
-    use({ "karb94/neoscroll.nvim", config = function() require("neoscroll").setup() end })
+    -- use({ "karb94/neoscroll.nvim", config = function() require("neoscroll").setup() end })
     use("numToStr/Comment.nvim")
     use("windwp/nvim-autopairs")
     use("famiu/bufdelete.nvim")
+    use("mg979/vim-visual-multi")
     use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use({ "ellisonleao/glow.nvim" }) -- markdown render
     use({ "kevinhwang91/nvim-hlslens" }) -- searching
@@ -129,7 +110,7 @@ return require("packer").startup({
       config = function() require("telescope").load_extension("todo-comments") end,
     })
 
-    -- File Explorer
+    -- Editor tools
     use("akinsho/toggleterm.nvim")
     use({
       "nvim-telescope/telescope.nvim",

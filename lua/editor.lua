@@ -31,7 +31,7 @@ local function setup_search()
   require("bqf").setup({ auto_reload = true, auto_resize_height = true })
 end
 
-local function setup_treesitter()
+local function setup_treesitter(opt)
   local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
   parser_config.org = {
     install_info = {
@@ -43,7 +43,7 @@ local function setup_treesitter()
   }
 
   require("nvim-treesitter.configs").setup({
-    ensure_installed = vim.g.ts_syntaxes,
+    ensure_installed = opt.ts_syntaxes,
     highlight = {
       enable = true,
       -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -61,10 +61,11 @@ local function setup_treesitter()
   })
 end
 
-M.setup = function()
+M.setup = function(opt)
+  opt = vim.tbl_deep_extend("keep", opt or {}, {})
   setup_edit()
   setup_search()
-  setup_treesitter()
+  setup_treesitter(opt)
 end
 
 return M

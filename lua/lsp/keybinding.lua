@@ -27,7 +27,8 @@ local function setup(bufnr)
     -- r = { "<cmd>lua vim.lsp.buf.references()<cr>", "Goto References" },
     k = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Peek Hover" },
     s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Peek SignatureHelp" },
-    o = { "<cmd>lua vim.lsp.buf.document_symbol()<cr>", "Document Symbol" },
+    -- o = { "<cmd>lua vim.lsp.buf.document_symbol()<cr>", "Document Symbol" },
+    o = { "<cmd>SymbolsOutline<cr>", "Document Symbol" },
     O = { "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>", "Workspace Symbol" },
     h = {
       name = "+Hierarchy",
@@ -44,12 +45,12 @@ local function setup(bufnr)
       r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove Workspace" },
       l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List Workspaces" },
     },
-    l = {
-      name = "+CodeLens",
-      d = { "<cmd>lua vim.lsp.codelens.display()<cr>", "Display CodeLens" },
-      r = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Run CodeLens" },
-      f = { "<cmd>lua vim.lsp.codelens.refresh()<cr>", "Refresh CodeLens" },
-    },
+    -- l = {
+    --   name = "+CodeLens",
+    --   d = { "<cmd>lua vim.lsp.codelens.display()<cr>", "Display CodeLens" },
+    --   r = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Run CodeLens" },
+    --   f = { "<cmd>lua vim.lsp.codelens.refresh()<cr>", "Refresh CodeLens" },
+    -- },
   }, {
     buffer = bufnr,
     -- prefix = "<leader>g",

@@ -49,6 +49,7 @@ M.setup = function()
   dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
   require("dbg/go").setup()
   require("dbg/python").setup()
+  require("dbg.c").setup()
 end
 
 return M
