@@ -1,4 +1,4 @@
-function GoOrganizeImports(timeout_ms)
+function OrganizeImports(timeout_ms)
   local context = { only = { "source.organizeImports" } }
   vim.validate({ context = { context, "t", true } })
 
@@ -123,6 +123,12 @@ local function rust_expand_macro(direction)
 end
 
 return {
+  default = {
+    OrganizeImports = {
+      function() OrganizeImports(1000) end,
+      description = "Organize imports",
+    }
+  },
   ["rust_analyzer"] = {
     RustExpandMacro = {
       function()
@@ -137,12 +143,6 @@ return {
         GoSwitch("bang" == "!", "vsplit")
       end,
       description = "Switch Between Go Test & Normal File",
-    },
-    GoOrganizeImports = {
-      function()
-        GoOrganizeImports(1000)
-      end,
-      description = "Source Organize Imports",
     },
   },
 }

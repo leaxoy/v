@@ -1,16 +1,34 @@
 local M = {}
 
-M.on_attach = function(client, bufnr)
-  client.offset_encoding = "utf-16"
-  require("lsp_signature").on_attach({
-    bind = true,
-    handler_opts = { border = "rounded" }
-  }, bufnr)
-  local caps = require("lsp.capabilities")
-  require("lsp.keybinding").setup(bufnr)
-  caps.codelens(client)
-  caps.highlight(client, bufnr)
-  caps.format(client)
+M.lsp_capabitities = function(cfg)
+  cfg = cfg or {}
+
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+  local if_nil = function(val, default)
+    if val == nil then
+      return default
+    end
+    return val
+  end
+
+  local completionItem = capabilities.textDocument.completion.completionItem
+
+  completionItem.snippetSupport = if_nil(cfg.snippetSupport, true)
+  completionItem.preselectSupport = if_nil(cfg.preselectSupport, true)
+  completionItem.insertReplaceSupport = if_nil(cfg.insertReplaceSupport, true)
+  completionItem.labelDetailsSupport = if_nil(cfg.labelDetailsSupport, true)
+  completionItem.deprecatedSupport = if_nil(cfg.deprecatedSupport, true)
+  completionItem.commitCharactersSupport = if_nil(cfg.commitCharactersSupport, true)
+  completionItem.tagSupport = if_nil(cfg.tagSupport, { valueSet = { 1 } })
+  completionItem.resolveSupport = if_nil(cfg.resolveSupport, {
+    properties = {
+      "documentation",
+      "detail",
+      "additionalTextEdits",
+    },
+  })
+  return capabilities
 end
 
 M.lsp_settings = {
@@ -45,6 +63,7 @@ M.lsp_settings = {
       usePlaceholders = true,
       completeUnimported = true,
       staticcheck = true,
+      semanticTokens = true,
       matcher = "Fuzzy",
       diagnosticsDelay = "500ms",
       experimentalWatchedFileDelay = "100ms",
@@ -120,8 +139,7 @@ M.setup = function(opt)
   local lspconfig = require("lspconfig")
   for _, server_name in pairs(opt.lsp_servers) do
     local opts = {
-      on_attach = M.on_attach,
-      capabilities = require("lsp.capabilities").update_capabilities(),
+      capabilities = M.lsp_capabitities(),
       flags = { debounce_text_changes = 150 },
       handlers = require("lsp.handler"),
     }

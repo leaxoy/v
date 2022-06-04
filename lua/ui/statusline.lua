@@ -69,7 +69,7 @@ M.setup_lualine = function()
 
   local gps = require("nvim-gps")
 
-  gps.setup({})
+  gps.setup({ separator = " › " })
 
   if vim.fn.has("nvim-0.8") then
     _G.win_title = function()
@@ -85,7 +85,7 @@ M.setup_lualine = function()
         return "%=符号大纲%="
       end
       local f = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
-      return gps.get_location() and f .. " # " .. gps.get_location() or f
+      return gps.get_location() and f .. " ☯ " .. gps.get_location() or f
     end
     vim.opt.winbar = "%{%v:lua.win_title()%}"
   end

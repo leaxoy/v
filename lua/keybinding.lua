@@ -147,6 +147,10 @@ local function setup()
   }, {
     mode = "i",
   })
+  vim.keymap.set("", "<ScrollWheelUp>", "<Nop>", { noremap = true, silent = true })
+  vim.keymap.set("", "<ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
+  vim.keymap.set("", "<S-ScrollWheelUp>", "<Nop>", { noremap = true, silent = true })
+  vim.keymap.set("", "<S-ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
 end
 
 return { setup = setup }

@@ -86,6 +86,7 @@ M.setup = function()
     "omnisharp",
     "pyright",
     "rust_analyzer",
+    "r_language_server",
     "sumneko_lua",
     "taplo",
     "tsserver",
