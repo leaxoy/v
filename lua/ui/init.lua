@@ -7,7 +7,7 @@ M.setup = function()
   })
 
   require("nvim-web-devicons").setup({ default = true })
-  require("ui/file_explorer").setup()
+  require("ui/file_explorer").setup_nvim_tree()
   require("ui/finder").setup()
   -- require("ui/tabline").setup()
   require("ui/terminal").setup()

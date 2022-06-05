@@ -41,8 +41,8 @@ return require("packer").startup({
     use({ "rcarriga/nvim-notify", config = function() require("notify").setup({}) end })
 
     -- Lang specifies
-    use("solarnz/thrift.vim")
-    use({ "luzhlon/xmake.vim" })
+    use({ "solarnz/thrift.vim", opt = true, ft = "thrift" })
+    use({ "luzhlon/xmake.vim", event = { "BufRead xmake.lua" } })
     use({
       "saecki/crates.nvim",
       event = { "BufRead Cargo.toml" },
@@ -65,13 +65,13 @@ return require("packer").startup({
         "hrsh7th/cmp-vsnip", -- cmp from snippet
         "hrsh7th/cmp-cmdline",
         "hrsh7th/cmp-nvim-lsp-document-symbol",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
+        -- "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind-nvim", -- cmp menu text
         "lukas-reineke/cmp-under-comparator",
       },
     })
     use("b0o/SchemaStore.nvim")
-    use("ray-x/lsp_signature.nvim")
+    -- use("ray-x/lsp_signature.nvim")
     use("folke/lua-dev.nvim")
     use("simrat39/symbols-outline.nvim")
 

@@ -92,6 +92,7 @@ M.setup = function()
     "tsserver",
     "volar",
     "yamlls",
+    "vimls",
   }
 
   -- copilot config

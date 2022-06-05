@@ -5,7 +5,9 @@ local M = {}
 M.setup_nvim_tree = function()
   require("nvim-tree").setup({
     diagnostics = { enable = true },
-    -- hijack_cursor = true,
+    disable_netrw = true,
+    hijack_cursor = true,
+    open_on_setup = true,
     create_in_closed_folder = false,
     respect_buf_cwd = false,
     filters = {
@@ -54,16 +56,12 @@ M.setup_nvim_tree = function()
         enable = true,
       },
     },
-    git = { enable = true, timeout = 100 },
+    git = { enable = true, timeout = 20 },
     actions = {
       change_dir = { enable = false },
       open_file = { resize_window = true },
     }
   })
-end
-
-M.setup = function()
-  M.setup_nvim_tree()
 end
 
 return M
