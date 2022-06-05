@@ -1,10 +1,11 @@
 vim.diagnostic.config({
-  -- disable virtual_text by default
-  -- virtual_text = {
-  --   prefix = "x ", -- Could be '●', '▎', 'x', "■"
-  --   source = "if_many",
-  -- },
-  virtual_text = false,
+  virtual_text = {
+    prefix = "■ ", -- Could be '●', '▎', 'x', "■"
+    source = "if_many",
+    severity = {
+      min = vim.diagnostic.severity.ERROR,
+    }
+  },
   signs = true,
   underline = true,
   float = { show_header = true, focus = false, border = "double" },

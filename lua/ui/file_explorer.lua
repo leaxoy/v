@@ -56,7 +56,8 @@ M.setup_nvim_tree = function()
         enable = true,
       },
     },
-    git = { enable = true, timeout = 20 },
+    git = { enable = true, timeout = 100 },
+    filesystem_watchers = { enable = true, interval = 3000 },
     actions = {
       change_dir = { enable = false },
       open_file = { resize_window = true },

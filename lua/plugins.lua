@@ -38,7 +38,7 @@ return require("packer").startup({
     use("p00f/nvim-ts-rainbow") -- colored brackets
     use("lukas-reineke/indent-blankline.nvim")
     use({ "kevinhwang91/nvim-bqf" })
-    use({ "rcarriga/nvim-notify", config = function() require("notify").setup({}) end })
+    use({ "rcarriga/nvim-notify", config = function() require("notify").setup({ background_colour = "#FFFFFF" }) end })
 
     -- Lang specifies
     use({ "solarnz/thrift.vim", opt = true, ft = "thrift" })
