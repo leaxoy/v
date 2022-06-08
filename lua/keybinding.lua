@@ -94,7 +94,7 @@ wk.register({
     w = { "<cmd>Telescope<cr>", "Open Telescope Window" },
     f = { "<cmd>Telescope find_files<cr>", "File Finder" },
     l = { "<cmd>Telescope file_browser<cr>", "File Browser" },
-    g = { "<cmd>Telescope live_grep_raw<cr>", "Live Grep" },
+    g = { "<cmd>Telescope live_grep_args<cr>", "Live Grep" },
     c = { "<cmd>Telescope grep_string<cr>", "Grep String" },
     b = { "<cmd>Telescope buffers<cr>", "All Buffers" },
     t = { "<cmd>TodoTelescope<cr>", "Todo List" },

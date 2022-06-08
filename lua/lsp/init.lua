@@ -106,6 +106,15 @@ local function resolve_server_capabilities(client, buffer)
       buffer = buffer,
       command = "lua vim.lsp.buf.format()",
     })
+  else
+    vim.g.neoformat_enabled_python = { "black" }
+    vim.api.nvim_create_augroup("lsp_document_format", { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = buffer, group = "lsp_document_format" })
+    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+      group = "lsp_document_format",
+      buffer = buffer,
+      command = "undojoin | Neoformat",
+    })
   end
   -- if client.server_capabilities.documentRangeFormattingProvider then
   -- end
@@ -180,6 +189,11 @@ local function resolve_client_capabilities(...)
 end
 
 M.activate = function(client, bufnr)
+  -- require("lsp_signature").on_attach({ bind = true, handler_opts = { border = "rounded" } }, buf)
+
+  -- Enable completion triggered by <c-x><c-o>
+  -- vim.api.nvim_buf_set_option(buf, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  client.offset_encoding = "utf-16"
   resolve_server_capabilities(client, bufnr)
 end
 
@@ -287,6 +301,7 @@ M.setup = function(opt)
   lsp_manager.setup({
     ensure_installed = opt.lsp_servers,
     ui = {
+      border = "double",
       icons = {
         server_installed = "✓",
         server_pending = "➜",

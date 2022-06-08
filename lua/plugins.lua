@@ -100,6 +100,7 @@ return require("packer").startup({
     use("windwp/nvim-autopairs")
     use("famiu/bufdelete.nvim")
     use("mg979/vim-visual-multi")
+    use({ "sbdchd/neoformat" })
     use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use({ "ellisonleao/glow.nvim" }) -- markdown render
     use({ "kevinhwang91/nvim-hlslens" }) -- searching
@@ -119,7 +120,7 @@ return require("packer").startup({
         "nvim-lua/popup.nvim",
         -- Telescope Plugins
         "nvim-telescope/telescope-file-browser.nvim",
-        "nvim-telescope/telescope-live-grep-raw.nvim",
+        "nvim-telescope/telescope-live-grep-args.nvim",
         "nvim-telescope/telescope-project.nvim",
         "nvim-telescope/telescope-dap.nvim",
         "nvim-telescope/telescope-packer.nvim",

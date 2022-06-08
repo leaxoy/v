@@ -20,11 +20,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local buf = args.buf
-    -- require("lsp_signature").on_attach({ bind = true, handler_opts = { border = "rounded" } }, buf)
 
-    -- Enable completion triggered by <c-x><c-o>
-    -- vim.api.nvim_buf_set_option(buf, "omnifunc", "v:lua.vim.lsp.omnifunc")
-    client.offset_encoding = "utf-16"
     require("lsp").activate(client, buf)
   end,
   desc = "setup lsp functions"

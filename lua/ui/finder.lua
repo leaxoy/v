@@ -16,10 +16,13 @@ M.setup = function()
     pickers = {},
     extensions = {
       file_browser = {},
+      live_grep_args = {
+        auto_quoting = true,
+      }
     }
   })
   require("telescope").load_extension("file_browser")
-  require("telescope").load_extension("live_grep_raw")
+  require("telescope").load_extension("live_grep_args")
   require("telescope").load_extension("media_files")
   require("telescope").load_extension("project")
   require("telescope").load_extension("dap")

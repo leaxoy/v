@@ -7,7 +7,7 @@ M.setup_nvim_tree = function()
     diagnostics = { enable = true },
     disable_netrw = true,
     hijack_cursor = true,
-    open_on_setup = true,
+    -- open_on_setup = true,
     create_in_closed_folder = false,
     respect_buf_cwd = false,
     filters = {
@@ -33,7 +33,7 @@ M.setup_nvim_tree = function()
       mappings = {
         -- custom only false will merge the list with the default mappings
         -- if true, it will only use your list to set the mappings
-        custom_only = false,
+        custom_only = true,
         -- list of mappings to set on the tree manually
         list = {
           { key = "<C-[>", cb = tree_cb("dir_up") },
@@ -42,7 +42,9 @@ M.setup_nvim_tree = function()
           { key = "r", cb = tree_cb("rename") },
           { key = "d", cb = tree_cb("remove") },
           { key = "a", cb = tree_cb("create") },
-          { key = "f", cb = tree_cb("refresh") },
+          { key = "s", cb = tree_cb("refresh") },
+          { key = "F", cb = tree_cb("live_filter") },
+          { key = "<cr>", cb = tree_cb("edit") },
         },
       },
     },
