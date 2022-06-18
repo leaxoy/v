@@ -29,13 +29,46 @@ return require("packer").startup({
     use("sainnhe/gruvbox-material") -- theme
     use("Mofiqul/vscode.nvim") -- theme
     use("navarasu/onedark.nvim") -- theme
-    use("kyazdani42/nvim-web-devicons") -- for file icons
-    use("kyazdani42/nvim-tree.lua") -- file explorer
-    use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
+    use({ "kyazdani42/nvim-tree.lua", requires = "kyazdani42/nvim-web-devicons" })
+    -- use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
     use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })
-    use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
+    use({ "SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig", config = function()
+      vim.api.nvim_set_hl(0, "NavicIconsFile", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsModule", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsNamespace", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsPackage", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsClass", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsMethod", { default = true, bg = "#000000", fg = "#433966" })
+      vim.api.nvim_set_hl(0, "NavicIconsProperty", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsField", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsConstructor", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsEnum", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsInterface", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsFunction", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsVariable", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsConstant", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsString", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsNumber", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsBoolean", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsArray", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsObject", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsKey", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsNull", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsEnumMember", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsStruct", { default = true, bg = "#000000", fg = "#357f2e" })
+      vim.api.nvim_set_hl(0, "NavicIconsEvent", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsOperator", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicText", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicSeparator", { default = true, bg = "#000000", fg = "#ffffff" })
+      require("nvim-navic").setup {
+        highlight = true,
+        separator = " > ",
+        depth_limit = 0,
+        depth_limit_indicator = "..",
+      }
+    end })
     use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }) -- syntax highlighting
-    use("p00f/nvim-ts-rainbow") -- colored brackets
     use("lukas-reineke/indent-blankline.nvim")
     use({ "kevinhwang91/nvim-bqf" })
     use({ "rcarriga/nvim-notify", config = function() require("notify").setup({ background_colour = "#FFFFFF" }) end })
@@ -48,6 +81,11 @@ return require("packer").startup({
       event = { "BufRead Cargo.toml" },
       requires = { { "nvim-lua/plenary.nvim" } },
       config = function() require("crates").setup() end,
+    })
+    use({
+      "weirongxu/plantuml-previewer.vim",
+      requires = { "tyru/open-browser.vim", "aklt/plantuml-syntax" },
+      opt = true, ft = "plantuml",
     })
 
     -- Lsp config
@@ -65,13 +103,11 @@ return require("packer").startup({
         "hrsh7th/cmp-vsnip", -- cmp from snippet
         "hrsh7th/cmp-cmdline",
         "hrsh7th/cmp-nvim-lsp-document-symbol",
-        -- "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind-nvim", -- cmp menu text
         "lukas-reineke/cmp-under-comparator",
       },
     })
     use("b0o/SchemaStore.nvim")
-    -- use("ray-x/lsp_signature.nvim")
     use("folke/lua-dev.nvim")
     use("simrat39/symbols-outline.nvim")
 
@@ -105,11 +141,7 @@ return require("packer").startup({
     use({ "ellisonleao/glow.nvim" }) -- markdown render
     use({ "kevinhwang91/nvim-hlslens" }) -- searching
     use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })
-    use({
-      "folke/todo-comments.nvim",
-      requires = "nvim-lua/plenary.nvim",
-      config = function() require("telescope").load_extension("todo-comments") end,
-    })
+    use({ "folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim" })
 
     -- Editor tools
     use("akinsho/toggleterm.nvim")

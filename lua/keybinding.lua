@@ -97,6 +97,7 @@ wk.register({
     g = { "<cmd>Telescope live_grep_args<cr>", "Live Grep" },
     c = { "<cmd>Telescope grep_string<cr>", "Grep String" },
     b = { "<cmd>Telescope buffers<cr>", "All Buffers" },
+    n = { "<cmd>Telescope ghn<cr>", "Github Notifications" },
     t = { "<cmd>TodoTelescope<cr>", "Todo List" },
     d = { "<cmd>Telescope diagnostics<cr>", "Diagnostics" },
     r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
@@ -116,6 +117,9 @@ wk.register({
     n = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
     o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
     r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Repl" },
+
+    t = { "<cmd>Ultest<cr>", "Test Current File" },
+    p = { "<cmd>UltestSummary<cr>", "Toggle Test Panel" },
   },
   H = { "^", "Start of line" },
   L = { "$", "End of line" },

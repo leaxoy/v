@@ -30,19 +30,21 @@ local function setup()
         with_text = false,
         maxwidth = 50,
         menu = {
-          copilot = "[PILOT]",
-          buffer = "[BUF]",
-          nvim_lsp = "[LSP]",
-          vsnip = "[SNI]",
-          spell = "[SPELL]",
-          crates = "[CRATE]",
+          spell = "",
+          nvim_lsp = "",
+          vsnip = "",
+          buffer = "",
+          copilot = "",
+          crates = "",
         },
       }),
     },
     mapping = {
       ["<C-d>"] = cmp.mapping.scroll_docs(5),
       ["<C-u>"] = cmp.mapping.scroll_docs(-5),
-      ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-Space>"] = cmp.mapping.complete({
+        reason = cmp.ContextReason.Auto,
+      }),
       ["<C-e>"] = cmp.mapping.close(),
       ["<CR>"] = cmp.mapping.confirm({
         select = true,

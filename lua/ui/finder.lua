@@ -29,6 +29,7 @@ M.setup = function()
   require("telescope").load_extension("goimpl")
   require("telescope").load_extension("packer")
   require("telescope").load_extension("gradle")
+  require("telescope").load_extension("todo-comments")
 end
 
 return M

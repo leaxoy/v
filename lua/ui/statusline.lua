@@ -38,11 +38,9 @@ M.setup_lualine = function()
             return msg
           end,
           icon = " LSP:",
-          color = { fg = "#ffffff", gui = "bold" },
+          color = { fg = "#145555", gui = "bold" },
         },
         { "lsp_progress", display_components = { "lsp_client_name", { "title", "percentage", "message" } } }
-        -- { "filename", path = 1 },
-        -- { gps.get_location, condition = gps.is_available },
       },
       lualine_x = {
         {
@@ -50,7 +48,8 @@ M.setup_lualine = function()
           sources = { "nvim_diagnostic" },
           sections = { "error", "warn", "info", "hint" },
           -- symbols = { error = " ", warn = " ", hint = " ", info = " " },
-          symbols = { error = " ", warn = " ", info = " " },
+          -- symbols = { error = " ", warn = " ", info = " " },
+          symbols = { error = " ", warn = " ", hint = " ", info = " " },
           diagnostics_color = {
             -- Same values like general color option can be used here.
             error = "DiagnosticError", -- changes diagnostic's error color
@@ -60,17 +59,13 @@ M.setup_lualine = function()
           },
           colored = true,
         },
-        -- "diff",
       },
       lualine_y = { { "filetype" } },
       lualine_z = { "progress", "location" },
     },
   })
 
-  local gps = require("nvim-gps")
-
-  gps.setup({ separator = " › " })
-
+  local navic = require("nvim-navic")
   if vim.fn.has("nvim-0.8") then
     _G.win_title = function()
       local buf_id = vim.api.nvim_win_get_buf(0);
@@ -81,11 +76,12 @@ M.setup_lualine = function()
       elseif buf_ft == "Quickfix" then
         return "Quickfix"
       elseif buf_ft == "Outline" then
-        -- return "%=Symbol Outline%="
         return "%=符号大纲%="
+      elseif buf_ft == "UltestSummary" then
+        return "%=测试报告%="
       end
       local f = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
-      return gps.get_location() and f .. " ☯ " .. gps.get_location() or f
+      return navic.get_location() and f .. " ☯ " .. navic.get_location() or f
     end
     vim.opt.winbar = "%{%v:lua.win_title()%}"
   end

@@ -1,5 +1,17 @@
 local M = {}
 
+local function resolve_lsp_command(cmds, lang)
+  return function()
+    vim.ui.select(cmds, {
+      prompt = "Execute Command:",
+    }, function(choice)
+      if not choice then return end
+      vim.api.nvim_out_write("Execute command: " .. choice)
+      vim.lsp.buf.execute_command({ command = choice, arguments = {} })
+    end)
+  end
+end
+
 local function type_hierarchy(method)
   vim.api.nvim_err_writeln("TypeHierarchy not supported in this version of nvim")
 end
@@ -36,9 +48,9 @@ local function resolve_server_capabilities(client, buffer)
     vim.keymap.set("n", "ghT", super_types, o({ desc = "Super Types" }))
   end
   if client.server_capabilities.documentHighlightProvider then
-    vim.api.nvim_command([[hi! LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
-    vim.api.nvim_command([[hi! LspReferenceText cterm=bold ctermbg=red guibg=Green]])
-    vim.api.nvim_command([[hi! LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
+    -- vim.api.nvim_command([[hi! LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
+    -- vim.api.nvim_command([[hi! LspReferenceText cterm=bold ctermbg=red guibg=Green]])
+    -- vim.api.nvim_command([[hi! LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
     vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
     vim.api.nvim_clear_autocmds({ buffer = buffer, group = "lsp_document_highlight", })
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -63,12 +75,12 @@ local function resolve_server_capabilities(client, buffer)
     vim.cmd([[highlight! link LspCodeLensTextSign LspCodeLensText]])
     vim.cmd([[highlight! link LspCodeLensTextSeparator Boolean]])
 
-    vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI" }, {
+    vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged" }, {
       pattern = "*", callback = vim.lsp.codelens.refresh
     })
     vim.keymap.set("n", "gad", vim.lsp.codelens.display, o({ desc = "Display CodeLens" }))
-    vim.keymap.set("n", "gac", vim.lsp.codelens.run, o({ desc = "Run CodeLens" }))
-    vim.keymap.set("n", "gaf", vim.lsp.codelens.run, o({ desc = "Refresh CodeLens" }))
+    vim.keymap.set("n", "gar", vim.lsp.codelens.run, o({ desc = "Run CodeLens" }))
+    vim.keymap.set("n", "gaf", vim.lsp.codelens.refresh, o({ desc = "Refresh CodeLens" }))
   end
   -- if client.server_capabilities.foldingRangeProvider then
   -- end
@@ -106,22 +118,22 @@ local function resolve_server_capabilities(client, buffer)
       buffer = buffer,
       command = "lua vim.lsp.buf.format()",
     })
-  else
-    vim.g.neoformat_enabled_python = { "black" }
-    vim.api.nvim_create_augroup("lsp_document_format", { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = buffer, group = "lsp_document_format" })
-    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      group = "lsp_document_format",
-      buffer = buffer,
-      command = "undojoin | Neoformat",
-    })
+    -- else
+    --   vim.g.neoformat_enabled_python = { "black" }
+    --   vim.api.nvim_create_augroup("document_format", { clear = false })
+    --   vim.api.nvim_clear_autocmds({ buffer = buffer, group = "document_format" })
+    --   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    --     group = "document_format",
+    --     buffer = buffer,
+    --     command = "undojoin | Neoformat",
+    --   })
   end
   -- if client.server_capabilities.documentRangeFormattingProvider then
   -- end
   -- if client.server_capabilities.documentOnTypeFormattingProvider then
   -- end
   if client.server_capabilities.renameProvider then
-    vim.keymap.set("n", "gar", vim.lsp.buf.rename, o({ desc = "Rename" }))
+    vim.keymap.set("n", "gr", vim.lsp.buf.rename, o({ desc = "Rename" }))
   end
   -- if client.server_capabilities.linkedEditingRangeProvider then
   -- end
@@ -131,44 +143,22 @@ local function resolve_server_capabilities(client, buffer)
     vim.keymap.set("n", "gO", vim.lsp.buf.workspace_symbol, o({ desc = "Workspace Symbol" }))
   end
   if client.server_capabilities.executeCommandProvider then
-    local cmds = client.server_capabilities.executeCommandProvider.commands;
-    for _, cmd in ipairs(cmds) do
-      local name = cmd.command;
-      local fn = function()
-        local params = cmd.arguments and vim.lsp.util.make_position_params() or nil
-        vim.lsp.buf.execute_command({ command = name, arguments = params })
-      end
-      vim.api.nvim_create_user_command(cmd:gsub(".", ""):gsub("_", ""), fn, {})
-    end
-    local execute_command = function()
-      vim.ui.select(cmds, {
-        prompt = "Execute Command:",
-      }, function(choice)
-        if not choice then return end
-        vim.api.nvim_out_write("Execute command: " .. choice)
-        vim.lsp.buf.execute_command({ command = choice, arguments = {} })
-      end)
-    end
-    vim.keymap.set("n", "gec", execute_command, o({ desc = "Execute Command" }))
+    local cmds = client.server_capabilities.executeCommandProvider.commands
+    local langs = client.config.filetypes
+    vim.keymap.set("n", "ge", resolve_lsp_command(cmds, langs), o({ desc = "Execute Command" }))
   end
   if client.server_capabilities.workspace and client.server_capabilities.workspace.workspaceFolders then
     vim.keymap.set("n", "gwa", vim.lsp.buf.add_workspace_folder, o({ desc = "Add Workspace" }))
     vim.keymap.set("n", "gwr", vim.lsp.buf.remove_workspace_folder, o({ desc = "Remove Workspace" }))
-    vim.keymap.set("n", "gwl", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, o({ desc = "Add Workspace" }))
+    local print_workspaces = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end
+    vim.keymap.set("n", "gwl", print_workspaces, o({ desc = "Add Workspace" }))
   end
 end
 
 local function resolve_client_capabilities(...)
   local cfg = ... or {}
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-  local if_nil = function(val, default)
-    if val == nil then
-      return default
-    end
-    return val
-  end
-
+  local if_nil = vim.F.if_nil
   local completionItem = capabilities.textDocument.completion.completionItem
 
   completionItem.snippetSupport = if_nil(cfg.snippetSupport, true)
@@ -195,6 +185,9 @@ M.activate = function(client, bufnr)
   -- vim.api.nvim_buf_set_option(buf, "omnifunc", "v:lua.vim.lsp.omnifunc")
   client.offset_encoding = "utf-16"
   resolve_server_capabilities(client, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+    require("nvim-navic").attach(client, bufnr)
+  end
 end
 
 M.lsp_capabitities = function(cfg)
@@ -251,7 +244,7 @@ M.lsp_settings = {
   },
   ["rust_analyzer"] = {
     rust_analyzer = {
-      cargo = { allFeatures = true, features = { "all" }, },
+      -- cargo = { allFeatures = true, features = { "all" }, },
       checkOnSave = { command = "clippy" },
     },
   },

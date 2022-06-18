@@ -44,7 +44,7 @@ M.setup_nvim_tree = function()
           { key = "a", cb = tree_cb("create") },
           { key = "s", cb = tree_cb("refresh") },
           { key = "F", cb = tree_cb("live_filter") },
-          { key = "<cr>", cb = tree_cb("edit") },
+          { key = "<CR>", cb = tree_cb("edit") },
         },
       },
     },

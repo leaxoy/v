@@ -40,6 +40,7 @@ M.setup = function()
   vim.o.showcmd = true
   -- 补全增强
   vim.o.wildmenu = true
+  -- vim.o.cmdheight = 0
   vim.o.foldmethod = "indent"
   vim.o.foldcolumn = "auto"
   vim.o.foldenable = false
