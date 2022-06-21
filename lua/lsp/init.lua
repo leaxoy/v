@@ -175,6 +175,10 @@ local function resolve_client_capabilities(...)
       "additionalTextEdits",
     },
   })
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+  }
   return capabilities
 end
 

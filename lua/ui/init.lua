@@ -7,11 +7,11 @@ M.setup = function()
   })
 
   require("nvim-web-devicons").setup({ default = true })
-  require("ui/file_explorer").setup_nvim_tree()
-  require("ui/finder").setup()
-  -- require("ui/tabline").setup()
-  require("ui/terminal").setup()
-  require("ui/statusline").setup()
+  require("ui/file_explorer")
+  require("ui/finder")
+  -- require("ui/tabline")
+  require("ui/terminal")
+  require("ui/statusline")
   require("ui/theme").setup({ theme = "vscode" })
 end
 

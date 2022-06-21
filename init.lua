@@ -1,11 +1,9 @@
 -- Store startup time in seconds
 vim.g.start_time = vim.fn.reltime()
-vim.g.mapleader = " "
-
-require("impatient").enable_profile()
 
 require("plugins")
-require("option").setup()
+require("impatient").enable_profile()
+require("option")
 require("commands")
 require("diagnostic")
 require("ui").setup()

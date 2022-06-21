@@ -1,9 +1,4 @@
 local dap = require("dap")
-dap.adapters.python = {
-  type = "executable",
-  command = "/usr/local/bin/python3",
-  args = { "-m", "debugpy.adapter" },
-}
 dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap

@@ -25,26 +25,26 @@ return require("packer").startup({
     -- startup
     use({ "lewis6991/impatient.nvim" })
     -- UI
-    use("stevearc/dressing.nvim")
+    use("stevearc/dressing.nvim") -- ui component
     use("sainnhe/gruvbox-material") -- theme
     use("Mofiqul/vscode.nvim") -- theme
     use("navarasu/onedark.nvim") -- theme
-    use({ "kyazdani42/nvim-tree.lua", requires = "kyazdani42/nvim-web-devicons" })
-    -- use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
-    use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })
+    use({ "kyazdani42/nvim-tree.lua", requires = "kyazdani42/nvim-web-devicons" }) -- file explorer
+    -- use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" }) -- bufferline
+    use({ "nvim-lualine/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" }) -- statusline
     use({ "SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig", config = function()
       vim.api.nvim_set_hl(0, "NavicIconsFile", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsModule", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsNamespace", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsPackage", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsClass", { default = true, bg = "#000000", fg = "#ffffff" })
-      vim.api.nvim_set_hl(0, "NavicIconsMethod", { default = true, bg = "#000000", fg = "#433966" })
+      vim.api.nvim_set_hl(0, "NavicIconsMethod", { default = false, fg = "#6000ff" })
       vim.api.nvim_set_hl(0, "NavicIconsProperty", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsField", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsConstructor", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsEnum", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsInterface", { default = true, bg = "#000000", fg = "#ffffff" })
-      vim.api.nvim_set_hl(0, "NavicIconsFunction", { default = true, bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "NavicIconsFunction", { default = true, bg = "#000000", fg = "#6000ff" })
       vim.api.nvim_set_hl(0, "NavicIconsVariable", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsConstant", { default = true, bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "NavicIconsString", { default = true, bg = "#000000", fg = "#ffffff" })
@@ -63,7 +63,7 @@ return require("packer").startup({
       vim.api.nvim_set_hl(0, "NavicSeparator", { default = true, bg = "#000000", fg = "#ffffff" })
       require("nvim-navic").setup {
         highlight = true,
-        separator = " > ",
+        separator = " ▸ ",
         depth_limit = 0,
         depth_limit_indicator = "..",
       }
@@ -125,18 +125,69 @@ return require("packer").startup({
     use("mfussenegger/nvim-dap")
     use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
     use({ "theHamsta/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } })
-    use({ "rcarriga/vim-ultest", requires = { "vim-test/vim-test" }, run = ":UpdateRemotePlugins" })
+    use({
+      "nvim-neotest/neotest",
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+        "antoinemadec/FixCursorHold.nvim",
+        "nvim-neotest/neotest-go",
+        "nvim-neotest/neotest-python",
+        { "nvim-neotest/neotest-vim-test", requires = "vim-test/vim-test" }
+      },
+      config = function()
+        require("neotest").setup({
+          adapters = {
+            require("neotest-python")({
+              -- Extra arguments for nvim-dap configuration
+              dap = { justMyCode = false },
+              -- Command line arguments for runner
+              -- Can also be a function to return dynamic values
+              args = { "--log-level", "DEBUG" },
+              -- Runner to use. Will use pytest if available by default.
+              -- Can be a function to return dynamic value.
+              runner = "pytest",
+
+              -- Returns if a given file path is a test file.
+              -- NB: This function is called a lot so don't perform any heavy tasks within it.
+              is_test_file = function(file_path)
+              end,
+            }),
+            require("neotest-go"),
+            require("neotest-vim-test")({ ignore_file_types = { "python", "go" } }),
+          },
+          icons = { running = "ﭦ" },
+          summary = {
+            mappings = { jumpto = "<CR>", expand = "<TAB>" }
+          },
+        })
+      end
+    })
 
     -- VCS
     use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 
     -- Code edit
     -- use({ "karb94/neoscroll.nvim", config = function() require("neoscroll").setup() end })
+    use({ "hrsh7th/nvim-pasta", config = function()
+      require("pasta").setup({
+        converters = {
+          require("pasta.converters").indentation,
+        },
+        paste_mode = true,
+        next_key = vim.api.nvim_replace_termcodes("<C-n>", true, true, true),
+        prev_key = vim.api.nvim_replace_termcodes("<C-p>", true, true, true),
+      })
+    end })
     use("numToStr/Comment.nvim")
     use("windwp/nvim-autopairs")
     use("famiu/bufdelete.nvim")
-    use("mg979/vim-visual-multi")
     use({ "sbdchd/neoformat" })
+    use {
+      "kevinhwang91/nvim-ufo",
+      requires = "kevinhwang91/promise-async",
+      config = function() require("ufo").setup() end
+    }
     use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use({ "ellisonleao/glow.nvim" }) -- markdown render
     use({ "kevinhwang91/nvim-hlslens" }) -- searching

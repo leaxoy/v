@@ -15,6 +15,8 @@ local function setup()
       completion = {
         border = "rounded",
         scrollbar = "║",
+        col_offset = -2,
+        side_padding = 1,
       },
       documentation = {
         border = "double",
@@ -30,12 +32,12 @@ local function setup()
         with_text = false,
         maxwidth = 50,
         menu = {
-          spell = "",
-          nvim_lsp = "",
-          vsnip = "",
-          buffer = "",
-          copilot = "",
-          crates = "",
+          spell = "via ",
+          nvim_lsp = "via ",
+          vsnip = "via ",
+          buffer = "via ",
+          copilot = "via ",
+          crates = "via ",
         },
       }),
     },
@@ -96,7 +98,7 @@ local function setup()
     },
     sources = {
       { name = "nvim_lsp" },
-      { name = "copilot" },
+      -- { name = "copilot" },
       { name = "vsnip" }, -- For vsnip user.
       { name = "buffer" },
       { name = "cmdline" },

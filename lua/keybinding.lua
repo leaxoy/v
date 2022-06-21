@@ -28,6 +28,17 @@ wk.register({
     name = "+Change & Comment",
     g = { "<cmd>lua require'neogen'.generate()<cr>", "Generate Doc" },
   },
+  d = {
+    name = "+Debug",
+    b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+    c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
+    e = { "<cmd>lua require'dapui'.eval()<cr>", "Eval Expression" },
+    f = { "<cmd>lua require'dapui'.float_element('stacks')<cr>", "Show Floating Window" },
+    i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
+    n = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
+    o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
+    r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Repl" },
+  },
   l = {
     name = "+LSP Manage",
     r = { "<cmd>LspRestart<cr>", "Restart Server" },
@@ -108,18 +119,14 @@ wk.register({
   },
   gim = { "<cmd>Telescope goimpl<cr>", "Go Impl Interface" },
   t = {
-    name = "+Debug & Test",
-    b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-    c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-    e = { "<cmd>lua require'dapui'.eval()<cr>", "Eval Expression" },
-    f = { "<cmd>lua require'dapui'.float_element('stacks')<cr>", "Show Floating Window" },
-    i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-    n = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-    o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-    r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Repl" },
-
-    t = { "<cmd>Ultest<cr>", "Test Current File" },
-    p = { "<cmd>UltestSummary<cr>", "Toggle Test Panel" },
+    name = "+Test",
+    f = { "<cmd>lua require('neotest').run.run()<cr>", "Test Current Function" },
+    r = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Test Current File" },
+    t = { "<cmd>lua require('neotest').run.run(vim.fn.getcwd())<cr>", "Test Project" },
+    s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Toggle Summary Panel" },
+    o = { "<cmd>lua require('neotest').output.open({enter = true})<cr>", "Open Output Panel" },
+    j = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "Jump Next Failure" },
+    k = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>", "Jump Prev Failure" },
   },
   H = { "^", "Start of line" },
   L = { "$", "End of line" },
@@ -153,3 +160,5 @@ vim.keymap.set("", "<ScrollWheelUp>", "<Nop>", { noremap = true, silent = true }
 vim.keymap.set("", "<ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
 vim.keymap.set("", "<S-ScrollWheelUp>", "<Nop>", { noremap = true, silent = true })
 vim.keymap.set("", "<S-ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set({ "x", "n" }, "p", require("pasta.mappings").p)
+vim.keymap.set({ "x", "n" }, "P", require("pasta.mappings").P)
