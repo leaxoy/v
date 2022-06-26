@@ -1,5 +1,3 @@
-local M = {}
-
 local function resolve_lsp_command(cmds, lang)
   return function()
     vim.ui.select(cmds, {
@@ -21,45 +19,48 @@ local function super_types() type_hierarchy("typeHierarchy/supertypes") end
 local function sub_types() type_hierarchy("typeHierarch/subtypes") end
 
 local function resolve_server_capabilities(client, buffer)
-  local opts = { noremap = true, silent = true, buffer = buffer }
-  local o = function(...) return vim.tbl_extend("force", opts, ...) end
+  local map = function(mode, lhs, rhs, opts)
+    opts = vim.tbl_extend("force", { noremap = true, silent = true, buffer = buffer }, opts)
+    vim.keymap.set(mode, lhs, rhs, opts)
+  end
 
   if client.server_capabilities.declarationProvider then
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, o({ desc = "Declaration" }))
+    map("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration" })
   end
   if client.server_capabilities.definitionProvider then
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, o({ desc = "Definition" }))
+    map("n", "gd", vim.lsp.buf.definition, { desc = "Definition" })
   end
   if client.server_capabilities.typeDefinitionProvider then
-    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, o({ desc = "Type Definition" }))
+    map("n", "gt", vim.lsp.buf.type_definition, { desc = "Type Definition" })
   end
   -- if client.server_capabilities.implementationProvider then
-  --   vim.keymap.set("n", "gi", vim.lsp.buf.implementation, o({ desc = "Implementation" }))
+  --   m("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation" })
   -- end
   -- if client.server_capabilities.referencesProvider then
-  --   vim.keymap.set("n", "gr", vim.lsp.buf.references, o({ desc = "References" }))
+  --   m("n", "gr", vim.lsp.buf.references, { desc = "References" })
   -- end
   if client.server_capabilities.callHierarchyProvider then
-    vim.keymap.set("n", "ghi", vim.lsp.buf.incoming_calls, o({ desc = "Incoming Calls" }))
-    vim.keymap.set("n", "gho", vim.lsp.buf.outgoing_calls, o({ desc = "Outgoing Calls" }))
+    map("n", "ghi", vim.lsp.buf.incoming_calls, { desc = "Incoming Calls" })
+    map("n", "gho", vim.lsp.buf.outgoing_calls, { desc = "Outgoing Calls" })
   end
   if client.server_capabilities.typeHierarchyProvider then
-    vim.keymap.set("n", "ght", sub_types, o({ desc = "Sub Types" }))
-    vim.keymap.set("n", "ghT", super_types, o({ desc = "Super Types" }))
+    map("n", "ght", sub_types, { desc = "Sub Types" })
+    map("n", "ghT", super_types, { desc = "Super Types" })
   end
   if client.server_capabilities.documentHighlightProvider then
     -- vim.api.nvim_command([[hi! LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
     -- vim.api.nvim_command([[hi! LspReferenceText cterm=bold ctermbg=red guibg=Green]])
     -- vim.api.nvim_command([[hi! LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
-    vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = buffer, group = "lsp_document_highlight", })
+    local group = "lsp_document_highlight"
+    vim.api.nvim_create_augroup(group, { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = buffer, group = group })
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-      group = "lsp_document_highlight",
+      group = group,
       buffer = buffer,
       callback = vim.lsp.buf.document_highlight,
     })
     vim.api.nvim_create_autocmd("CursorMoved", {
-      group = "lsp_document_highlight",
+      group = group,
       buffer = buffer,
       callback = vim.lsp.buf.clear_references,
     })
@@ -67,7 +68,7 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.documentLinkProvider then
   -- end
   if client.server_capabilities.hoverProvider then
-    vim.keymap.set("n", "gk", vim.lsp.buf.hover, o({ desc = "Hover" }))
+    map("n", "gk", vim.lsp.buf.hover, { desc = "Hover" })
   end
   if client.server_capabilities.codeLensProvider then
     vim.cmd([[highlight! link LspCodeLens WarningMsg]])
@@ -78,17 +79,18 @@ local function resolve_server_capabilities(client, buffer)
     vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged" }, {
       pattern = "*", callback = vim.lsp.codelens.refresh
     })
-    vim.keymap.set("n", "gad", vim.lsp.codelens.display, o({ desc = "Display CodeLens" }))
-    vim.keymap.set("n", "gar", vim.lsp.codelens.run, o({ desc = "Run CodeLens" }))
-    vim.keymap.set("n", "gaf", vim.lsp.codelens.refresh, o({ desc = "Refresh CodeLens" }))
+    map("n", "gad", vim.lsp.codelens.display, { desc = "Display CodeLens" })
+    map("n", "gar", vim.lsp.codelens.run, { desc = "Run CodeLens" })
+    map("n", "gaf", vim.lsp.codelens.refresh, { desc = "Refresh CodeLens" })
   end
   -- if client.server_capabilities.foldingRangeProvider then
   -- end
   -- if client.server_capabilities.selectionRangeProvider then
   -- end
   if client.server_capabilities.documentSymbolProvider then
-    -- vim.keymap.set("n", "go", vim.lsp.buf.document_symbol, o({ desc = "Document Symbol" }))
-    vim.keymap.set("n", "go", "<cmd>SymbolsOutline<cr>", o({ desc = "Document Symbol" }))
+    -- m("n", "go", vim.lsp.buf.document_symbol, o({ desc = "Document Symbol" }))
+    map("n", "go", "<cmd>SymbolsOutline<cr>", { desc = "Document Symbol" })
+    require("nvim-navic").attach(client, buffer)
   end
   -- if client.server_capabilities.semanticTokensProvider then
   -- end
@@ -103,18 +105,19 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.diagnosticProvider then
   -- end
   if client.server_capabilities.signatureHelpProvider then
-    vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, o({ desc = "Signature Help" }))
+    map("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   end
   if client.server_capabilities.codeActionProvider then
-    vim.keymap.set("n", "gaa", vim.lsp.buf.code_action, o({ desc = "Code Action" }))
+    map("n", "gaa", vim.lsp.buf.code_action, { desc = "Code Action" })
   end
   -- if client.server_capabilities.colorProvider then
   -- end
   if client.server_capabilities.documentFormattingProvider then
-    vim.api.nvim_create_augroup("lsp_document_format", { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = buffer, group = "lsp_document_format" })
+    local group = "lsp_document_formatting"
+    vim.api.nvim_create_augroup(group, { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = buffer, group = group })
     vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      group = "lsp_document_format",
+      group = group,
       buffer = buffer,
       command = "lua vim.lsp.buf.format()",
     })
@@ -133,25 +136,25 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.documentOnTypeFormattingProvider then
   -- end
   if client.server_capabilities.renameProvider then
-    vim.keymap.set("n", "gr", vim.lsp.buf.rename, o({ desc = "Rename" }))
+    map("n", "gr", vim.lsp.buf.rename, { desc = "Rename" })
   end
   -- if client.server_capabilities.linkedEditingRangeProvider then
   -- end
 
   --#region workspace start
   if client.server_capabilities.workspaceSymbolProvider then
-    vim.keymap.set("n", "gO", vim.lsp.buf.workspace_symbol, o({ desc = "Workspace Symbol" }))
+    map("n", "gO", vim.lsp.buf.workspace_symbol, { desc = "Workspace Symbol" })
   end
   if client.server_capabilities.executeCommandProvider then
     local cmds = client.server_capabilities.executeCommandProvider.commands
     local langs = client.config.filetypes
-    vim.keymap.set("n", "ge", resolve_lsp_command(cmds, langs), o({ desc = "Execute Command" }))
+    map("n", "ge", resolve_lsp_command(cmds, langs), { desc = "Execute Command" })
   end
   if client.server_capabilities.workspace and client.server_capabilities.workspace.workspaceFolders then
-    vim.keymap.set("n", "gwa", vim.lsp.buf.add_workspace_folder, o({ desc = "Add Workspace" }))
-    vim.keymap.set("n", "gwr", vim.lsp.buf.remove_workspace_folder, o({ desc = "Remove Workspace" }))
+    map("n", "gwa", vim.lsp.buf.add_workspace_folder, { desc = "Add Workspace" })
+    map("n", "gwr", vim.lsp.buf.remove_workspace_folder, { desc = "Remove Workspace" })
     local print_workspaces = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end
-    vim.keymap.set("n", "gwl", print_workspaces, o({ desc = "Add Workspace" }))
+    map("n", "gwl", print_workspaces, { desc = "Add Workspace" })
   end
 end
 
@@ -182,16 +185,11 @@ local function resolve_client_capabilities(...)
   return capabilities
 end
 
-M.activate = function(client, bufnr)
-  -- require("lsp_signature").on_attach({ bind = true, handler_opts = { border = "rounded" } }, buf)
+local M = {}
 
-  -- Enable completion triggered by <c-x><c-o>
-  -- vim.api.nvim_buf_set_option(buf, "omnifunc", "v:lua.vim.lsp.omnifunc")
+M.activate = function(client, bufnr)
   client.offset_encoding = "utf-16"
   resolve_server_capabilities(client, bufnr)
-  if client.server_capabilities.documentSymbolProvider then
-    require("nvim-navic").attach(client, bufnr)
-  end
 end
 
 M.lsp_capabitities = function(cfg)

@@ -1,4 +1,9 @@
-function ToggleLazygit()
+local map = function(mode, lhs, rhs, opts)
+  opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+local function ToggleLazygit()
   local lazygit = require("toggleterm.terminal").Terminal:new({
     cmd = "lazygit",
     hidden = true,
@@ -8,157 +13,112 @@ function ToggleLazygit()
   lazygit:toggle()
 end
 
-local wk = require("which-key")
-wk.register({
-  b = {
-    name = "+Buffer",
-    ["h"] = { "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer" },
-    ["l"] = { "<cmd>BufferLineCycleNext<cr>", "Next Buffer" },
-    ["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Goto Buffer 1" },
-    ["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "Goto Buffer 2" },
-    ["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "Goto Buffer 3" },
-    ["4"] = { "<cmd>BufferLineGoToBuffer 4<cr>", "Goto Buffer 4" },
-    ["5"] = { "<cmd>BufferLineGoToBuffer 5<cr>", "Goto Buffer 5" },
-    ["6"] = { "<cmd>BufferLineGoToBuffer 6<cr>", "Goto Buffer 6" },
-    ["7"] = { "<cmd>BufferLineGoToBuffer 7<cr>", "Goto Buffer 7" },
-    ["8"] = { "<cmd>BufferLineGoToBuffer 8<cr>", "Goto Buffer 8" },
-    ["9"] = { "<cmd>BufferLineGoToBuffer 9<cr>", "Goto Buffer 9" },
-  },
-  c = {
-    name = "+Change & Comment",
-    g = { "<cmd>lua require'neogen'.generate()<cr>", "Generate Doc" },
-  },
-  d = {
-    name = "+Debug",
-    b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-    c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-    e = { "<cmd>lua require'dapui'.eval()<cr>", "Eval Expression" },
-    f = { "<cmd>lua require'dapui'.float_element('stacks')<cr>", "Show Floating Window" },
-    i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-    n = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-    o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-    r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Repl" },
-  },
-  l = {
-    name = "+LSP Manage",
-    r = { "<cmd>LspRestart<cr>", "Restart Server" },
-    i = { "<cmd>LspInfo<cr>", "Show Info" },
-    s = { "<cmd>LspInstallInfo<cr>", "Manage Servers" },
-  },
-  p = {
-    name = "+Preview",
-    m = { "<cmd>Glow<cr>", "Markdown" },
-  },
-  v = {
-    name = "+VCS",
-    d = { "<cmd>Gitsigns diffthis<cr>", "Diff this file" },
-    p = { "<cmd>Gitsigns preview_hunk<cr>", "Preview diff" },
-    v = { "<cmd>lua ToggleLazygit()<cr>", "LazyGit" },
-  },
-  u = {
-    name = "+User Interface",
-    d = { "<cmd>lua require'dapui'.toggle()<cr>", "Debug & Test" },
-    f = { "<cmd>NvimTreeToggle<cr>", "File Explorer" },
-    s = { "<cmd>SymbolsOutline<cr>", "Symbol Outline" },
-  },
-  w = {
-    name = "+Window",
-    c = { "<cmd>wincmd x<cr>", "Close Current Window" },
-    o = { "<cmd>wincmd o<cr>", "Close Other Window" },
-    v = { "<cmd>vsplit<cr>", "Split Vertically" },
-    s = { "<cmd>split<cr>", "Split Horizonally" },
-    h = { "<c-w>10<", "Decrease width" },
-    j = { "<c-w>10+", "Increase height" },
-    k = { "<c-w>10-", "Decrease height" },
-    l = { "<c-w>10>", "Increase width" },
-    ["="] = { "<c-w>=", "Equally high and wide" },
-  },
-  x = {
-    name = "+Diagnostic",
-    t = { "<cmd>TodoQuickFix<cr>", "Workspace Todos" },
-    b = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Buffer Diagnostic" },
-    w = { "<cmd>lua vim.diagnostic.setqflist()<cr>", "Workspace Diagnostic" },
-    x = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Show Line Diagnostic" },
-    l = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
-    h = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
-  },
-}, {
-  mode = "n",
-  prefix = "<leader>",
-})
-wk.register({
-  d = {
-    name = "+Delete",
-    H = { "d^", "Start of line" },
-    L = { "d$", "End of line" },
-    ['"'] = { 'di"', "double quoted string" },
-    ["'"] = { "di'", "single quoted string" },
-    ["[["] = { "di[", "content between matched []" },
-    ["]]"] = { "di]", "content between matched []" },
-    ["("] = { "dib", "content between matched ()" },
-    [")"] = { "dib", "content between matched ()" },
-    ["{"] = { "diB", "content between matched {}" },
-    ["}"] = { "diB", "content between matched {}" },
-  },
-  f = {
-    name = "Magic Finder",
-    w = { "<cmd>Telescope<cr>", "Open Telescope Window" },
-    f = { "<cmd>Telescope find_files<cr>", "File Finder" },
-    l = { "<cmd>Telescope file_browser<cr>", "File Browser" },
-    g = { "<cmd>Telescope live_grep_args<cr>", "Live Grep" },
-    c = { "<cmd>Telescope grep_string<cr>", "Grep String" },
-    b = { "<cmd>Telescope buffers<cr>", "All Buffers" },
-    n = { "<cmd>Telescope ghn<cr>", "Github Notifications" },
-    t = { "<cmd>TodoTelescope<cr>", "Todo List" },
-    d = { "<cmd>Telescope diagnostics<cr>", "Diagnostics" },
-    r = { "<cmd>Telescope lsp_references<cr>", "[LSP] References" },
-    i = { "<cmd>Telescope lsp_implementations<cr>", "[LSP] Implementations" },
-    s = { "<cmd>Telescope lsp_document_symbols<cr>", "[LSP] Document Symbols" },
-    p = { "<cmd>Telescope project display_type=full<cr>", "List Projects" },
-    e = { "<cmd>Telescope packer<cr>", "List Packer Plugins" },
-  },
-  gim = { "<cmd>Telescope goimpl<cr>", "Go Impl Interface" },
-  t = {
-    name = "+Test",
-    f = { "<cmd>lua require('neotest').run.run()<cr>", "Test Current Function" },
-    r = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Test Current File" },
-    t = { "<cmd>lua require('neotest').run.run(vim.fn.getcwd())<cr>", "Test Project" },
-    s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Toggle Summary Panel" },
-    o = { "<cmd>lua require('neotest').output.open({enter = true})<cr>", "Open Output Panel" },
-    j = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "Jump Next Failure" },
-    k = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>", "Jump Prev Failure" },
-  },
-  H = { "^", "Start of line" },
-  L = { "$", "End of line" },
-  J = { "10j", "Jump 10 Line Down" },
-  K = { "10k", "Jump 10 Line Up" },
-  [";"] = { ":", "Command Mode" },
-  ["#"] = { "#<cmd>lua require('hlslens').start()<cr>", "Search" },
-  ["<c-s>"] = { "<cmd>w<cr>", "Save buffer" },
-  ["<c-x>"] = { "<cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
-  ["<c-h>"] = { "<cmd>wincmd h<cr>", "Goto Left Window" },
-  ["<c-j>"] = { "<cmd>wincmd j<cr>", "Goto Bottom Window" },
-  ["<c-k>"] = { "<cmd>wincmd k<cr>", "Goto Top Window" },
-  ["<c-l>"] = { "<cmd>wincmd l<cr>", "Goto Right Window" },
-}, { mode = "n" })
-wk.register({
-  ["jk"] = { "<Esc>", "Escape Insert Mode" },
-  ["<c-h>"] = { "<c-o>^", "Start of line" },
-  ["<c-l>"] = { "<c-o>$", "End of line" },
-  ["<c-j>"] = { "<c-o>10j", "Jump 10 Line Down" },
-  ["<c-k>"] = { "<c-o>10k", "Jump 10 Line Up" },
-  ["<c-t>"] = { "<c-o><cmd>ToggleTerm<cr>", "Toggle Terminal" },
-  ["<c-u>"] = { "<c-o>u", "Undo" },
-  ["<c-y>"] = { "<c-o>yy", "Copy Line" },
-  ["<c-p>"] = { "<c-o>p", "Paste" },
-  ["<c-s>"] = { "<c-o><cmd>w<cr>", "Save buffer" },
-  ["<c-x>"] = { "<c-o><cmd>lua require('bufdelete').bufdelete(0)<cr>", "Close Current Buffer" },
-}, {
-  mode = "i",
-})
-vim.keymap.set("", "<ScrollWheelUp>", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set("", "<ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set("", "<S-ScrollWheelUp>", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set("", "<S-ScrollWheelDown>", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set({ "x", "n" }, "p", require("pasta.mappings").p)
-vim.keymap.set({ "x", "n" }, "P", require("pasta.mappings").P)
+-- builtin start
+-- builtin end
+
+-- Window
+require("key-menu").set("n", "<leader>w", { desc = "Window" })
+map("n", "<leader>wc", "<cmd>wincmd x<cr>", { desc = "Close Current Window" })
+map("n", "<leader>wo", "<cmd>wincmd o<cr>", { desc = "Close Other Window" })
+map("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "Split Vertically" })
+map("n", "<leader>ws", "<cmd>split<cr>", { desc = "Split Horizonally" })
+map("n", "<leader>wh", "<c-w>10<<cr>", { desc = "Decrease Width" })
+map("n", "<leader>wj", "<c-w>10+<cr>", { desc = "Increase Height" })
+map("n", "<leader>wk", "<c-w>10-<cr>", { desc = "Decrease Width" })
+map("n", "<leader>wl", "<c-w>10><cr>", { desc = "Increase Height" })
+map("n", "<leader>wo", "<cmd>wincmd o<cr>", { desc = "Equality height and width" })
+-- Movement
+map("n", "<c-h>", "<cmd>wincmd h<cr>", { desc = "Goto Left Window" })
+map("n", "<c-l>", "<cmd>wincmd l<cr>", { desc = "Goto Right Window" })
+map("n", "<c-j>", "<cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
+map("n", "<c-k>", "<cmd>wincmd k<cr>", { desc = "Goto Top Window" })
+map("i", "<c-h>", "<c-o><cmd>wincmd h<cr>", { desc = "Goto Left Window" })
+map("i", "<c-l>", "<c-o><cmd>wincmd l<cr>", { desc = "Goto Right Window" })
+map("i", "<c-j>", "<c-o><cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
+map("i", "<c-k>", "<c-o><cmd>wincmd k<cr>", { desc = "Goto Top Window" })
+
+require("key-menu").set("n", "<leader>l", { desc = "LSP" })
+map("n", "<leader>lr", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
+map("n", "<leader>li", "<cmd>LspInfo<cr>", { desc = "Show Server Info" })
+map("n", "<leader>ls", "<cmd>LspInstallInfo<cr>", { desc = "Manage Servers" })
+
+-- Debug
+require("key-menu").set("n", "<leader>d", { desc = "Debug" })
+map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+map("n", "<leader>dc", function() require("dap").continue() end, { desc = "Run | Countine" })
+map("n", "<leader>de", function() require("dapui").eval(nil, {}) end, { desc = "Eval Expression" })
+map("n", "<leader>df", function() require("dapui").float_element("stacks", {}) end, { desc = "Show Floating Window" })
+map("n", "<leader>di", function() require("dap").step_into() end, { desc = "Step Into" })
+map("n", "<leader>dn", function() require("dap").step_over() end, { desc = "Step Over" })
+map("n", "<leader>do", function() require("dap").step_out() end, { desc = "Step Out" })
+map("n", "<leader>dr", function() require("dap").repl.toggle() end, { desc = "Repl" })
+
+require("key-menu").set("n", "<leader>v", { desc = "VCS" })
+map("n", "<leader>vd", "<cmd>Gitsigns diffthis<cr>", { desc = "Diff" })
+map("n", "<leader>vp", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Preview Diff" })
+map("n", "<leader>vv", ToggleLazygit, { desc = "LazyGit" })
+
+-- Diagnostic
+require("key-menu").set("n", "<leader>x", { desc = "Diagnostic" })
+map("n", "<leader>xt", "<cmd>TodoQuickFix<cr>", { desc = "Workspace Todos" })
+map("n", "<leader>xb", function() vim.diagnostic.setloclist() end, { desc = "Buffer Diagnostic" })
+map("n", "<leader>xw", function() vim.diagnostic.setqflist() end, { desc = "Workspace Diagnostic" })
+map("n", "<leader>xx", function() vim.diagnostic.open_float() end, { desc = "Line Diagnostic" })
+map("n", "<leader>xl", function() vim.diagnostic.goto_next() end, { desc = "Next Diagnostic" })
+map("n", "<leader>xh", function() vim.diagnostic.goto_prev() end, { desc = "Prev Diagnostic" })
+
+-- UI
+require("key-menu").set("n", "<leader>u", { desc = "UI" })
+map("n", "<leader>ud", function() require("dapui").toggle() end, { desc = "Debug Window" })
+map("n", "<leader>uf", "<cmd>NvimTreeToggle<cr>", { desc = "File Explorer" })
+map("s", "<leader>us", "<cmd>SymbolsOutline<cr>", { desc = "Symbol Outline" })
+
+-- Edit
+map("n", "<leader>cg", "<cmd>lua require'neogen'.generate()<cr>", { desc = "Generate Doc" })
+require("key-menu").set("n", "<leader>p", { desc = "Preview" })
+map("n", "<leader>pm", "<cmd>Glow<cr>", { desc = "Preview Markdow" })
+map("n", "gim", "<cmd>Telescope goimpl<cr>", { desc = "Impl Golang Interface" })
+
+-- Finder
+require("key-menu").set("n", "f", { desc = "Magic Finder" })
+map("n", "fw", "<cmd>Telescope<cr>", { desc = "Open Telescope Window" })
+map("n", "ff", "<cmd>Telescope find_files<cr>", { desc = "File Finder" })
+map("n", "fl", "<cmd>Telescope file_browser<cr>", { desc = "File Browser" })
+map("n", "fg", "<cmd>Telescope live_grep_args<cr>", { desc = "Live Grep" })
+map("n", "fc", "<cmd>Telescope grep_string<cr>", { desc = "Grep Cursor String" })
+map("n", "fb", "<cmd>Telescope buffers<cr>", { desc = "All Buffers" })
+map("n", "fn", "<cmd>Telescope notify<cr>", { desc = "Notifications" })
+map("n", "ft", "<cmd>TodoTelescope<cr>", { desc = "Todo List" })
+map("n", "fd", "<cmd>Telescope diagnostics<cr>", { desc = "Diagnostics" })
+map("n", "fr", "<cmd>Telescope lsp_references<cr>", { desc = "[LSP] References" })
+map("n", "fi", "<cmd>Telescope lsp_implementations<cr>", { desc = "[LSP] Implementations" })
+map("n", "fs", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "[LSP] Document Symbols" })
+map("n", "fp", "<cmd>Telescope project display_type=full<cr>", { desc = "List Projects" })
+map("n", "fe", "<cmd>Telescope packer<cr>", { desc = "List Packer Plugins" })
+
+-- Test
+require("key-menu").set("n", "t", { desc = "Test" })
+map("n", "tf", function() require("neotest").run.run() end, { desc = "Test Current Function" })
+map("n", "tr", function() require("neotest").run.run(vim.fn.expand("%s")) end, { desc = "Test Current File" })
+map("n", "tt", function() require("neotest").run.run(vim.fn.getcwd()) end, { desc = "Test Project" })
+map("n", "ts", function() require("neotest").summary.toggle() end, { desc = "Toggle Test Summary Panel" })
+map("n", "to", function() require("neotest").output.open({ enter = true }) end, { desc = "Open Test Output Panel" })
+map("n", "tj", function() require("neotest").jump.next({ status = "failed" }) end, { desc = "Next Failed Test" })
+map("n", "tk", function() require("neotest").jump.prev({ status = "failed" }) end, { desc = "Prev Failed Test" })
+
+map("n", "<c-t>", "<cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
+map("i", "<c-t>", "<c-o><cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
+map("n", "<c-s>", "<cmd>w<cr>", { desc = "Save Current Buffer" })
+map("i", "<c-s>", "<c-o><cmd>w<cr>", { desc = "Save Current Buffer" })
+map("n", "<c-x>", "<cmd>lua require('bufdelete').bufdelete(0)<cr>", { desc = "Close Current Buffer" })
+map("i", "<c-x>", "<c-o><cmd>lua require('bufdelete').bufdelete(0)<cr>", { desc = "Close Current Buffer" })
+
+map("i", "jk", "<Esc>", { desc = "Escape Insert Mode" })
+map("i", "<c-u>", "<c-o>u", { desc = "Undo" })
+map("i", "<c-y>", "<c-o>yy", { desc = "Copy Line" })
+map("i", "<c-p>", "<c-o>p", { desc = "Paste" })
+
+map("", "<ScrollWheelUp>", "<Nop>", {})
+map("", "<ScrollWheelDown>", "<Nop>", {})
+map("", "<S-ScrollWheelUp>", "<Nop>", {})
+map("", "<S-ScrollWheelDown>", "<Nop>", {})

@@ -22,12 +22,6 @@ local function setup_edit()
 end
 
 local function setup_search()
-  require("hlslens").setup({
-    calm_down = true,
-    nearest_only = true,
-    nearest_float_when = "always",
-    virt_priority = 1,
-  })
   require("bqf").setup({ auto_reload = true, auto_resize_height = true })
 end
 

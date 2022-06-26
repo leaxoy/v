@@ -22,6 +22,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local buf = args.buf
 
     require("lsp").activate(client, buf)
+    require("notify")({ "attach lsp server " }, "INFO", {
+      title = "LSP | " .. client.name,
+      timeout = 3000,
+    })
   end,
   desc = "setup lsp functions"
 })
