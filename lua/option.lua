@@ -1,10 +1,13 @@
 vim.o.laststatus = 3
 vim.o.updatetime = 250
-vim.o.timeoutlen = 250
+vim.o.timeoutlen = 500
 vim.o.swapfile = false
+vim.o.backup = false
 vim.o.number = true
 vim.o.relativenumber = true
+vim.o.splitbelow = true
 vim.o.splitright = true
+vim.o.scrolloff = 3
 vim.o.wrap = false
 vim.o.numberwidth = 4
 vim.o.tabstop = 4
@@ -19,11 +22,12 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.termguicolors = true
 vim.o.cursorline = true
+vim.o.cursorcolumn = true
 vim.o.showmatch = true
 vim.o.ruler = true
 vim.o.background = "dark"
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,options,tabpages,winsize,resize,winpos,terminal"
-vim.o.showmode = false
+vim.o.showmode = true
 vim.o.autoread = true
 vim.o.list = false
 vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·,eol:↴,space:⋅"
@@ -38,6 +42,8 @@ vim.o.foldlevelstart = 99
 -- vim.o.foldmethod = "expr"
 -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.confirm = true
+vim.o.signcolumn = "number"
+vim.o.guifont = "FiraCode Nerd Font Mono:h18"
 vim.wo.colorcolumn = "100"
 -- vim.o.spell = true
 -- vim.opt.spelllang = { "en_us" }
@@ -48,13 +54,11 @@ vim.g.ts_syntaxes = {
   "c",
   "cmake",
   "cpp",
-  "c_sharp",
   "go",
   "gomod",
   "gowork",
   "java",
   "javascript",
-  "kotlin",
   "lua",
   "rust",
   "org",
@@ -62,31 +66,31 @@ vim.g.ts_syntaxes = {
   "toml",
   "tsx",
   "typescript",
-  "vue",
 }
 -- lsp server config
 vim.g.lsp_servers = {
-  "asm_lsp",
   "bashls",
   "clangd",
   "cmake",
-  "cssls",
   "gopls",
   "jdtls",
   "jsonls",
-  "kotlin_language_server",
-  "omnisharp",
   "pyright",
   "rust_analyzer",
-  "r_language_server",
   "sumneko_lua",
   "taplo",
   "tsserver",
-  "volar",
   "yamlls",
-  "vimls",
 }
 -- copilot config
 -- vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.mapleader = " "
+vim.g.copilot_filetypes = {
+  qf = false,
+  TelescopePrompt = false,
+  TelescopeResults = false,
+  NvimTree = false,
+  Outline = false,
+  DressingInput = false,
+}

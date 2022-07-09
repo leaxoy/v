@@ -1,6 +1,6 @@
 vim.diagnostic.config({
   virtual_text = {
-    prefix = " ", -- Could be '●', '▎', 'x', "■"
+    prefix = "", -- Could be '●', '▎', 'x', "■"
     source = "if_many",
     severity = {
       min = vim.diagnostic.severity.ERROR,
@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
       close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
       border = "rounded",
       source = "if_many",
-      prefix = " ",
+      prefix = "",
       scope = "cursor",
     }
     vim.diagnostic.open_float(opts)

@@ -1,7 +1,7 @@
 local function resolve_lsp_command(cmds, lang)
   return function()
     vim.ui.select(cmds, {
-      prompt = "Execute Command:",
+      prompt = "Execute Commands:",
     }, function(choice)
       if not choice then return end
       vim.api.nvim_out_write("Execute command: " .. choice)
@@ -10,9 +10,7 @@ local function resolve_lsp_command(cmds, lang)
   end
 end
 
-local function type_hierarchy(method)
-  vim.api.nvim_err_writeln("TypeHierarchy not supported in this version of nvim")
-end
+local function type_hierarchy(method) end
 
 local function super_types() type_hierarchy("typeHierarchy/supertypes") end
 
@@ -71,10 +69,10 @@ local function resolve_server_capabilities(client, buffer)
     map("n", "gk", vim.lsp.buf.hover, { desc = "Hover" })
   end
   if client.server_capabilities.codeLensProvider then
-    vim.cmd([[highlight! link LspCodeLens WarningMsg]])
-    vim.cmd([[highlight! link LspCodeLensText WarningMsg]])
-    vim.cmd([[highlight! link LspCodeLensTextSign LspCodeLensText]])
-    vim.cmd([[highlight! link LspCodeLensTextSeparator Boolean]])
+    vim.highlight.link("LspCodeLens", "WarningMsg", true)
+    vim.highlight.link("LspCodeLensText", "WarningMsg", true)
+    vim.highlight.link("LspCodeLensTextSign", "LspCodeLensText", true)
+    vim.highlight.link("LspCodeLensTextSeparator", "Boolean", true)
 
     vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged" }, {
       pattern = "*", callback = vim.lsp.codelens.refresh
@@ -109,24 +107,24 @@ local function resolve_server_capabilities(client, buffer)
   end
   if client.server_capabilities.codeActionProvider then
     map("n", "gaa", vim.lsp.buf.code_action, { desc = "Code Action" })
+    map("v", "gaa", vim.lsp.buf.range_code_action, { desc = "Code Action" })
   end
   -- if client.server_capabilities.colorProvider then
   -- end
+
   if client.server_capabilities.documentFormattingProvider then
-    local group = "lsp_document_formatting"
-    vim.api.nvim_create_augroup(group, { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = buffer, group = group })
-    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      group = group,
+    local format_group = "document_formatting"
+    vim.api.nvim_create_augroup(format_group, { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = buffer, group = format_group })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = format_group,
       buffer = buffer,
       command = "lua vim.lsp.buf.format()",
     })
     -- else
     --   vim.g.neoformat_enabled_python = { "black" }
-    --   vim.api.nvim_create_augroup("document_format", { clear = false })
-    --   vim.api.nvim_clear_autocmds({ buffer = buffer, group = "document_format" })
-    --   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    --     group = "document_format",
+    --   vim.api.nvim_create_autocmd("BufWritePre", {
+    --     group = format_group,
     --     buffer = buffer,
     --     command = "undojoin | Neoformat",
     --   })
@@ -204,6 +202,15 @@ M.lsp_settings = {
       -- not supported
       allExperiments = true,
       deepCompletion = true,
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
       analyses = {
         unusedparams = true,
         unusedwrite = true,
@@ -240,9 +247,7 @@ M.lsp_settings = {
     },
   },
   ["jsonls"] = {
-    json = {
-      schemas = require("schemastore").json.schemas(),
-    },
+    json = { schemas = require("schemastore").json.schemas() },
   },
   ["rust_analyzer"] = {
     rust_analyzer = {
@@ -284,17 +289,12 @@ M.lsp_init_options = {
   },
 }
 
-M.setup = function(opt)
-  opt = opt or {}
-  if not opt.lsp_servers then
-    opt.lsp_servers = vim.g.lsp_servers
-  end
-
+M.setup = function()
   require("lsp/completion").setup()
 
   local lsp_manager = require("nvim-lsp-installer")
   lsp_manager.setup({
-    ensure_installed = opt.lsp_servers,
+    ensure_installed = vim.g.lsp_servers,
     ui = {
       border = "double",
       icons = {
@@ -306,7 +306,8 @@ M.setup = function(opt)
   })
 
   local lspconfig = require("lspconfig")
-  for _, server_name in pairs(opt.lsp_servers) do
+  for _, server in pairs(lsp_manager.get_installed_servers()) do
+    local server_name = server.name
     local opts = {
       capabilities = M.lsp_capabitities(),
       flags = { debounce_text_changes = 150 },

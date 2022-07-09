@@ -64,7 +64,7 @@ return require("packer").startup({
     -- Lsp config
     use("williamboman/nvim-lsp-installer")
     use("neovim/nvim-lspconfig")
-    -- use("github/copilot.vim") -- now is not free
+    use("github/copilot.vim") -- now is not free
     use("hrsh7th/nvim-cmp")
     use({ "hrsh7th/cmp-nvim-lsp", requires = "hrsh7th/nvim-cmp" })
     use({ "hrsh7th/cmp-buffer", requires = "hrsh7th/nvim-cmp" })
@@ -134,6 +134,15 @@ return require("packer").startup({
     use("windwp/nvim-autopairs")
     use("famiu/bufdelete.nvim")
     use("sbdchd/neoformat")
+    use("terryma/vim-multiple-cursors")
+    use({
+      "kylechui/nvim-surround",
+      config = function()
+        require("nvim-surround").setup({
+          -- Configuration here, or leave empty to use defaults
+        })
+      end
+    })
     use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use("ellisonleao/glow.nvim") -- markdown render
     use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })

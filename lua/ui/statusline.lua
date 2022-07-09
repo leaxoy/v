@@ -35,7 +35,7 @@ require("lualine").setup({
           return msg
         end,
         icon = " LSP:",
-        color = { fg = "#145555", gui = "bold" },
+        color = { fg = "#77b787", gui = "bold" },
       },
       { "lsp_progress", display_components = { "lsp_client_name", { "title", "percentage", "message" } } }
     },
@@ -65,20 +65,16 @@ require("lualine").setup({
 local navic = require("nvim-navic")
 if vim.fn.has("nvim-0.8") then
   _G.win_title = function()
-    local buf_id = vim.api.nvim_win_get_buf(0);
-    local buf_ft = vim.api.nvim_buf_get_option(buf_id, "filetype")
-    if buf_ft == "NvimTree" then
-      -- return "%=File Explorer%="
-      return "%=文件管理器%="
-    elseif buf_ft == "Quickfix" then
-      return "Quickfix"
-    elseif buf_ft == "Outline" then
-      return "%=符号大纲%="
-    elseif buf_ft == "neotest-summary" then
-      return "%=测试报告%="
-    elseif buf_ft == "toggleterm" then
-      return "%=终端%="
-    end
+    local ft = vim.api.nvim_buf_get_option(0, "filetype")
+    local ft2title = {
+      NvimTree = "%=文件管理器%=",
+      netrw = "%=文件管理器%=",
+      Outline = "%=符号大纲%=",
+      ["neotest-summary"] = "%=测试报告%=",
+      toggleterm = "%=终端%=",
+    }
+    local title = ft2title[ft]
+    if title ~= nil then return title end
     local f = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
     return navic.get_location() and f .. " ▸ " .. navic.get_location() or f
   end
