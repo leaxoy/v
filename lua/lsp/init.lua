@@ -5,7 +5,12 @@ local function resolve_lsp_command(cmds, lang)
     }, function(choice)
       if not choice then return end
       vim.api.nvim_out_write("Execute command: " .. choice)
-      vim.lsp.buf.execute_command({ command = choice, arguments = {} })
+      if vim.bo.filetype == "go" then
+        vim.lsp.buf.execute_command({
+          command = choice,
+          arguments = { { URI = vim.uri_from_bufnr(vim.api.nvim_get_current_buf()) } }
+        })
+      end
     end)
   end
 end
@@ -66,13 +71,14 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.documentLinkProvider then
   -- end
   if client.server_capabilities.hoverProvider then
-    map("n", "gk", vim.lsp.buf.hover, { desc = "Hover" })
+    map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
   end
-  if client.server_capabilities.codeLensProvider then
-    vim.highlight.link("LspCodeLens", "WarningMsg", true)
-    vim.highlight.link("LspCodeLensText", "WarningMsg", true)
-    vim.highlight.link("LspCodeLensTextSign", "LspCodeLensText", true)
-    vim.highlight.link("LspCodeLensTextSeparator", "Boolean", true)
+  if client.server_capabilities.codeLensProvider and client.server_capabilities.codeLensProvider.resolveProvider then
+    local hl_link = require("fn").hl_link
+    hl_link("LspCodeLens", "WarningMsg")
+    hl_link("LspCodeLensText", "WarningMsg")
+    hl_link("LspCodeLensTextSign", "LspCodeLensText")
+    hl_link("LspCodeLensTextSeparator", "Boolean")
 
     vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged" }, {
       pattern = "*", callback = vim.lsp.codelens.refresh
@@ -112,23 +118,17 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.colorProvider then
   -- end
 
-  if client.server_capabilities.documentFormattingProvider then
-    local format_group = "document_formatting"
-    vim.api.nvim_create_augroup(format_group, { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = buffer, group = format_group })
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = format_group,
-      buffer = buffer,
-      command = "lua vim.lsp.buf.format()",
-    })
-    -- else
-    --   vim.g.neoformat_enabled_python = { "black" }
-    --   vim.api.nvim_create_autocmd("BufWritePre", {
-    --     group = format_group,
-    --     buffer = buffer,
-    --     command = "undojoin | Neoformat",
-    --   })
-  end
+  local format_group = "document_formatting"
+  local format_commands = {python = "Neoformat black"}
+  vim.api.nvim_create_augroup(format_group, { clear = false })
+  vim.api.nvim_clear_autocmds({ buffer = buffer, group = format_group })
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = format_group,
+    buffer = buffer,
+    command = format_commands[vim.api.nvim_buf_get_option(buffer, "filetype")] or "lua vim.lsp.buf.format()"
+    -- command = client.server_capabilities.documentFormattingProvider
+    --     and "lua vim.lsp.buf.format()" or "undojoin | Neoformat",
+  })
   -- if client.server_capabilities.documentRangeFormattingProvider then
   -- end
   -- if client.server_capabilities.documentOnTypeFormattingProvider then

@@ -38,6 +38,7 @@ local function setup()
           buffer = "via ",
           copilot = "via ",
           crates = "via ",
+          npm = "via ",
         },
       }),
     },
@@ -106,6 +107,7 @@ local function setup()
       { name = "nvim_lsp_document_symbol" },
       -- { name = "nvim_lsp_signature_help" },
       { name = "spell" },
+      { name = "npm" },
     },
   })
 

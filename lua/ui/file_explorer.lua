@@ -1,6 +1,6 @@
 require("nvim-tree").setup({
   diagnostics = {
-    enable = true,
+    enable = false,
     icons = { hint = "", info = "", warning = "", error = "" },
   },
   disable_netrw = true,
@@ -25,6 +25,7 @@ require("nvim-tree").setup({
     width = 30,
     -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
     side = "left",
+    signcolumn = "no",
     -- if true the tree will resize itself after opening a file
     -- auto_resize = true,
     -- lsp_diagnostics = true,
@@ -34,6 +35,8 @@ require("nvim-tree").setup({
       custom_only = true,
       -- list of mappings to set on the tree manually
       list = {
+        { key = "<C-v>", action = "vsplit" },
+        { key = "<C-s>", action = "split" },
         { key = "<C-[>", action = "dir_up" },
         { key = "<C-]>", action = "cd" },
         { key = "<Tab>", action = "preview" },
@@ -61,12 +64,11 @@ require("nvim-tree").setup({
     highlight_git = true,
     highlight_opened_files = "none",
     root_folder_modifier = ":~",
-    indent_markers = {
-      enable = true,
-    },
+    indent_markers = { enable = true },
+    icons = { show = { folder_arrow = false } },
   },
   git = { enable = true, timeout = 100 },
-  filesystem_watchers = { enable = true, interval = 3000 },
+  filesystem_watchers = { enable = true, debounce_delay = 1000 },
   actions = {
     change_dir = { enable = false },
     open_file = { resize_window = true },

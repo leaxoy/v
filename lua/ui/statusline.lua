@@ -9,7 +9,7 @@ require("lualine").setup({
       right = "",
     },
     section_separators = { left = "", right = "" },
-    always_divide_middle = true,
+    always_divide_middle = false,
     globalstatus = true,
   },
   extensions = { "nvim-tree", "toggleterm", "symbols-outline", "quickfix" },
@@ -62,8 +62,8 @@ require("lualine").setup({
   },
 })
 
-local navic = require("nvim-navic")
 if vim.fn.has("nvim-0.8") then
+  local navic = require("nvim-navic")
   _G.win_title = function()
     local ft = vim.api.nvim_buf_get_option(0, "filetype")
     local ft2title = {

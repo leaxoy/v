@@ -1,6 +1,6 @@
 -- map create new keymap
 local map = function(mode, lhs, rhs, opts)
-  opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
+  opts = vim.tbl_extend("keep", opts or vim.empty_dict(), { noremap = true, silent = true })
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
@@ -14,40 +14,37 @@ local lazygit = function()
   lazygit:toggle()
 end
 
-local cmd_fn = require('fn').cmd_fn
-
--- builtin start
-require("key-menu").set("n", "<leader>")
--- builtin end
+local cmd_fn = require("fn").cmd_fn
+local popup = function(key) return function() require("which-key").show(key) end end
 
 -- Window
-require("key-menu").set("n", "<leader>w", { desc = "Window" })
-map("n", "<leader>wc", cmd_fn "wincmd x", { desc = "Close Current Window" })
-map("n", "<leader>wo", cmd_fn "wincmd o", { desc = "Close Other Window" })
+map("n", "<leader>w", popup("<leader>w"), { desc = "+Window" })
+map("n", "<leader>wc", cmd_fn("wincmd", { "x" }), { desc = "Close Current Window" })
+map("n", "<leader>wo", cmd_fn("wincmd", { "o" }), { desc = "Close Other Window" })
 map("n", "<leader>wv", cmd_fn "vsplit", { desc = "Split Vertically" })
 map("n", "<leader>ws", cmd_fn "split", { desc = "Split Horizonally" })
-map("n", "<leader>wo", cmd_fn "wincmd o", { desc = "Equality height and width" })
 map("n", "<leader>wh", "<c-w>10<<cr>", { desc = "Decrease Width" })
 map("n", "<leader>wj", "<c-w>10+<cr>", { desc = "Increase Height" })
 map("n", "<leader>wk", "<c-w>10-<cr>", { desc = "Decrease Width" })
 map("n", "<leader>wl", "<c-w>10><cr>", { desc = "Increase Height" })
 -- Movement
-map("n", "<c-h>", "<cmd>wincmd h<cr>", { desc = "Goto Left Window" })
-map("n", "<c-l>", "<cmd>wincmd l<cr>", { desc = "Goto Right Window" })
-map("n", "<c-j>", "<cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
-map("n", "<c-k>", "<cmd>wincmd k<cr>", { desc = "Goto Top Window" })
+map("n", "<c-h>", cmd_fn("wincmd", { "h" }), { desc = "Goto Left Window" })
+map("n", "<c-l>", cmd_fn("wincmd", { "l" }), { desc = "Goto Right Window" })
+map("n", "<c-j>", cmd_fn("wincmd", { "j" }), { desc = "Goto Bottom Window" })
+map("n", "<c-k>", cmd_fn("wincmd", { "k" }), { desc = "Goto Top Window" })
 map("i", "<c-h>", "<c-o><cmd>wincmd h<cr>", { desc = "Goto Left Window" })
 map("i", "<c-l>", "<c-o><cmd>wincmd l<cr>", { desc = "Goto Right Window" })
 map("i", "<c-j>", "<c-o><cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
 map("i", "<c-k>", "<c-o><cmd>wincmd k<cr>", { desc = "Goto Top Window" })
 
-require("key-menu").set("n", "<leader>l", { desc = "LSP" })
+-- LSP
+map("n", "<leader>l", popup("<leader>l"), { desc = "+Lsp" })
 map("n", "<leader>lr", cmd_fn "LspRestart", { desc = "Restart LSP" })
 map("n", "<leader>li", cmd_fn "LspInfo", { desc = "Show Server Info" })
 map("n", "<leader>ls", cmd_fn "LspInstallInfo", { desc = "Manage Servers" })
 
 -- Debug
-require("key-menu").set("n", "<leader>d", { desc = "Debug" })
+map("n", "<leader>d", popup("<leader>d"), { desc = "+Debug" })
 map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
 map("n", "<leader>dc", function() require("dap").continue() end, { desc = "Run | Countine" })
 map("n", "<leader>de", function() require("dapui").eval(nil, {}) end, { desc = "Eval Expression" })
@@ -57,13 +54,18 @@ map("n", "<leader>dn", function() require("dap").step_over() end, { desc = "Step
 map("n", "<leader>do", function() require("dap").step_out() end, { desc = "Step Out" })
 map("n", "<leader>dr", function() require("dap").repl.toggle() end, { desc = "Repl" })
 
-require("key-menu").set("n", "<leader>v", { desc = "VCS" })
-map("n", "<leader>vd", "<cmd>Gitsigns diffthis<cr>", { desc = "Diff" })
-map("n", "<leader>vp", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Preview Diff" })
+-- VCS
+map("n", "<leader>v", popup("<leader>v"), { desc = "+VCS" })
+map("n", "<leader>vd", cmd_fn("Gitsigns", { "diffthis" }), { desc = "Diff" })
+map("n", "<leader>vp", cmd_fn("Gitsigns", { "preview_hunk" }), { desc = "Preview Diff" })
 map("n", "<leader>vv", lazygit, { desc = "LazyGit" })
 
+-- Search
+map("n", "/", require("searchbox.search").incsearch, { desc = "Search" })
+map("v", "/", function() require("searchbox.search").incsearch({ visual_mode = true }) end, { desc = "Search" })
+
 -- Diagnostic
-require("key-menu").set("n", "<leader>x", { desc = "Diagnostic" })
+map("n", "<leader>x", popup("<leader>x"), { desc = "+Diagnostic" })
 map("n", "<leader>xt", cmd_fn "TodoQuickFix", { desc = "Workspace Todos" })
 map("n", "<leader>xb", vim.diagnostic.setloclist, { desc = "Buffer Diagnostic" })
 map("n", "<leader>xw", vim.diagnostic.setqflist, { desc = "Workspace Diagnostic" })
@@ -74,20 +76,21 @@ map("n", "<leader>xh", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 map("n", "<leader>x[", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 
 -- UI
-require("key-menu").set("n", "<leader>u", { desc = "UI" })
+map("n", "<leader>u", popup("<leader>u"), { desc = "+UI" })
 map("n", "<leader>ud", require("dapui").toggle, { desc = "Debug Window" })
 map("n", "<leader>uf", cmd_fn "NvimTreeToggle", { desc = "File Explorer" })
 map("s", "<leader>us", cmd_fn "SymbolsOutline", { desc = "Symbol Outline" })
 
 -- Edit
 map("n", "cg", require "neogen".generate, { desc = "Generate Doc" })
-require("key-menu").set("n", "<leader>p", { desc = "Preview" })
+map("n", "<C-;>", "i<CR><Esc>", { desc = "Break Line" })
+map("n", "<leader>p", popup("<leader>p"), { desc = "+Preview" })
 map("n", "<leader>pm", cmd_fn "Glow", { desc = "Preview Markdow" })
 map("n", "<leader>im", cmd_fn("Telescope", { "goimpl" }), { desc = "Impl Golang Interface" })
 
 -- Finder
-require("key-menu").set("n", "f", { desc = "Magic Finder" })
-map("n", "fw", cmd_fn "Telescope", { desc = "Open Telescope Window" })
+map("n", "f", popup("f"), { desc = "+Finder" })
+map("n", "fw", cmd_fn("Telescope"), { desc = "Open Telescope Window" })
 map("n", "ff", cmd_fn("Telescope", { "find_files" }), { desc = "File Finder" })
 map("n", "fl", cmd_fn("Telescope", { "file_browser" }), { desc = "File Browser" })
 map("n", "fg", cmd_fn("Telescope", { "live_grep_args" }), { desc = "Live Grep" })
@@ -100,10 +103,10 @@ map("n", "fi", cmd_fn("Telescope", { "lsp_implementations" }), { desc = "[LSP] I
 map("n", "fs", cmd_fn("Telescope", { "lsp_document_symbols" }), { desc = "[LSP] Document Symbols" })
 map("n", "fp", cmd_fn("Telescope", { "project display_type=full" }), { desc = "List Projects" })
 map("n", "fe", cmd_fn("Telescope", { "packer" }), { desc = "List Packer Plugins" })
-map("n", "ft", cmd_fn "TodoTelescope", { desc = "Todo List" })
+map("n", "ft", cmd_fn("TodoTelescope"), { desc = "Todo List" })
 
 -- Test
-require("key-menu").set("n", "t", { desc = "Test" })
+map("n", "t", popup("t"), { desc = "+Test" })
 map("n", "tf", function() require("neotest").run.run() end, { desc = "Test Current Function" })
 map("n", "tr", function() require("neotest").run.run(vim.fn.expand("%s")) end, { desc = "Test Current File" })
 map("n", "tt", function() require("neotest").run.run(vim.fn.getcwd()) end, { desc = "Test Project" })
