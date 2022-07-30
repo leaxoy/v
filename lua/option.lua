@@ -30,7 +30,7 @@ vim.o.background = "dark"
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,options,tabpages,winsize,resize,winpos,terminal"
 vim.o.showmode = true
 vim.o.autoread = true
-vim.o.list = true
+vim.o.list = false
 vim.o.listchars = "tab:» ,extends:›,precedes:‹,nbsp:·,trail:·,eol:↴,space:⋅"
 vim.o.showcmd = true
 vim.o.wildmenu = true
@@ -92,10 +92,10 @@ vim.g.lsp_servers = {
   "tsserver",
   "yamlls",
 }
+vim.g.mapleader = " "
 -- copilot config
 -- vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
-vim.g.mapleader = " "
 vim.g.copilot_filetypes = {
   netrw = false,
   qf = false,
@@ -104,5 +104,6 @@ vim.g.copilot_filetypes = {
   NvimTree = false,
   Outline = false,
   DressingInput = false,
-  SearchBox = false,
 }
+-- filetype config
+vim.g.rust_recommended_style = 0

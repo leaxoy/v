@@ -13,9 +13,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
   })
 end
 
-local use = require("packer").use
 return require("packer").startup({
-  function()
+  function(use)
     -- Packer can manage itself
     use("wbthomason/packer.nvim")
 
@@ -92,6 +91,10 @@ return require("packer").startup({
       end
     }
 
+    -- Editor enhancements
+    use({ "williamboman/mason.nvim", config = [[ require("mason").setup({ ui = { border = "double" } }) ]] })
+    use({ "williamboman/mason-lspconfig.nvim", requires = { "williamboman/mason.nvim" } })
+
     -- UI
     use("stevearc/dressing.nvim") -- ui component
     use("Mofiqul/vscode.nvim") -- theme
@@ -114,7 +117,6 @@ return require("packer").startup({
     use({ "lukas-reineke/indent-blankline.nvim" })
     use({ "kevinhwang91/nvim-bqf" })
     use({ "rcarriga/nvim-notify", config = function() require("notify").setup({ background_colour = "#FFFFFF" }) end })
-    use({ "romgrk/searchbox.nvim", requires = { { "MunifTanjim/nui.nvim" } } })
 
     -- Lang specifies
     use({ "solarnz/thrift.vim", opt = true, ft = "thrift" })
@@ -132,7 +134,6 @@ return require("packer").startup({
     })
 
     -- Lsp config
-    use("williamboman/nvim-lsp-installer")
     use("neovim/nvim-lspconfig")
     use("github/copilot.vim") -- now is not free
     use("hrsh7th/nvim-cmp")
@@ -166,7 +167,8 @@ return require("packer").startup({
         "antoinemadec/FixCursorHold.nvim",
         "nvim-neotest/neotest-go",
         "nvim-neotest/neotest-python",
-        { "nvim-neotest/neotest-vim-test", requires = "vim-test/vim-test" }
+        { "nvim-neotest/neotest-vim-test", requires = "vim-test/vim-test" },
+        "rouge8/neotest-rust",
       },
       config = function()
         require("neotest").setup({
@@ -188,6 +190,7 @@ return require("packer").startup({
             }),
             require("neotest-go"),
             require("neotest-vim-test")({ ignore_file_types = { "python", "go" } }),
+            require("neotest-rust")
           },
           icons = { running = "ﭦ" },
           summary = {
@@ -206,14 +209,6 @@ return require("packer").startup({
     use("famiu/bufdelete.nvim")
     use("sbdchd/neoformat")
     use("terryma/vim-multiple-cursors")
-    use({
-      "kylechui/nvim-surround",
-      config = function()
-        require("nvim-surround").setup({
-          -- Configuration here, or leave empty to use defaults
-        })
-      end
-    })
     use({ "lewis6991/spellsitter.nvim", config = function() require("spellsitter").setup() end })
     use("ellisonleao/glow.nvim") -- markdown render
     use({ "danymat/neogen", requires = "nvim-treesitter/nvim-treesitter" })
@@ -232,7 +227,6 @@ return require("packer").startup({
     use({ "nvim-telescope/telescope-dap.nvim", requires = "nvim-telescope/telescope.nvim" })
     use({ "nvim-telescope/telescope-packer.nvim", requires = "nvim-telescope/telescope.nvim" })
     use({ "nvim-telescope/telescope-media-files.nvim", requires = "nvim-telescope/telescope.nvim" })
-    use({ "aloussase/telescope-gradle.nvim", requires = "nvim-telescope/telescope.nvim" })
     use({ "edolphin-ydf/goimpl.nvim", requires = "nvim-telescope/telescope.nvim" })
     use({ "sudormrfbin/cheatsheet.nvim", requires = "nvim-telescope/telescope.nvim" })
 

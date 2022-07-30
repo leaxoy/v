@@ -9,7 +9,6 @@ require("impatient").enable_profile()
 require("option")
 pcall(require, "local") -- try load local config, can override option
 require("commands")
-require("diagnostic")
 require("ui")
 require("keybinding")
 require("lsp").setup()

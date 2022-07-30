@@ -112,23 +112,21 @@ local function resolve_server_capabilities(client, buffer)
     map("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   end
   if client.server_capabilities.codeActionProvider then
-    map("n", "gaa", vim.lsp.buf.code_action, { desc = "Code Action" })
-    map("v", "gaa", vim.lsp.buf.range_code_action, { desc = "Code Action" })
+    map({ "n", "v" }, "gaa", function()
+      vim.lsp.buf.code_action({ apply = true })
+    end, { desc = "Code Action" })
   end
   -- if client.server_capabilities.colorProvider then
   -- end
 
-  local format_group = "document_formatting"
-  local format_commands = {python = "Neoformat black"}
-  vim.api.nvim_create_augroup(format_group, { clear = false })
-  vim.api.nvim_clear_autocmds({ buffer = buffer, group = format_group })
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    group = format_group,
-    buffer = buffer,
-    command = format_commands[vim.api.nvim_buf_get_option(buffer, "filetype")] or "lua vim.lsp.buf.format()"
-    -- command = client.server_capabilities.documentFormattingProvider
-    --     and "lua vim.lsp.buf.format()" or "undojoin | Neoformat",
-  })
+  if client.server_capabilities.documentFormattingProvider then
+    local format_group = "document_formatting"
+    vim.api.nvim_create_augroup(format_group, { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = buffer, group = format_group })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = format_group, buffer = buffer, command = "lua vim.lsp.buf.format()",
+    })
+  end
   -- if client.server_capabilities.documentRangeFormattingProvider then
   -- end
   -- if client.server_capabilities.documentOnTypeFormattingProvider then
@@ -274,6 +272,7 @@ M.lsp_settings = {
 
 M.lsp_init_options = {
   ["jdtls"] = {
+    bundles = {},
     extendedClientCapabilities = {
       progressReportProvider = true,
       classFileContentsSupport = true,
@@ -292,22 +291,14 @@ M.lsp_init_options = {
 M.setup = function()
   require("lsp/completion").setup()
 
-  local lsp_manager = require("nvim-lsp-installer")
-  lsp_manager.setup({
+  local lsp_center = require("mason-lspconfig")
+  lsp_center.setup({
     ensure_installed = vim.g.lsp_servers,
-    ui = {
-      border = "double",
-      icons = {
-        server_installed = "✓",
-        server_pending = "➜",
-        server_uninstalled = "✗",
-      },
-    },
+    automatic_installation = true,
   })
 
   local lspconfig = require("lspconfig")
-  for _, server in pairs(lsp_manager.get_installed_servers()) do
-    local server_name = server.name
+  for _, server_name in pairs(lsp_center.get_installed_servers()) do
     local opts = {
       capabilities = M.lsp_capabitities(),
       flags = { debounce_text_changes = 150 },
@@ -321,8 +312,7 @@ M.setup = function()
     opts.commands = vim.tbl_deep_extend(
       "force",
       opts.commands or vim.empty_dict(),
-      require("lsp.commands")[server_name] or vim.empty_dict(),
-      require("lsp.commands")["default"] or vim.empty_dict()
+      require("lsp.commands") or vim.empty_dict()
     )
     opts.init_options = vim.tbl_deep_extend(
       "force",
@@ -332,6 +322,9 @@ M.setup = function()
     if server_name == "sumneko_lua" then
       local luadev = require("lua-dev").setup({ lspconfig = opts })
       lspconfig[server_name].setup(luadev)
+    elseif server_name == "jdtls" then
+      local new_opts = vim.tbl_deep_extend("keep", opts, { use_lombok_agent = true })
+      lspconfig[server_name].setup(new_opts)
     else
       lspconfig[server_name].setup(opts)
     end

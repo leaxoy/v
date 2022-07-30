@@ -1,8 +1,3 @@
-vim.g.vscode_style = "dark"
-vim.g.vscode_transparent = 1
-vim.g.vscode_italic_comment = 1
-vim.g.vscode_disable_nvimtree_bg = true
-
 vim.g.gruvbox_material_background = "hard" -- hard, medium or soft
 vim.g.gruvbox_material_foreground = "material" -- material, mix or original
 vim.g.gruvbox_material_better_performance = 1
@@ -22,7 +17,14 @@ vim.g.gruvbox_material_current_word = "grey background"
 vim.g.gruvbox_material_disable_terminal_colors = 1
 vim.g.gruvbox_material_statusline_style = "default"
 
-vim.cmd({
-  cmd = "colorscheme",
-  args = { vim.g.theme or "vscode" }
+
+require("vscode").setup({
+  transparent = true,
+  italic_comments = true,
+  disable_nvimtree_bg = true,
 })
+
+vim.cmd({ cmd = "colorscheme", args = { vim.g.theme or "vscode" } })
+
+vim.api.nvim_set_hl(0, "WinBar", { fg = "#458e88" })
+vim.api.nvim_set_hl(0, "WinBarNC", { fg = "#666777" })

@@ -7,5 +7,5 @@ return {
     require("fn").lsp_notify(client.name, result.message, lvl, 3000, function()
       return lvl == "ERROR" or lvl == "WARN"
     end)
-  end
+  end,
 }

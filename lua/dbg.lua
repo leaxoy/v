@@ -58,7 +58,8 @@ dap.adapters.go = {
 
 dap.adapters.python = {
   type = "executable",
-  command = "/usr/local/bin/python3",
+  -- command = "/usr/local/bin/python3",
+  command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python3",
   args = { "-m", "debugpy.adapter" },
 }
 

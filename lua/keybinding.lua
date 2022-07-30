@@ -37,11 +37,11 @@ map("i", "<c-l>", "<c-o><cmd>wincmd l<cr>", { desc = "Goto Right Window" })
 map("i", "<c-j>", "<c-o><cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
 map("i", "<c-k>", "<c-o><cmd>wincmd k<cr>", { desc = "Goto Top Window" })
 
--- LSP
-map("n", "<leader>l", popup("<leader>l"), { desc = "+Lsp" })
+-- LSP or DAP or Linter or Formatter
+map("n", "<leader>l", popup("<leader>l"), { desc = "+Mason" })
+map("n", "<leader>lm", cmd_fn "Mason", { desc = "Manage Mason" })
 map("n", "<leader>lr", cmd_fn "LspRestart", { desc = "Restart LSP" })
 map("n", "<leader>li", cmd_fn "LspInfo", { desc = "Show Server Info" })
-map("n", "<leader>ls", cmd_fn "LspInstallInfo", { desc = "Manage Servers" })
 
 -- Debug
 map("n", "<leader>d", popup("<leader>d"), { desc = "+Debug" })
@@ -59,10 +59,6 @@ map("n", "<leader>v", popup("<leader>v"), { desc = "+VCS" })
 map("n", "<leader>vd", cmd_fn("Gitsigns", { "diffthis" }), { desc = "Diff" })
 map("n", "<leader>vp", cmd_fn("Gitsigns", { "preview_hunk" }), { desc = "Preview Diff" })
 map("n", "<leader>vv", lazygit, { desc = "LazyGit" })
-
--- Search
-map("n", "/", require("searchbox.search").incsearch, { desc = "Search" })
-map("v", "/", function() require("searchbox.search").incsearch({ visual_mode = true }) end, { desc = "Search" })
 
 -- Diagnostic
 map("n", "<leader>x", popup("<leader>x"), { desc = "+Diagnostic" })
