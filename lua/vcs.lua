@@ -29,7 +29,7 @@ require("gitsigns").setup({
   current_line_blame_opts = {
     virt_text = true,
     virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
+    delay = 500,
     ignore_whitespace = false,
   },
   current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
@@ -46,4 +46,30 @@ require("gitsigns").setup({
     col = 1,
   },
   yadm = { enable = false },
+})
+
+require("git").setup({
+  keymaps = {
+    -- Open blame window
+    blame = "<Leader>vb",
+    -- Close blame window
+    quit_blame = "q",
+    -- Open blame commit
+    blame_commit = "<CR>",
+    -- Open file/folder in git repository
+    browse = "<Leader>vo",
+    -- Open pull request of the current branch
+    open_pull_request = "<Leader>vm",
+    -- Create a pull request with the target branch is set in the `target_branch` option
+    create_pull_request = "<Leader>vn",
+    -- Opens a new diff that compares against the current index
+    diff = "<Leader>vd",
+    -- Close git diff
+    diff_close = "q",
+    -- Revert to the specific commit
+    revert = "<Leader>vr",
+    -- Revert the current file to the specific commit
+    revert_file = "<Leader>vR",
+  },
+  default_branch = "master",
 })

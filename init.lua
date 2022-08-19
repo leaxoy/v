@@ -1,13 +1,10 @@
--- Store startup time in seconds
-vim.g.start_time = vim.fn.reltime()
+require("base")
 
--- vim.g.theme = "gruvbox-material"
-vim.g.theme = "vscode"
+pcall(require, "local_option") -- try load local config, can override option
 
 require("plugins")
 require("impatient").enable_profile()
-require("option")
-pcall(require, "local") -- try load local config, can override option
+
 require("commands")
 require("ui")
 require("keybinding")

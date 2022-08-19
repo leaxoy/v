@@ -1,6 +1,15 @@
 local dap = require("dap")
 local ts_utils = require("nvim-treesitter.ts_utils")
 
+dap.adapters.go = {
+  type = "server",
+  port = "${port}",
+  executable = {
+    command = "dlv",
+    args = { "dap", "-l", "127.0.0.1:${port}" },
+  }
+}
+
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {
   {
@@ -85,8 +94,14 @@ local function switch_test_file(bang, cmd)
   end
 end
 
-vim.api.nvim_create_user_command("GoAddTags", modify_tags("add"), { nargs = 1, desc = "Add tags to struct" })
-vim.api.nvim_create_user_command("GoRemoveTags", modify_tags("remove"), { nargs = 1, desc = "Remove tags from struct" })
+function _G.go_tag_list(a, l, p)
+  return { "json", "yaml", "xml", "db" }
+end
+
+vim.api.nvim_create_user_command("GoAddTags", modify_tags("add"),
+  { nargs = 1, desc = "Add tags to struct", complete = _G.go_tag_list })
+vim.api.nvim_create_user_command("GoRemoveTags", modify_tags("remove"),
+  { nargs = 1, desc = "Remove tags from struct", complete = _G.go_tag_list })
 vim.api.nvim_create_user_command("GoClearTags", modify_tags("clear"), { desc = "Clear all tags from struct" })
 vim.api.nvim_create_user_command("GoSwitchTest", function(opts) switch_test_file(opts.bang) end,
   { desc = "Switch to test file" })

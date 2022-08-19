@@ -60,5 +60,5 @@ end
 vim.api.nvim_create_user_command(
   "RustExpandMacro",
   function() rust_expand_macro() end,
-  { description = "Rust Expand Macro" }
+  { desc = "Rust Expand Macro" }
 )

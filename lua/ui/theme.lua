@@ -1,3 +1,9 @@
+local hl = function(group, val) vim.api.nvim_set_hl(0, group, val) end
+
+hl("WinBar", { fg = "#458e88", undercurl = true })
+hl("WinBarNC", { fg = "#666777", undercurl = true })
+
+-- gruvbox material config
 vim.g.gruvbox_material_background = "hard" -- hard, medium or soft
 vim.g.gruvbox_material_foreground = "material" -- material, mix or original
 vim.g.gruvbox_material_better_performance = 1
@@ -17,14 +23,33 @@ vim.g.gruvbox_material_current_word = "grey background"
 vim.g.gruvbox_material_disable_terminal_colors = 1
 vim.g.gruvbox_material_statusline_style = "default"
 
+-- tokyonight config
+vim.g.tokyonight_style = "night"
+vim.g.tokyonight_terminal_colors = true
+vim.g.tokyonight_italic_comments = true
+vim.g.tokyonight_italic_keywords = true
+vim.g.tokyonight_italic_functions = true
+vim.g.tokyonight_italic_variables = true
+vim.g.tokyonight_transparent = true
+vim.g.tokyonight_hide_inactive_statusline = true
+vim.g.tokyonight_sidebars = { "qf", "lspsagaoutline", "terminal", "packer", "toggleterm" }
+vim.g.tokyonight_transparent_sidebar = true
+vim.g.tokyonight_dark_sidebar = true
+vim.g.tokyonight_dark_float = true
+vim.g.tokyonight_colors = {}
+vim.g.tokyonight_day_brightness = 0.3
+vim.g.tokyonight_lualine_bold = true -- default false
 
-require("vscode").setup({
-  transparent = true,
-  italic_comments = true,
-  disable_nvimtree_bg = true,
-})
+local vscode_status, vscode = pcall(require, "vscode")
+if vscode_status then
+  vscode.setup({
+    transparent = true,
+    italic_comments = true,
+    disable_nvimtree_bg = false,
+  })
+end
 
-vim.cmd({ cmd = "colorscheme", args = { vim.g.theme or "vscode" } })
+local colorizer_status, colorizer = pcall(require, "colorizer")
+if colorizer_status then colorizer.setup({ "*" }) end
 
-vim.api.nvim_set_hl(0, "WinBar", { fg = "#458e88" })
-vim.api.nvim_set_hl(0, "WinBarNC", { fg = "#666777" })
+vim.cmd({ cmd = "colorscheme", args = { vim.g.theme or "habamax" } })

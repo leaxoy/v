@@ -74,3 +74,5 @@ require("nvim-tree").setup({
     open_file = { resize_window = true },
   }
 })
+
+vim.keymap.set("n", "<leader>uf", "<CMD>NvimTreeToggle<CR>", { desc = "File Explorer" })

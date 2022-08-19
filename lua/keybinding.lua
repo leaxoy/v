@@ -17,31 +17,46 @@ end
 local cmd_fn = require("fn").cmd_fn
 local popup = function(key) return function() require("which-key").show(key) end end
 
+-- Welcome
+map("n", "<M-a>", function() print("Hello, world!!!") end, { desc = "Greeting" })
+
 -- Window
 map("n", "<leader>w", popup("<leader>w"), { desc = "+Window" })
 map("n", "<leader>wc", cmd_fn("wincmd", { "x" }), { desc = "Close Current Window" })
 map("n", "<leader>wo", cmd_fn("wincmd", { "o" }), { desc = "Close Other Window" })
 map("n", "<leader>wv", cmd_fn "vsplit", { desc = "Split Vertically" })
 map("n", "<leader>ws", cmd_fn "split", { desc = "Split Horizonally" })
-map("n", "<leader>wh", "<c-w>10<<cr>", { desc = "Decrease Width" })
-map("n", "<leader>wj", "<c-w>10+<cr>", { desc = "Increase Height" })
-map("n", "<leader>wk", "<c-w>10-<cr>", { desc = "Decrease Width" })
-map("n", "<leader>wl", "<c-w>10><cr>", { desc = "Increase Height" })
+map("n", "<M-h>", "<c-w>10<", { desc = "Decrease Width" })
+map("n", "<M-j>", "<c-w>10+", { desc = "Increase Height" })
+map("n", "<M-k>", "<c-w>10-", { desc = "Decrease Width" })
+map("n", "<M-l>", "<c-w>10>", { desc = "Increase Height" })
+
 -- Movement
 map("n", "<c-h>", cmd_fn("wincmd", { "h" }), { desc = "Goto Left Window" })
 map("n", "<c-l>", cmd_fn("wincmd", { "l" }), { desc = "Goto Right Window" })
 map("n", "<c-j>", cmd_fn("wincmd", { "j" }), { desc = "Goto Bottom Window" })
 map("n", "<c-k>", cmd_fn("wincmd", { "k" }), { desc = "Goto Top Window" })
-map("i", "<c-h>", "<c-o><cmd>wincmd h<cr>", { desc = "Goto Left Window" })
-map("i", "<c-l>", "<c-o><cmd>wincmd l<cr>", { desc = "Goto Right Window" })
-map("i", "<c-j>", "<c-o><cmd>wincmd j<cr>", { desc = "Goto Bottom Window" })
-map("i", "<c-k>", "<c-o><cmd>wincmd k<cr>", { desc = "Goto Top Window" })
+
+-- Buffer
+map("n", "<leader>$", cmd_fn("BufferLineGoToBuffer", { "-1" }), { desc = "Goto Last Buffer" })
+map("n", "<leader>1", cmd_fn("BufferLineGoToBuffer", { "1" }), { desc = "Goto Buffer 1" })
+map("n", "<leader>2", cmd_fn("BufferLineGoToBuffer", { "2" }), { desc = "Goto Buffer 2" })
+map("n", "<leader>3", cmd_fn("BufferLineGoToBuffer", { "3" }), { desc = "Goto Buffer 3" })
+map("n", "<leader>4", cmd_fn("BufferLineGoToBuffer", { "4" }), { desc = "Goto Buffer 4" })
+map("n", "<leader>5", cmd_fn("BufferLineGoToBuffer", { "5" }), { desc = "Goto Buffer 5" })
+map("n", "<leader>6", cmd_fn("BufferLineGoToBuffer", { "6" }), { desc = "Goto Buffer 6" })
+map("n", "<leader>7", cmd_fn("BufferLineGoToBuffer", { "7" }), { desc = "Goto Buffer 7" })
+map("n", "<leader>8", cmd_fn("BufferLineGoToBuffer", { "8" }), { desc = "Goto Buffer 8" })
+map("n", "<leader>9", cmd_fn("BufferLineGoToBuffer", { "9" }), { desc = "Goto Buffer 9" })
 
 -- LSP or DAP or Linter or Formatter
 map("n", "<leader>l", popup("<leader>l"), { desc = "+Mason" })
 map("n", "<leader>lm", cmd_fn "Mason", { desc = "Manage Mason" })
 map("n", "<leader>lr", cmd_fn "LspRestart", { desc = "Restart LSP" })
 map("n", "<leader>li", cmd_fn "LspInfo", { desc = "Show Server Info" })
+
+map("n", "gf", cmd_fn("Lspsaga", { "lsp_finder" }), { desc = "Lsp Finder" })
+map("n", "gp", cmd_fn("Lspsaga", { "preview_definition" }), { desc = "Lsp Preview Definition" })
 
 -- Debug
 map("n", "<leader>d", popup("<leader>d"), { desc = "+Debug" })
@@ -53,6 +68,7 @@ map("n", "<leader>di", function() require("dap").step_into() end, { desc = "Step
 map("n", "<leader>dn", function() require("dap").step_over() end, { desc = "Step Over" })
 map("n", "<leader>do", function() require("dap").step_out() end, { desc = "Step Out" })
 map("n", "<leader>dr", function() require("dap").repl.toggle() end, { desc = "Repl" })
+map("n", "<leader>du", require("dapui").toggle, { desc = "Debug Window" })
 
 -- VCS
 map("n", "<leader>v", popup("<leader>v"), { desc = "+VCS" })
@@ -71,15 +87,8 @@ map("n", "<leader>x]", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 map("n", "<leader>xh", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 map("n", "<leader>x[", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 
--- UI
-map("n", "<leader>u", popup("<leader>u"), { desc = "+UI" })
-map("n", "<leader>ud", require("dapui").toggle, { desc = "Debug Window" })
-map("n", "<leader>uf", cmd_fn "NvimTreeToggle", { desc = "File Explorer" })
-map("s", "<leader>us", cmd_fn "SymbolsOutline", { desc = "Symbol Outline" })
-
 -- Edit
-map("n", "cg", require "neogen".generate, { desc = "Generate Doc" })
-map("n", "<C-;>", "i<CR><Esc>", { desc = "Break Line" })
+map("n", "<leader>;", "i<CR><Esc>", { desc = "Break Line" })
 map("n", "<leader>p", popup("<leader>p"), { desc = "+Preview" })
 map("n", "<leader>pm", cmd_fn "Glow", { desc = "Preview Markdow" })
 map("n", "<leader>im", cmd_fn("Telescope", { "goimpl" }), { desc = "Impl Golang Interface" })
@@ -97,7 +106,6 @@ map("n", "fd", cmd_fn("Telescope", { "diagnostics" }), { desc = "Diagnostics" })
 map("n", "fr", cmd_fn("Telescope", { "lsp_references" }), { desc = "[LSP] References" })
 map("n", "fi", cmd_fn("Telescope", { "lsp_implementations" }), { desc = "[LSP] Implementations" })
 map("n", "fs", cmd_fn("Telescope", { "lsp_document_symbols" }), { desc = "[LSP] Document Symbols" })
-map("n", "fp", cmd_fn("Telescope", { "project display_type=full" }), { desc = "List Projects" })
 map("n", "fe", cmd_fn("Telescope", { "packer" }), { desc = "List Packer Plugins" })
 map("n", "ft", cmd_fn("TodoTelescope"), { desc = "Todo List" })
 

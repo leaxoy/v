@@ -11,18 +11,10 @@ local function setup()
   local cmp = require("cmp")
 
   cmp.setup({
+    view = { entries = { name = "custom", selection_order = "near_cursor" } },
     window = {
-      completion = {
-        border = "rounded",
-        scrollbar = "║",
-        col_offset = -2,
-        side_padding = 1,
-      },
-      documentation = {
-        border = "double",
-        scrollbar = "║",
-        winhighlight = "NormalFloat:NormalFloat,FloatBorder:VertSplit",
-      },
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
     },
     completion = { completeopt = "menu,menuone,noselect" },
     experimental = { ghost_text = true, native_menu = false },
@@ -36,49 +28,61 @@ local function setup()
           nvim_lsp = "via ",
           vsnip = "via ",
           buffer = "via ",
-          copilot = "via ",
           crates = "via ",
           npm = "via ",
         },
       }),
     },
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
       ["<C-d>"] = cmp.mapping.scroll_docs(5),
       ["<C-u>"] = cmp.mapping.scroll_docs(-5),
-      ["<C-Space>"] = cmp.mapping.complete({
-        reason = cmp.ContextReason.Auto,
-      }),
+      ["<C-Space>"] = cmp.mapping.complete({ reason = cmp.ContextReason.Auto }),
       ["<C-e>"] = cmp.mapping.close(),
       ["<CR>"] = cmp.mapping.confirm({
         select = true,
         behavior = cmp.ConfirmBehavior.Replace,
       }),
-      ["<C-g>"] = cmp.mapping(function(fallback)
-        vim.api.nvim_feedkeys(
-          vim.fn["copilot#Accept"](vim.api.nvim_replace_termcodes("<Tab>", true, true, true)),
-          "n",
-          true
-        )
+      ["<C-g>"] = cmp.mapping(function()
+        local key = vim.api.nvim_replace_termcodes("<Tab>", true, true, true)
+        vim.api.nvim_feedkeys(vim.fn["copilot#Accept"](key), "n", true)
       end, { "i" }),
-      ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif vim.fn["vsnip#available"](1) == 1 then
-          feedkey("<Plug>(vsnip-expand-or-jump)", "")
-        elseif has_words_before() then
-          cmp.complete()
-        else
-          fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+      ["<Tab>"] = cmp.mapping({
+        c = function()
+          if cmp.visible() then
+            cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+          else
+            cmp.complete()
+          end
+        end,
+        i = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif vim.fn["vsnip#available"](1) == 1 then
+            feedkey("<Plug>(vsnip-expand-or-jump)", "")
+          elseif has_words_before() then
+            cmp.complete({ reason = cmp.ContextReason.Auto })
+          else
+            fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+          end
         end
-      end, { "i", "s" }),
-      ["<S-Tab>"] = cmp.mapping(function()
-        if cmp.visible() then
-          cmp.select_prev_item()
-        elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-          feedkey("<Plug>(vsnip-jump-prev)", "")
+      }),
+      ["<S-Tab>"] = cmp.mapping({
+        c = function()
+          if cmp.visible() then
+            cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+          else
+            cmp.complete()
+          end
+        end,
+        i = function()
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+            feedkey("<Plug>(vsnip-jump-prev)", "")
+          end
         end
-      end, { "i", "s" }),
-    },
+      }),
+    }),
     snippet = {
       expand = function(args)
         vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
@@ -99,13 +103,10 @@ local function setup()
     },
     sources = {
       { name = "nvim_lsp" },
-      -- { name = "copilot" },
       { name = "vsnip" }, -- For vsnip user.
       { name = "buffer" },
       { name = "cmdline" },
       { name = "crates" },
-      { name = "nvim_lsp_document_symbol" },
-      -- { name = "nvim_lsp_signature_help" },
       { name = "spell" },
       { name = "npm" },
     },
@@ -113,11 +114,13 @@ local function setup()
 
   -- Use buffer source for `/`.
   cmp.setup.cmdline("/", {
+    view = { entries = { name = "wildmenu" } },
     sources = { { name = "buffer" }, { name = "nvim_lsp_document_symbol" } },
   })
 
   -- Use cmdline & path source for ':'.
   cmp.setup.cmdline(":", {
+    view = { entries = { name = "wildmenu" } },
     sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
   })
 end

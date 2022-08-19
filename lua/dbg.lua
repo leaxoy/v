@@ -1,3 +1,21 @@
+require("neotest").setup({
+  adapters = {
+    require("neotest-python")({
+      dap = { justMyCode = false },
+      args = { "--log-level", "DEBUG" },
+      runner = "pytest",
+    }),
+    require("neotest-go"),
+    require("neotest-rust"),
+    require("neotest-vim-test")({ ignore_file_types = { "python", "go", "rust" } }),
+  },
+  icons = { running = "ﭦ" },
+  summary = {
+    mappings = { jumpto = "<CR>", expand = "<TAB>" }
+  },
+})
+
+
 local dap, dapui = require("dap"), require("dapui");
 
 require("nvim-dap-virtual-text").setup({})
@@ -42,26 +60,7 @@ vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "FoldColumn
 vim.fn.sign_define("DapStopped", { text = "", texthl = "ErrorMsg", linehl = "", numhl = "" }) --  
 vim.fn.sign_define("DapLogPoint", { text = "L", texthl = "", linehl = "", numhl = "" })
 
-dap.adapters.lldb = {
-  type = "executable",
-  command = "lldb-vscode",
-}
-
-dap.adapters.go = {
-  type = "server",
-  port = "${port}",
-  executable = {
-    command = "dlv",
-    args = { "dap", "-l", "127.0.0.1:${port}" },
-  }
-}
-
-dap.adapters.python = {
-  type = "executable",
-  -- command = "/usr/local/bin/python3",
-  command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python3",
-  args = { "-m", "debugpy.adapter" },
-}
+dap.adapters.lldb = { type = "executable", command = "lldb-vscode" }
 
 local c_config = {
   {

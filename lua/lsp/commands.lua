@@ -8,13 +8,10 @@ function OrganizeImports(timeout_ms)
   -- See the implementation of the textDocument/codeAction callback
   -- (lua/vim/lsp/handler.lua) for how to do this properly.
   local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-  for _, res in pairs(result or {}) do
+  for client_id, res in pairs(result or {}) do
     for _, r in pairs(res.result or {}) do
-      if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
-      else
-        vim.lsp.buf.execute_command(r.command)
-      end
+      local encoding = (vim.lsp.get_client_by_id(client_id) or {}).offset_encoding or "utf-16"
+      vim.lsp.util.apply_workspace_edit(r.edit, encoding)
     end
   end
 end

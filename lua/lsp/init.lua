@@ -6,10 +6,8 @@ local function resolve_lsp_command(cmds, lang)
       if not choice then return end
       vim.api.nvim_out_write("Execute command: " .. choice)
       if vim.bo.filetype == "go" then
-        vim.lsp.buf.execute_command({
-          command = choice,
-          arguments = { { URI = vim.uri_from_bufnr(vim.api.nvim_get_current_buf()) } }
-        })
+        local arg = { URI = vim.uri_from_bufnr(vim.api.nvim_get_current_buf()) }
+        vim.lsp.buf.execute_command({ command = choice, arguments = { arg } })
       end
     end)
   end
@@ -51,9 +49,6 @@ local function resolve_server_capabilities(client, buffer)
     map("n", "ghT", super_types, { desc = "Super Types" })
   end
   if client.server_capabilities.documentHighlightProvider then
-    -- vim.api.nvim_command([[hi! LspReferenceRead cterm=bold ctermbg=red guibg=Teal]])
-    -- vim.api.nvim_command([[hi! LspReferenceText cterm=bold ctermbg=red guibg=Green]])
-    -- vim.api.nvim_command([[hi! LspReferenceWrite cterm=bold ctermbg=red guibg=DarkRed]])
     local group = "lsp_document_highlight"
     vim.api.nvim_create_augroup(group, { clear = false })
     vim.api.nvim_clear_autocmds({ buffer = buffer, group = group })
@@ -92,16 +87,20 @@ local function resolve_server_capabilities(client, buffer)
   -- if client.server_capabilities.selectionRangeProvider then
   -- end
   if client.server_capabilities.documentSymbolProvider then
-    -- m("n", "go", vim.lsp.buf.document_symbol, o({ desc = "Document Symbol" }))
-    map("n", "go", "<cmd>SymbolsOutline<cr>", { desc = "Document Symbol" })
-    require("nvim-navic").attach(client, buffer)
+    local status, _ = pcall(require, "lspsaga")
+    if status then
+      map("n", "go", "<Cmd>LSoutlineToggle<CR>", { desc = "Document Symbol" })
+    else
+      map("n", "go", vim.lsp.buf.document_symbol, { desc = "Document Symbol" })
+    end
   end
   -- if client.server_capabilities.semanticTokensProvider then
   -- end
   -- if client.server_capabilities.inlineValueProvider then
   -- end
-  -- if client.server_capabilities.inlayHintProvider then
-  -- end
+  if client.server_capabilities.inlayHintProvider then
+    require("lsp-inlayhints").on_attach(buffer, client, true)
+  end
   -- if client.server_capabilities.monikerProvider then
   -- end
   -- if client.server_capabilities.completionProvider then
@@ -112,9 +111,8 @@ local function resolve_server_capabilities(client, buffer)
     map("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   end
   if client.server_capabilities.codeActionProvider then
-    map({ "n", "v" }, "gaa", function()
-      vim.lsp.buf.code_action({ apply = true })
-    end, { desc = "Code Action" })
+    local ca = function() vim.lsp.buf.code_action({ apply = true }) end
+    map({ "n", "v" }, "gaa", ca, { desc = "Code Action" })
   end
   -- if client.server_capabilities.colorProvider then
   -- end
@@ -178,13 +176,72 @@ local function resolve_client_capabilities(...)
     dynamicRegistration = false,
     lineFoldingOnly = true
   }
+  capabilities.textDocument.typeHierarchy = {
+    dynamicRegistration = false,
+  }
   return capabilities
 end
 
 local M = {}
 
+local function setup_lspsaga()
+  require("lspsaga").init_lsp_saga({
+    border_style = "double",
+    max_preview_lines = 20,
+    symbol_in_winbar = {
+      enable = true,
+      in_custom = false,
+      click_support = false,
+      show_file = false,
+      separator = "  "
+    },
+    finder_action_keys = {
+      open = { "o", "<CR>" },
+      quit = { "q", "<Esc>" },
+      vsplit = "v",
+      split = "s",
+      scroll_down = "<C-d>",
+      scroll_up = "<C-u>",
+    },
+    finder_request_timeout = 5000,
+    finder_icons = { def = " ", imp = " ", ref = " " },
+    definition_preview_icon = " ",
+    code_action_lightbulb = { enable = false },
+  })
+end
+
+local function setup_lsp_inlayhint()
+  require("lsp-inlayhints").setup({
+    inlay_hints = {
+      highlight = "CustomLspInlayHint",
+      type_hints = { prefix = " " },
+      parameter_hints = { prefix = " " }
+    }
+  })
+end
+
+local function setup_lsp_semantic_tokens()
+  if pcall(require, "vim.lsp.semantic_tokens") then
+    local status, tokens = pcall(require, "nvim-semantic-tokens")
+    if status then
+      tokens.setup({
+        preset = "default",
+        -- highlighters is a list of modules following the interface of nvim-semantic-tokens.table-highlighter or
+        -- function with the signature: highlight_token(ctx, token, highlight) where
+        --        ctx (as defined in :h lsp-handler)
+        --        token  (as defined in :h vim.lsp.semantic_tokens.on_full())
+        --        highlight (a helper function that you can call (also multiple times) with the determined highlight group(s) as the only parameter)
+        highlighters = { require("nvim-semantic-tokens.table-highlighter") }
+      })
+    end
+  end
+end
+
 M.activate = function(client, bufnr)
   client.offset_encoding = "utf-16"
+  setup_lsp_inlayhint()
+  setup_lspsaga()
+  setup_lsp_semantic_tokens()
   resolve_server_capabilities(client, bufnr)
 end
 
@@ -193,7 +250,7 @@ M.lsp_capabitities = function(cfg)
 end
 
 M.lsp_settings = {
-  ["gopls"] = {
+  gopls = {
     gopls = {
       -- more settings: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
       -- flags = {allow_incremental_sync = true, debounce_text_changes = 500},
@@ -244,16 +301,22 @@ M.lsp_settings = {
       -- buildFlags = {"-tags", "functional"}
     },
   },
-  ["jsonls"] = {
-    json = { schemas = require("schemastore").json.schemas() },
-  },
-  ["rust_analyzer"] = {
+  jsonls = { json = { schemas = require("schemastore").json.schemas() } },
+  rust_analyzer = {
     rust_analyzer = {
-      -- cargo = { allFeatures = true, features = { "all" }, },
       checkOnSave = { command = "clippy" },
+      imports = {
+        granularity = { group = "module", },
+        prefix = "self",
+      },
+      cargo = {
+        buildScripts = { enable = true, },
+        allFeatures = true, features = { "all" }
+      },
+      procMacro = { enable = true },
     },
   },
-  ["sumneko_lua"] = {
+  sumneko_lua = {
     Lua = {
       format = {
         enable = true,
@@ -266,12 +329,14 @@ M.lsp_settings = {
           quote_style = "double",
         },
       },
+      workspace = { checkThirdParty = false, },
     },
   },
 }
 
 M.lsp_init_options = {
-  ["jdtls"] = {
+  gopls = { usePlaceholders = true },
+  jdtls = {
     bundles = {},
     extendedClientCapabilities = {
       progressReportProvider = true,
