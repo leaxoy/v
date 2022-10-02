@@ -1,3 +1,6 @@
+# Deprecated
+Goto [dotfiles](https://github.com/leaxoy/dotfiles.git)
+
 # v
 
 neovim config
